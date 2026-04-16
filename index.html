@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="Queva"/>
-<meta name="theme-color" content="#04060F"/>
+<meta name="theme-color" content="#FAFAF8" id="theme-meta"/>
 <link rel="apple-touch-icon" href="icon-512.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -22,55 +22,39 @@
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js" onerror="console.error('Firebase firestore failed to load')"></script>
 <style>
 :root {
-  /* Default: deep blue/purple — original Queva theme */
-  --bg:#04060F; --bg1:#080B18; --bg2:#0C1022; --bg3:#10162C; --bg4:#161E3A; --bg5:#1E2848;
-  --t0:#F0F4FF; --t1:#99A8CC; --t2:#4A5580; --t3:#252D48;
-  --bdr:rgba(255,255,255,.07); --bdrc:rgba(0,212,255,.25);
-  --cyan:#00D4FF; --cyan2:#38E8FF;
-  --cylo:rgba(0,212,255,.08); --cymd:rgba(0,212,255,.22);
-  --cyglow:0 0 14px rgba(0,212,255,.2),0 0 32px rgba(0,212,255,.08);
-  --vio:#8B5CF6; --vio2:#A78BFA;
-  --violo:rgba(139,92,246,.12);
-  --pink:#EC4899; --pinlo:rgba(236,72,153,.1);
-  --amb:#F59E0B; --red:#EF4444; --grn:#22C55E;
+  /* LIGHT THEME (default) - Academic Warmth */
+  --bg:#FAFAF8; --bg1:#F4F2EE; --bg2:#ECEAE5; --bg3:#E2DFD9; --bg4:#D3CFC8; --bg5:#C4BFB7;
+  --t0:#1C1917; --t1:#44403C; --t2:#78716C; --t3:#C8C3BD;
+  --bdr:rgba(0,0,0,.09); --bdrc:rgba(0,0,0,.18);
+  --acc:#B45309; --acc2:#92400E;
+  --acclo:rgba(180,83,9,.08); --accmd:rgba(180,83,9,.22); --accglow:none;
+  --amb:#B45309; --red:#DC2626; --grn:#15803D;
+  /* Compatibility aliases */
+  --cyan:var(--acc); --cyan2:var(--acc2);
+  --cylo:var(--acclo); --cymd:var(--accmd); --cyglow:var(--accglow);
+  --vio:var(--acc); --vio2:var(--acc2); --violo:var(--acclo);
+  --pink:var(--acc); --pinlo:var(--acclo);
   --ff:'Outfit',system-ui,sans-serif; --mono:'DM Mono',monospace;
   --ease:cubic-bezier(.4,0,.2,1); --spring:cubic-bezier(.34,1.56,.64,1);
   --dur:.18s; --navh:60px; --sb:256px; --fs:14px; --inzone-h:90px;
 }
-/* DARK theme — pure black */
+/* DARK THEME - Warm Charcoal */
 [data-theme="dark"] {
-  --bg:#000000; --bg1:#0A0A0A; --bg2:#111111; --bg3:#1A1A1A; --bg4:#222222; --bg5:#2A2A2A;
-  --t0:#EEEEEE; --t1:#999999; --t2:#555555; --t3:#333333;
-  --bdr:rgba(255,255,255,.08); --bdrc:rgba(255,255,255,.15);
-  --cyan:#EEEEEE; --cyan2:#CCCCCC;
-  --cylo:rgba(255,255,255,.05); --cymd:rgba(255,255,255,.12);
-  --cyglow:0 0 0 1px rgba(255,255,255,.1);
-  --vio:#AAAAAA; --vio2:#CCCCCC;
-  --violo:rgba(255,255,255,.04);
-  --pink:#AAAAAA; --pinlo:rgba(255,255,255,.04);
+  --bg:#141210; --bg1:#1C1917; --bg2:#252220; --bg3:#302D2A; --bg4:#3D3A36; --bg5:#4A4742;
+  --t0:#F5F0EB; --t1:#C8BFB4; --t2:#7A726A; --t3:#3D3A36;
+  --bdr:rgba(255,255,255,.08); --bdrc:rgba(255,255,255,.14);
+  --acc:#D97706; --acc2:#F59E0B;
+  --acclo:rgba(217,119,6,.1); --accmd:rgba(217,119,6,.25); --accglow:0 0 12px rgba(217,119,6,.15);
+  --amb:#D97706; --red:#EF4444; --grn:#22C55E;
+  --cyan:var(--acc); --cyan2:var(--acc2);
+  --cylo:var(--acclo); --cymd:var(--accmd); --cyglow:var(--accglow);
+  --vio:var(--acc); --vio2:var(--acc2); --violo:var(--acclo);
+  --pink:var(--acc); --pinlo:var(--acclo);
 }
-[data-theme="dark"] .inbtn.send { background:#FFFFFF; color:#000; }
-[data-theme="dark"] .btn-prim { background:#FFFFFF; color:#000; }
-[data-theme="dark"] .sc-btn.cyan { background:#FFFFFF; color:#000; }
+[data-theme="dark"] .inbtn.send { background:var(--acc); color:#fff; }
+[data-theme="dark"] .btn-prim { background:var(--acc); color:#fff; }
+[data-theme="dark"] .sc-btn.cyan { background:var(--acc); color:#fff; }
 [data-theme="dark"] body::before { display:none; }
-
-/* LIGHT theme — soft warm white, not blinding */
-[data-theme="light"] {
-  --bg:#F5F4F0; --bg1:#EDECE8; --bg2:#E4E3DF; --bg3:#D8D7D3; --bg4:#CCCBC7; --bg5:#BFBEBB;
-  --t0:#1A1A18; --t1:#444440; --t2:#777770; --t3:#AAAAAA;
-  --bdr:rgba(0,0,0,.09); --bdrc:rgba(0,0,0,.18);
-  --cyan:#1A1A18; --cyan2:#333330;
-  --cylo:rgba(0,0,0,.04); --cymd:rgba(0,0,0,.1);
-  --cyglow:none;
-  --vio:#555550; --vio2:#333330;
-  --violo:rgba(0,0,0,.04);
-  --pink:#555550; --pinlo:rgba(0,0,0,.04);
-  --amb:#B8860B; --grn:#2D6A2D;
-}
-[data-theme="light"] body::before { display:none; }
-[data-theme="light"] .inbtn.send { background:#1A1A18; color:#fff; }
-[data-theme="light"] .btn-prim { background:#1A1A18; color:#fff; }
-[data-theme="light"] .sc-btn.cyan { background:#1A1A18; color:#fff; }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{height:100%;width:100%}
 body{
@@ -94,70 +78,136 @@ body::before{display:none}
 /* ── ONBOARDING ── */
 #onboard{
   position:fixed;inset:0;z-index:800;
-  display:flex;align-items:center;justify-content:center;
-  padding:1.5rem;background:var(--bg);
+  display:flex;align-items:flex-start;justify-content:center;
+  overflow-y:auto;
+  background:var(--bg);
+  padding:0;
 }
 .ob-wrap{
-  width:100%;max-width:390px;display:flex;flex-direction:column;
-  align-items:center;gap:1.5rem;
-  animation:riseUp .5s var(--spring) both;
+  width:100%;max-width:420px;
+  min-height:100vh;
+  display:flex;flex-direction:column;
+  align-items:center;
+  padding:52px 28px 40px;
+  gap:0;
+  animation:riseUp .45s var(--spring) both;
 }
-.q-logo{position:relative;width:68px;height:68px;cursor:pointer}
+
+/* Logo mark */
+.q-logo{position:relative;width:56px;height:56px;cursor:pointer;margin-bottom:20px}
 .q-circle{
-  width:68px;height:68px;border-radius:50%;
-  background:linear-gradient(135deg,var(--bg3),var(--bg4));
+  width:56px;height:56px;border-radius:14px;
+  background:var(--bg3);border:1px solid var(--bdr);
   display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 28px rgba(0,212,255,.25),0 0 55px rgba(139,92,246,.15);
   position:relative;
 }
-.q-circle::before{
-  content:'';position:absolute;inset:-2px;border-radius:50%;
-  background:linear-gradient(135deg,var(--cyan),var(--vio));z-index:-1;
-}
+.q-circle::before{display:none}
 .q-letter{
-  font-size:28px;font-weight:900;
-  background:linear-gradient(135deg,var(--cyan),var(--vio2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  font-size:24px;font-weight:900;
+  color:var(--acc);
 }
 .q-star{
-  position:absolute;top:-3px;right:-3px;width:17px;height:17px;
-  background:linear-gradient(135deg,var(--cyan),var(--vio));
+  position:absolute;top:-5px;right:-5px;width:16px;height:16px;
+  background:var(--acc);
   border-radius:50%;border:2px solid var(--bg);
-  display:flex;align-items:center;justify-content:center;font-size:8px;
+  display:flex;align-items:center;justify-content:center;font-size:7px;color:#fff;
 }
+
+/* Wordmark */
 .ob-wordmark{
-  font-size:2.4rem;font-weight:900;letter-spacing:3px;
-  background:linear-gradient(90deg,var(--t0),var(--cyan));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  line-height:1;
+  font-size:2rem;font-weight:900;letter-spacing:4px;
+  color:var(--t0);
+  line-height:1;margin-bottom:6px;
 }
-.ob-tag{font-size:.78rem;color:var(--t1);letter-spacing:.05em;margin-top:3px;text-align:center}
+.ob-tag{font-size:.78rem;color:var(--t2);letter-spacing:.04em;margin-bottom:40px;text-align:center}
+
+/* Auth card */
 .ob-card{
-  background:var(--bg2);border:1px solid var(--bdrc);border-radius:18px;
-  padding:1.8rem 2rem;width:100%;
-  box-shadow:0 20px 60px rgba(0,0,0,.5);
-  position:relative;overflow:hidden;
+  background:transparent;border:none;
+  padding:0;width:100%;
+  position:relative;overflow:visible;
 }
-.ob-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:linear-gradient(90deg,var(--cyan),var(--vio),var(--pink));
+.ob-card::before{display:none}
+
+/* Section label */
+.ob-sect-lbl{
+  font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t2);margin-bottom:14px;
 }
-.ob-feats{list-style:none;display:flex;flex-direction:column;gap:.55rem;margin-bottom:1.4rem}
-.ob-feats li{display:flex;align-items:center;gap:.65rem;font-size:.82rem;color:var(--t1)}
-.ob-dot{width:5px;height:5px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--vio));flex-shrink:0}
+
+/* Feature list (hidden in new design — moved to compact) */
+.ob-feats{display:none}
+.ob-dot{display:none}
+
+/* Input fields */
+.ob-inp{
+  display:block;width:100%;
+  padding:14px 16px;margin-bottom:10px;
+  border-radius:11px;
+  border:1px solid var(--bdr);background:var(--bg2);
+  color:var(--t0);font-family:var(--ff);font-size:.92rem;
+  outline:none;transition:border-color .15s,box-shadow .15s;
+}
+.ob-inp:focus{border-color:var(--accmd);box-shadow:0 0 0 3px var(--acclo)}
+.ob-inp::placeholder{color:var(--t3)}
+
+/* Primary CTA */
 .ob-btn{
-  width:100%;padding:.82rem;border-radius:11px;border:none;cursor:pointer;
-  font-family:var(--ff);font-size:.88rem;font-weight:600;
-  transition:all var(--dur);display:flex;align-items:center;justify-content:center;gap:.65rem;
+  width:100%;padding:15px;border-radius:11px;border:none;cursor:pointer;
+  font-family:var(--ff);font-size:.92rem;font-weight:700;
+  transition:opacity .15s,transform .1s;
+  display:flex;align-items:center;justify-content:center;gap:.65rem;
+  margin-bottom:0;
 }
+.ob-btn-guest{
+  background:var(--acc);color:#fff;
+  margin-bottom:20px;
+}
+.ob-btn-guest:hover{opacity:.88}
+.ob-btn-guest:active{transform:scale(.98)}
+
+/* Divider */
+.ob-divider{
+  display:flex;align-items:center;gap:12px;margin-bottom:20px;
+}
+.ob-divider::before,.ob-divider::after{
+  content:'';flex:1;height:1px;background:var(--bdr);
+}
+.ob-divider span{font-size:.68rem;color:var(--t2);white-space:nowrap}
+
+/* Google icon-circle button */
 .ob-btn-google{
-  background:linear-gradient(135deg,rgba(0,212,255,.15),rgba(139,92,246,.15));
-  border:1px solid var(--cymd);color:var(--t0);margin-bottom:.6rem;
+  width:48px;height:48px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;margin:0 auto 24px;
+  transition:border-color .15s,box-shadow .15s;
+  padding:0;
 }
-.ob-btn-google:hover{border-color:var(--cymd);color:var(--t0)}
-.ob-btn-guest{background:linear-gradient(135deg,var(--cyan),var(--vio));border:none;color:#fff;font-weight:700;margin-bottom:.5rem;}
-.ob-btn-guest:hover{opacity:.9}
-.ob-note{font-size:.67rem;color:var(--t2);text-align:center;margin-top:.7rem;line-height:1.5}
+.ob-btn-google:hover{
+  border-color:var(--accmd);
+  box-shadow:0 0 0 3px var(--acclo);
+}
+
+/* Toggle link */
+.ob-auth-toggle{
+  font-size:.82rem;color:var(--t1);text-align:center;
+  cursor:pointer;margin-top:0;
+}
+.ob-auth-toggle span{color:var(--acc);font-weight:600;text-decoration:underline}
+.ob-auth-toggle:hover{color:var(--t0)}
+
+/* Error */
+.ob-err{
+  font-size:.76rem;color:var(--red);
+  display:none;padding:10px 14px;margin-bottom:10px;
+  background:rgba(220,38,38,.07);border:1px solid rgba(220,38,38,.2);
+  border-radius:8px;
+}
+.ob-err.show{display:block}
+
+/* Footer note */
+.ob-note{font-size:.67rem;color:var(--t3);text-align:center;margin-top:32px;line-height:1.5}
 
 /* ── APP SHELL ── */
 #app{display:none;position:fixed;inset:0;z-index:1}
@@ -261,9 +311,9 @@ body::before{display:none}
 .cc-cy{background:linear-gradient(145deg,#0A1628,#0D2040,#062030)}
 .cc-vi{background:linear-gradient(145deg,#110D28,#1C1040,#200D35)}
 .cc-pk{background:linear-gradient(145deg,#200A1A,#2A0D22,#180A18)}
-[data-theme="light"] .cc-cy{background:linear-gradient(145deg,#d8e8f8,#ccdcf0)}
-[data-theme="light"] .cc-vi{background:linear-gradient(145deg,#e0d8f4,#d4cced)}
-[data-theme="light"] .cc-pk{background:linear-gradient(145deg,#ecd8e4,#e4ccd8)}
+
+
+
 .cc-glow{position:absolute;inset:0;pointer-events:none;opacity:.4}
 .cc-cy .cc-glow{background:radial-gradient(ellipse at 80% 20%,rgba(0,212,255,.15) 0%,transparent 60%)}
 .cc-vi .cc-glow{background:radial-gradient(ellipse at 80% 20%,rgba(139,92,246,.18) 0%,transparent 60%)}
@@ -745,11 +795,11 @@ body::before{display:none}
 .sc-5 { background:var(--bg2); }
 .sc-5::before { background:var(--bdr); }
 
-[data-theme="light"] .sc-1 { background:linear-gradient(145deg,#d8e4f4,#ccd8ec); }
-[data-theme="light"] .sc-2 { background:linear-gradient(145deg,#e0d8f4,#d4ccec); }
-[data-theme="light"] .sc-3 { background:linear-gradient(145deg,#d0ecdc,#c4e4d0); }
-[data-theme="light"] .sc-4 { background:linear-gradient(145deg,#f0e4c8,#e8d8b8); }
-[data-theme="light"] .sc-5 { background:linear-gradient(145deg,#ecd8e4,#e4ccd8); }
+
+
+
+
+
 
 .sc-icon { font-size:2.2rem; line-height:1; }
 .sc-label {
@@ -921,7 +971,7 @@ body::before{display:none}
 /* ═══ CINEMATIC SPLASH SCREEN ═══ */
 #splash {
   position:fixed; inset:0; z-index:1000;
-  background:#04060F;
+  background:var(--bg);
   display:flex; flex-direction:column;
   align-items:center; justify-content:center;
   gap:0;
@@ -944,10 +994,10 @@ body::before{display:none}
 }
 .splash-circle {
   width:90px; height:90px; border-radius:50%;
-  background:linear-gradient(135deg,#10162C,#161E3A);
+  background:var(--bg3);
   display:flex; align-items:center; justify-content:center;
   position:relative;
-  box-shadow:0 0 40px rgba(0,212,255,.3), 0 0 80px rgba(139,92,246,.2);
+  box-shadow:0 2px 12px rgba(0,0,0,.15);
   animation:splashPulse 2.5s ease-in-out infinite;
   animation-delay:1s;
 }
@@ -969,7 +1019,7 @@ body::before{display:none}
   position:absolute; top:-4px; right:-4px;
   width:22px; height:22px;
   background:linear-gradient(135deg,var(--cyan),var(--vio));
-  border-radius:50%; border:2px solid #04060F;
+  border-radius:50%; border:2px solid var(--bg);
   display:flex; align-items:center; justify-content:center;
   font-size:10px; color:#fff;
   animation:starSpin 4s linear infinite;
@@ -982,8 +1032,7 @@ body::before{display:none}
 /* Brand name */
 .splash-brand {
   font-size:3.2rem; font-weight:900; letter-spacing:6px;
-  background:linear-gradient(90deg,#F0F4FF,var(--cyan));
-  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  color:var(--t0);
   animation:splashTextIn .8s var(--spring) both;
   animation-delay:.8s; opacity:0;
   line-height:1;
@@ -1091,14 +1140,398 @@ body::before{display:none}
   .nl { display:none !important; }
   #sb-nav-label { display:none !important; }
 }
+
+/* ═══════════════════════════════════════════════
+   QUEVA v2 — DESIGN SYSTEM OVERRIDES
+   Kills all neon/gradient AI aesthetics;
+   replaces with clean editorial warmth.
+═══════════════════════════════════════════════ */
+
+/* — Gradient text: remove everywhere, use solid — */
+.ob-wordmark {
+  background:none !important;
+  -webkit-background-clip:unset !important;
+  -webkit-text-fill-color:var(--t0) !important;
+  background-clip:unset !important;
+  color:var(--t0) !important;
+  letter-spacing:2px;
+}
+.sb-nm {
+  background:none !important;
+  -webkit-background-clip:unset !important;
+  -webkit-text-fill-color:var(--t0) !important;
+  background-clip:unset !important;
+  color:var(--t0) !important;
+}
+.splash-brand {
+  background:none !important;
+  -webkit-background-clip:unset !important;
+  -webkit-text-fill-color:var(--t0) !important;
+  background-clip:unset !important;
+  color:var(--t0) !important;
+}
+.q-letter, .splash-q {
+  background:none !important;
+  -webkit-background-clip:unset !important;
+  -webkit-text-fill-color:var(--acc) !important;
+  background-clip:unset !important;
+}
+.sc-title span, .ftc-slide-title span {
+  background:none !important;
+  -webkit-background-clip:unset !important;
+  -webkit-text-fill-color:var(--acc) !important;
+  background-clip:unset !important;
+}
+
+/* — Logo orbs: remove neon glow, use clean accent ring — */
+.q-circle {
+  background:var(--bg3) !important;
+  box-shadow:0 2px 8px rgba(0,0,0,.12) !important;
+  animation:none !important;
+  border:2px solid var(--accmd) !important;
+}
+.q-circle::before { background:none !important; }
+.q-star, .splash-star { background:var(--acc) !important; }
+.splash-circle {
+  background:var(--bg3) !important;
+  box-shadow:0 4px 20px rgba(0,0,0,.15) !important;
+  animation:none !important;
+  border:2px solid var(--accmd) !important;
+}
+.splash-circle::before { background:none !important; }
+
+/* — Onboarding card: replace gradient top-bar with accent — */
+.ob-card::before { background:var(--acc) !important; }
+
+/* — Onboarding buttons — */
+.ob-btn-guest {
+  background:var(--acc) !important;
+  color:#fff !important;
+}
+.ob-btn-google {
+  background:var(--bg3) !important;
+  border-color:var(--bdr) !important;
+}
+.ob-dot { background:var(--acc) !important; }
+
+/* — Home page — */
+.home-dq::before { background:var(--acc) !important; }
+.home-dq-label { color:var(--acc) !important; }
+.home-dq-btn { background:var(--acc) !important; }
+.home-cta:hover { border-color:var(--accmd) !important; }
+.hc-icon { border-color:var(--accmd) !important; color:var(--acc) !important; background:var(--acclo) !important; }
+.hc-arrow { color:var(--acc) !important; }
+.ha-btn:hover { border-color:var(--accmd) !important; background:var(--bg3) !important; }
+.sec-more { color:var(--acc) !important; }
+
+/* — Ask bar: clean, no glow — */
+.ask-bar { box-shadow:none !important; border-color:var(--bdr) !important; }
+.ask-bar:hover { border-color:var(--accmd) !important; }
+.ask-badge { background:var(--acclo) !important; border-color:var(--accmd) !important; color:var(--acc) !important; }
+
+/* — Upload strip chips — */
+.us-chip { border-color:var(--bdr) !important; }
+.us-chip:hover { border-color:var(--accmd) !important; color:var(--acc) !important; background:var(--acclo) !important; }
+
+/* — AI model pill — */
+.mpill { background:var(--acclo) !important; border-color:var(--accmd) !important; color:var(--acc) !important; }
+.mdot { background:var(--acc) !important; animation:blink 2.5s infinite !important; }
+
+/* — Speed tip banner — */
+#speed-tip {
+  background:var(--acclo) !important;
+  border-color:var(--accmd) !important;
+}
+.st-ttl { color:var(--acc) !important; }
+.st-btn { background:var(--acclo) !important; border-color:var(--accmd) !important; color:var(--acc) !important; }
+
+/* — Swipe banners — */
+.sc-title span { -webkit-text-fill-color:var(--acc) !important; }
+.sc-btn.cyan { background:var(--acc) !important; color:#fff !important; }
+.sd.active { background:var(--acc) !important; }
+
+/* — Progress bars & streak — */
+.bar.done { background:var(--acc) !important; }
+.bar.today { background:var(--acc) !important; box-shadow:none !important; }
+.s-fill { stroke:var(--acc) !important; }
+#aiq-prog-bar { background:var(--acc) !important; }
+
+/* Curio cards: use flat warm grads instead of neon tints */
+.cc-cy { background:linear-gradient(145deg,#f0ece4,#e8e0d4) !important; }
+.cc-vi { background:linear-gradient(145deg,#ece8e0,#e4dcd0) !important; }
+.cc-pk { background:linear-gradient(145deg,#e8e0d8,#e0d8cc) !important; }
+[data-theme="dark"] .cc-cy { background:linear-gradient(145deg,#242220,#2a2724) !important; }
+[data-theme="dark"] .cc-vi { background:linear-gradient(145deg,#262320,#2c2926) !important; }
+[data-theme="dark"] .cc-pk { background:linear-gradient(145deg,#242220,#2a2622) !important; }
+.cc-glow { display:none !important; }
+.cc-cy .cc-tag { color:var(--acc) !important; background:var(--acclo) !important; }
+.cc-vi .cc-tag { color:var(--t1) !important; background:var(--bg4) !important; }
+.cc-pk .cc-tag { color:var(--t2) !important; background:var(--bg4) !important; }
+.cc-cy .cc-cta { color:var(--acc) !important; }
+.cc-vi .cc-cta { color:var(--t1) !important; }
+.cc-pk .cc-cta { color:var(--t2) !important; }
+
+/* — Navigation active states — */
+.nl.active { background:var(--acclo) !important; border-color:var(--accmd) !important; color:var(--t0) !important; }
+.hi.active { background:var(--acclo) !important; border-color:var(--accmd) !important; }
+.hi.active .hi-lb { color:var(--acc) !important; }
+
+/* — Topbar interactive states — */
+.tb-ham:hover { border-color:var(--accmd) !important; color:var(--acc) !important; }
+.tb-back:hover { border-color:var(--accmd) !important; color:var(--acc) !important; background:var(--acclo) !important; }
+.tb-theme:hover { border-color:var(--accmd) !important; color:var(--acc) !important; }
+.tb-btn:hover { border-color:var(--accmd) !important; color:var(--acc) !important; background:var(--acclo) !important; }
+
+/* — Input & send button — */
+.inbtn.send { background:var(--acc) !important; color:#fff !important; }
+.inbtn.send:hover { opacity:.88 !important; }
+.btn-prim { background:var(--acc) !important; color:#fff !important; }
+
+/* — Document action chips — */
+.doc-chip:hover { border-color:var(--accmd) !important; background:var(--acclo) !important; color:var(--acc) !important; }
+.doc-ready { border-color:var(--accmd) !important; }
+
+/* — Think steps — */
+.think-step.active { color:var(--acc) !important; }
+
+/* — Quiz options — */
+.aiq-opt:hover { border-color:var(--accmd) !important; background:var(--acclo) !important; }
+.aiq-opt.selected { border-color:var(--acc) !important; background:var(--acclo) !important; color:var(--acc) !important; }
+
+/* — Sidebar user avatar — */
+.su-av { border-color:var(--accmd) !important; color:var(--acc) !important; }
+
+/* — Splash: use theme bg not hardcoded black — */
+#splash { background:var(--bg) !important; }
+
+/* — Auth input focus — */
+.ob-inp:focus { border-color:var(--accmd) !important; }
+.ob-auth-toggle { color:var(--acc) !important; }
+
+/* — Settings: link color — */
+a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
+
+/* — FTC carousel: clean button — */
+.ftc-slide-btn { background:var(--acc) !important; color:#fff !important; }
+.ftc-slide-btn.outline { background:none !important; border-color:var(--bdr) !important; color:var(--t1) !important; }
+.ftc-slide-btn.outline:hover { border-color:var(--accmd) !important; color:var(--acc) !important; }
+
+/* — Streak card: remove orange blob bg — */
+.streak-card::before { display:none !important; }
+
+/* — DQ card accent bar — */
+.dq-card { border-left:3px solid var(--acc) !important; border-radius:0 11px 11px 0 !important; }
+
+/* ─ Light theme specific refinements ─ */
+:root .ask-bar,
+[data-theme="light"] .ask-bar { border-color:var(--bdr) !important; }
+[data-theme="light"] .tb-ham { background:var(--bg3) !important; }
+
+
+/* ═══════════════════════════════════════════════
+   QUEVA v2.1 — LAYOUT & SPACING OVERRIDES
+   Premium breathing room. Matches Claude/GPT feel.
+═══════════════════════════════════════════════ */
+
+/* ── TOPBAR: cleaner, no emoji icons ── */
+.topbar {
+  height:56px !important;
+  min-height:56px !important;
+  padding:0 16px !important;
+  gap:10px !important;
+}
+.tb-ham {
+  border-radius:9px !important;
+  font-size:1rem !important;
+}
+.tb-ttl {
+  font-size:.88rem !important;
+  font-weight:700 !important;
+  letter-spacing:.01em !important;
+}
+
+/* ── BOTTOM NAV: taller, better spacing ── */
+#bnav {
+  height:64px !important;
+  padding:0 4px !important;
+  gap:0 !important;
+  border-top:1px solid var(--bdr) !important;
+  background:var(--bg1) !important;
+}
+.bni {
+  flex:1;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  padding:8px 4px;
+  font-size:.6rem;
+  font-weight:500;
+  color:var(--t2);
+  cursor:pointer;
+  transition:color .15s;
+  border:none;
+  background:none;
+  border-radius:0;
+  position:relative;
+}
+.bni:hover { color:var(--t1); }
+.bni.active { color:var(--acc); }
+.bni.active::before {
+  content:'';
+  position:absolute;
+  top:0; left:20%; right:20%; height:2px;
+  background:var(--acc);
+  border-radius:0 0 3px 3px;
+}
+.bni-ic { font-size:1.1rem; line-height:1; }
+--navh:64px;
+
+/* ── HOME PAGE: breathing room ── */
+#pg-home {
+  padding:20px 18px !important;
+  gap:18px !important;
+}
+.home-greeting { padding:8px 0 4px !important; }
+.hg-title { font-size:1.5rem !important; font-weight:800 !important; letter-spacing:-.01em; }
+.hg-sub { font-size:.86rem !important; margin-top:4px !important; }
+
+/* ── HOME CTA: bigger, more presence ── */
+.home-cta {
+  padding:20px 20px !important;
+  border-radius:16px !important;
+  gap:16px !important;
+}
+.hc-icon {
+  width:44px !important;
+  height:44px !important;
+  border-radius:12px !important;
+  font-size:1.2rem !important;
+}
+.hc-title { font-size:.96rem !important; font-weight:700 !important; }
+.hc-sub { font-size:.78rem !important; }
+
+/* ── QUICK ACTIONS: taller cards ── */
+.home-actions { gap:10px !important; }
+.ha-btn {
+  padding:18px 8px !important;
+  border-radius:14px !important;
+  gap:8px !important;
+}
+.ha-ic { font-size:1.5rem !important; }
+.ha-lbl { font-size:.73rem !important; font-weight:600 !important; }
+
+/* ── DAILY QUESTION CARD ── */
+.home-dq {
+  border-radius:16px !important;
+  padding:18px 18px 16px !important;
+  gap:10px !important;
+}
+
+/* ── SWIPE CARDS: less crowded ── */
+.swipe-card {
+  border-radius:16px !important;
+  padding:22px !important;
+  gap:12px !important;
+}
+.sc-icon { font-size:2.4rem !important; }
+.sc-title { font-size:1.15rem !important; font-weight:800 !important; }
+.sc-body { font-size:.82rem !important; line-height:1.65 !important; }
+
+/* ── INPUT ZONE: Claude-style pill ── */
+.inzone {
+  padding:12px 16px 16px !important;
+}
+.inbox {
+  border-radius:16px !important;
+  padding:12px 12px 12px 16px !important;
+  gap:8px !important;
+}
+#txtin { font-size:.9rem !important; }
+.inbtn {
+  width:38px !important;
+  height:38px !important;
+  border-radius:10px !important;
+}
+.inbtn.send {
+  width:38px !important;
+  height:38px !important;
+  border-radius:10px !important;
+  background:var(--acc) !important;
+  color:#fff !important;
+  border:none !important;
+}
+
+/* ── CHAT MESSAGES: more readable ── */
+.mbl {
+  padding:12px 15px !important;
+  border-radius:14px !important;
+  font-size:.88rem !important;
+  line-height:1.7 !important;
+}
+.mr.user .mbl { border-bottom-right-radius:4px !important; }
+.mr.ai .mbl { border-bottom-left-radius:4px !important; }
+
+/* ── WELCOME SCREEN ── */
+#welcome { gap:1.4rem !important; padding:2rem 1.2rem !important; }
+.wc-qi {
+  width:60px !important; height:60px !important;
+  border-radius:16px !important;
+  background:var(--bg3) !important;
+  border:1px solid var(--bdr) !important;
+  color:var(--acc) !important;
+  box-shadow:none !important;
+}
+.wc-ttl { font-size:1.5rem !important; font-weight:800 !important; }
+.wc-cards { gap:8px !important; }
+.wcc {
+  border-radius:13px !important;
+  padding:14px 12px !important;
+}
+.wcc-ic { font-size:1.1rem !important; margin-bottom:5px !important; }
+.wcc-t { font-size:.76rem !important; font-weight:700 !important; margin-bottom:3px !important; }
+.wcc-d { font-size:.68rem !important; }
+
+/* ── SETTINGS: wider gutters ── */
+.ss { border-radius:14px !important; padding:18px !important; gap:14px !important; }
+.ss-hd { font-size:.82rem !important; padding-bottom:10px !important; }
+
+/* ── Kill particle animations residuals ── */
+.ob-particles { display:none !important; }
+@keyframes floatUp { from{} to{} } /* neutralise */
+
+/* ── Remove old ob-email-form class (now inline in views) ── */
+.ob-email-form { display:none !important; }
+
+/* ── Onboarding view padding on tall phones ── */
+@media(min-height:750px){
+  .ob-wrap { padding-top:72px !important; }
+}
+@media(max-height:650px){
+  .ob-wrap { padding-top:28px !important; }
+  .ob-tag { margin-bottom:24px !important; }
+}
+
+/* ── Update navh for taller bottom nav ── */
+@media(max-width:768px){
+  #pg-home  { padding-bottom:calc(64px + 16px) !important; }
+  #pg-kp    { padding-bottom:calc(64px + 16px) !important; }
+  #pg-set   { padding-bottom:calc(64px + 16px) !important; }
+  #msgs     { padding-bottom:calc(64px + 90px + 16px) !important; }
+  .inzone   { bottom:64px !important; }
+}
+
+
 </style>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute">
   <defs>
     <linearGradient id="rg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00D4FF"/>
-      <stop offset="100%" stop-color="#8B5CF6"/>
+      <stop offset="0%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
     </linearGradient>
   </defs>
 </svg>
@@ -1126,82 +1559,77 @@ body::before{display:none}
 
 <!-- ONBOARDING -->
 <div id="onboard">
-
-  <!-- Floating learning particles — pure CSS, zero performance impact -->
-  <div class="ob-particles" id="ob-particles">
-    <div class="ob-p" style="left:8%;--dur:9s;--delay:0s">📄</div>
-    <div class="ob-p" style="left:20%;--dur:11s;--delay:1.5s">✦</div>
-    <div class="ob-p" style="left:35%;--dur:8s;--delay:3s">💡</div>
-    <div class="ob-p" style="left:50%;--dur:13s;--delay:0.5s">🎯</div>
-    <div class="ob-p" style="left:65%;--dur:10s;--delay:2s">◈</div>
-    <div class="ob-p" style="left:78%;--dur:12s;--delay:4s">📝</div>
-    <div class="ob-p" style="left:90%;--dur:9s;--delay:1s">⚡</div>
-    <div class="ob-p" style="left:15%;--dur:14s;--delay:6s">🔑</div>
-    <div class="ob-p" style="left:55%;--dur:10s;--delay:7s">📚</div>
-    <div class="ob-p" style="left:42%;--dur:15s;--delay:2.5s">✨</div>
-  </div>
-
   <div class="ob-wrap">
+
+    <!-- Logo -->
     <div class="q-logo" id="ob-logo">
       <div class="q-circle"><div class="q-letter">Q</div></div>
       <div class="q-star">✦</div>
     </div>
-    <div style="text-align:center">
-      <div class="ob-wordmark">QUEVA</div>
-      <div class="ob-tag">Question Everything. Learn Anything.</div>
-    </div>
-    <div class="ob-card">
-      <ul class="ob-feats">
-        <li><div class="ob-dot"></div>Upload PDFs &amp; lecture notes for instant AI analysis</li>
-        <li><div class="ob-dot"></div>Auto-extract key points and map exam topics</li>
-        <li><div class="ob-dot"></div>Sessions saved to cloud — access anywhere</li>
-        <li><div class="ob-dot"></div>Track your streak, export chats &amp; key points</li>
-      </ul>
 
-      <!-- Guest — primary CTA -->
-      <button class="ob-btn ob-btn-guest" id="ob-guest">Start Learning — No signup needed</button>
+    <!-- Brand -->
+    <div class="ob-wordmark">QUEVA</div>
+    <div class="ob-tag">Your AI study companion</div>
 
-      <div style="display:flex;align-items:center;gap:8px;margin:8px 0">
-        <div style="flex:1;height:1px;background:var(--bdr)"></div>
-        <span style="font-size:.68rem;color:var(--t2)">or sign in to sync sessions</span>
-        <div style="flex:1;height:1px;background:var(--bdr)"></div>
-      </div>
+    <!-- Auth card -->
+    <div class="ob-card" id="ob-card">
 
-      <!-- Google sign in -->
-      <button class="ob-btn ob-btn-google" id="ob-google">
-        <svg width="17" height="17" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Continue with Google
-      </button>
-
-      <!-- Email divider -->
-      <div style="display:flex;align-items:center;gap:8px;margin:6px 0">
-        <div style="flex:1;height:1px;background:var(--bdr)"></div>
-        <span style="font-size:.68rem;color:var(--t2)">or use email</span>
-        <div style="flex:1;height:1px;background:var(--bdr)"></div>
-      </div>
-
-      <!-- Email auth form -->
-      <div class="ob-email-form" id="ob-email-form">
-        <input type="email" class="ob-inp" id="ob-email" placeholder="Email address" autocomplete="email"/>
-        <input type="password" class="ob-inp" id="ob-pass" placeholder="Password" autocomplete="current-password"/>
-        <input type="password" class="ob-inp" id="ob-pass2" placeholder="Confirm password (sign up only)" autocomplete="new-password" style="display:none"/>
+      <!-- SIGNUP VIEW (default) -->
+      <div id="ob-signup-view">
+        <div class="ob-sect-lbl">Create your account</div>
+        <input type="text"     class="ob-inp" id="ob-name"  placeholder="Full name"          autocomplete="name"/>
+        <input type="email"    class="ob-inp" id="ob-email" placeholder="Email address"      autocomplete="email"/>
+        <input type="password" class="ob-inp" id="ob-pass"  placeholder="Password"           autocomplete="new-password"/>
+        <input type="password" class="ob-inp" id="ob-pass2" placeholder="Confirm password"   autocomplete="new-password"/>
         <div class="ob-err" id="ob-err"></div>
-        <button class="ob-btn ob-btn-guest" id="ob-email-submit" style="margin-bottom:0">Sign In</button>
-        <div class="ob-auth-toggle" id="ob-auth-toggle">Don't have an account? Sign up</div>
+        <button class="ob-btn ob-btn-guest" id="ob-email-submit" style="margin-top:6px">Create Account</button>
+        <div class="ob-divider"><span>or sign up with</span></div>
+        <button class="ob-btn-google" id="ob-google" title="Continue with Google">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+        </button>
+        <div class="ob-auth-toggle" id="ob-auth-toggle">
+          Already have an account? <span onclick="switchToSignIn()">Sign in</span>
+        </div>
       </div>
 
-      <!-- Email toggle button (collapsed by default) -->
-      <button class="ob-btn ob-btn-google" id="ob-email-toggle" style="margin-top:0">
-        ✉️ Continue with Email
-      </button>
+      <!-- SIGNIN VIEW -->
+      <div id="ob-signin-view" style="display:none">
+        <div class="ob-sect-lbl">Welcome back</div>
+        <input type="email"    class="ob-inp" id="ob-si-email" placeholder="Email address"  autocomplete="email"/>
+        <input type="password" class="ob-inp" id="ob-si-pass"  placeholder="Password"       autocomplete="current-password"/>
+        <div class="ob-err" id="ob-si-err"></div>
+        <button class="ob-btn ob-btn-guest" id="ob-si-submit" style="margin-top:6px">Sign In</button>
+        <div class="ob-divider"><span>or sign in with</span></div>
+        <button class="ob-btn-google" id="ob-google-si" title="Sign in with Google">
+          <svg width="20" height="20" viewBox="0 0 24 24">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+        </button>
+        <div class="ob-auth-toggle">
+          New to Queva? <span onclick="switchToSignUp()">Create account</span>
+        </div>
+      </div>
 
-      <div id="ob-loading" style="display:none;text-align:center;padding:6px;font-size:.74rem;color:var(--cyan)">
-        <span id="ob-loading-txt">Signing in…</span>
+      <div id="ob-loading" style="display:none;text-align:center;padding:14px 0;font-size:.8rem;color:var(--t2)">
+        <span id="ob-loading-txt">Please wait…</span>
       </div>
     </div>
+
+    <!-- Guest link -->
+    <div class="ob-note">
+      Just exploring? <span style="color:var(--acc);cursor:pointer;font-weight:600;text-decoration:underline" id="ob-guest">Continue without account</span>
+    </div>
+
   </div>
 </div>
-
 <!-- APP -->
 <div id="app">
 
@@ -1223,11 +1651,11 @@ body::before{display:none}
       <button class="btn-out" id="btn-out">Sign out</button>
     </div>
     <nav class="sb-nav">
-      <div class="nl active" data-pg="home"><div class="nl-ic">⌂</div>Home</div>
-      <div class="nl" data-pg="ai"><div class="nl-ic">✦</div>AI Assistant</div>
-      <div class="nl" data-pg="quiz"><div class="nl-ic">🎯</div>Quiz Mode</div>
-      <div class="nl" data-pg="kp"><div class="nl-ic">◈</div>Key Points</div>
-      <div class="nl" data-pg="set"><div class="nl-ic">⚙</div>Settings</div>
+      <div class="nl active" data-pg="home"><div class="nl-ic">Home</div></div>
+      <div class="nl" data-pg="ai"><div class="nl-ic">AI</div></div>
+      <div class="nl" data-pg="quiz"><div class="nl-ic">Quiz</div></div>
+      <div class="nl" data-pg="kp"><div class="nl-ic">Keys</div></div>
+      <div class="nl" data-pg="set"><div class="nl-ic">Settings</div></div>
     </nav>
     <div class="sb-hl">Sessions</div>
     <div class="sb-hist" id="sb-hist">
@@ -1238,8 +1666,8 @@ body::before{display:none}
   <!-- MAIN -->
   <div id="main">
     <div class="topbar">
-      <div class="tb-ham" id="ham">☰</div>
-      <button class="tb-back" id="tb-back" onclick="goHome()">‹ Home</button>
+      <div class="tb-ham" id="ham"><svg width="16" height="14" viewBox="0 0 16 14" fill="none"><rect y="0" width="16" height="1.8" rx="0.9" fill="currentColor"/><rect y="6" width="11" height="1.8" rx="0.9" fill="currentColor"/><rect y="12" width="16" height="1.8" rx="0.9" fill="currentColor"/></svg></div>
+      <button class="tb-back" id="tb-back" onclick="goHome()">← Home</button>
       <div class="tb-ttl" id="tb-ttl">Welcome to Queva</div>
       <div class="fchip" id="fchip" style="display:none;align-items:center;gap:5px;padding:4px 9px;background:var(--cylo);border:1px solid var(--cymd);border-radius:20px;font-size:.7rem;color:var(--cyan);max-width:120px">
         <span>📎</span><span class="fc-nm" id="fc-nm" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></span>
@@ -1263,7 +1691,7 @@ body::before{display:none}
       <!-- MAIN CTA — goes straight to AI -->
       <div class="home-cta" onclick="swPage('ai')">
         <div class="hc-left">
-          <div class="hc-icon">✦</div>
+          <div class="hc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg></div>
           <div>
             <div class="hc-title">Ask Queva</div>
             <div class="hc-sub">Type a question or attach your notes…</div>
@@ -1275,7 +1703,7 @@ body::before{display:none}
       <!-- 3 QUICK ACTIONS -->
       <div class="home-actions">
         <div class="ha-btn" onclick="swPage('ai');openModal()">
-          <div class="ha-ic">📄</div>
+          <div class="ha-ic" style="font-size:1.3rem;opacity:.7">PDF</div>
           <div class="ha-lbl">Upload PDF</div>
         </div>
         <div class="ha-btn" onclick="swPage('quiz')">
@@ -1392,7 +1820,7 @@ body::before{display:none}
 
       <div id="msgs">
         <div id="welcome">
-          <div class="wc-qi">Q</div>
+          <div class="wc-qi" style="font-size:1.5rem;font-weight:900">Q</div>
           <div class="wc-ttl">Ask <span>anything.</span></div>
           <div class="wc-sub">Type a question below — or attach a PDF / lecture note above to analyse your material.</div>
           <div class="wc-cards">
@@ -1510,10 +1938,10 @@ body::before{display:none}
         <div style="background:var(--bg2);border:1px solid var(--bdr);border-radius:12px;padding:14px">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
             <div style="font-size:.76rem;font-weight:700;color:var(--t0)" id="aiq-sess-title">Quiz</div>
-            <div style="font-family:var(--mono);font-size:.7rem;color:var(--cyan)" id="aiq-progress">1 / 5</div>
+            <div style="font-family:var(--mono);font-size:.7rem;color:var(--acc)" id="aiq-progress">1 / 5</div>
           </div>
           <div style="height:5px;background:var(--bg4);border-radius:3px;overflow:hidden">
-            <div id="aiq-prog-bar" style="height:100%;background:linear-gradient(90deg,var(--cyan),var(--vio));border-radius:3px;transition:width .4s ease;width:0%"></div>
+            <div id="aiq-prog-bar" style="height:100%;background:var(--acc);border-radius:3px;transition:width .4s ease;width:0%"></div>
           </div>
           <div style="display:flex;justify-content:space-between;margin-top:6px">
             <div style="font-size:.68rem;color:var(--grn)" id="aiq-correct-count">✓ 0 correct</div>
@@ -1523,7 +1951,7 @@ body::before{display:none}
 
         <!-- Question card -->
         <div class="dq-card" id="aiq-q-card">
-          <div style="font-family:var(--mono);font-size:.62rem;color:var(--cyan);margin-bottom:10px" id="aiq-q-num">Question 1</div>
+          <div style="font-family:var(--mono);font-size:.62rem;color:var(--acc);margin-bottom:10px" id="aiq-q-num">Question 1</div>
           <div style="font-size:.87rem;font-weight:600;color:var(--t0);line-height:1.5;margin-bottom:12px" id="aiq-q-text"></div>
           <div id="aiq-q-opts" style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px"></div>
           <div class="dq-expl" id="aiq-q-expl"></div>
@@ -1550,7 +1978,7 @@ body::before{display:none}
               <div style="font-size:.65rem;color:var(--t2)">Wrong</div>
             </div>
             <div style="background:var(--bg3);border-radius:9px;padding:10px">
-              <div style="font-size:1.3rem;font-weight:800;color:var(--cyan)" id="aiq-res-pct">0%</div>
+              <div style="font-size:1.3rem;font-weight:800;color:var(--acc)" id="aiq-res-pct">0%</div>
               <div style="font-size:.65rem;color:var(--t2)">Accuracy</div>
             </div>
           </div>
@@ -1601,9 +2029,8 @@ body::before{display:none}
       <div class="ss">
         <div class="ss-hd">🎨 Appearance</div>
         <div class="theme-row">
-          <div class="tho active" data-th="default" onclick="applyTheme('default')">🔵 Default</div>
-          <div class="tho" data-th="dark" onclick="applyTheme('dark')">⚫ Dark</div>
-          <div class="tho" data-th="light" onclick="applyTheme('light')">⚪ Light</div>
+          <div class="tho active" data-th="light" onclick="applyTheme('light')">☀️ Light</div>
+          <div class="tho" data-th="dark" onclick="applyTheme('dark')">🌙 Dark</div>
         </div>
       </div>
 
@@ -1643,7 +2070,7 @@ body::before{display:none}
           </div>
         </div>
         <div style="font-size:.68rem;color:var(--t2);margin-top:6px">
-          Live at <a href="https://obinna18.github.io/QUEVA" target="_blank" style="color:var(--cyan)">obinna18.github.io/QUEVA</a>
+          Live at <a href="https://obinna18.github.io/QUEVA" target="_blank" style="color:var(--acc)">obinna18.github.io/QUEVA</a>
         </div>
       </div>
 
@@ -1957,15 +2384,15 @@ window.addEventListener('offline',()=>{setOnline(false);toast('Offline — AI un
    THEME
 ═══════════════════════════════════ */
 function applyTheme(t){
+  // Normalise: old 'default' users → light
+  if(t==='default') t='light';
   S.theme=t;
-  // Remove all theme attributes first
   document.documentElement.removeAttribute('data-theme');
   if(t==='dark') document.documentElement.setAttribute('data-theme','dark');
-  else if(t==='light') document.documentElement.setAttribute('data-theme','light');
-  // default = no attribute = :root styles apply
-  const icons = {default:'🔵', dark:'⚫', light:'☀️'};
-  document.getElementById('theme-btn').textContent = icons[t]||'🔵';
+  const icons = {light:'☀️', dark:'🌙'};
+  document.getElementById('theme-btn').textContent = icons[t]||'☀️';
   document.querySelectorAll('.tho').forEach(b=>b.classList.toggle('active',b.dataset.th===t));
+  const meta=document.getElementById('theme-meta');if(meta)meta.content=t==='dark'?'#141210':'#FAFAF8';
   save();
 }
 document.getElementById('theme-btn').onclick=()=>applyTheme(S.theme==='dark'?'light':'dark');
@@ -2071,54 +2498,40 @@ function openApp(){
   layoutCheck();
 
 }
-document.getElementById('ob-google').onclick=()=>{
+function doGoogleAuth(){
   if(!S.fb){
-    // Try to boot Firebase one more time
-    if(typeof firebase !== 'undefined'){
-      bootFB(FB_CFG);
-    }
-    if(!S.fb){
-      toast('Sign-in unavailable — try refreshing the page','err');
-      return;
-    }
+    if(typeof firebase!=='undefined') bootFB(FB_CFG);
+    if(!S.fb){ toast('Sign-in unavailable — try refreshing','err'); return; }
   }
-  const p = new firebase.auth.GoogleAuthProvider();
-  p.addScope('email');
-  p.addScope('profile');
-  const loadEl = document.getElementById('ob-loading');
-  const btn = document.getElementById('ob-google');
+  const p=new firebase.auth.GoogleAuthProvider();
+  p.addScope('email'); p.addScope('profile');
+  const loadEl=document.getElementById('ob-loading');
   loadEl.style.display='block';
   document.getElementById('ob-loading-txt').textContent='Opening Google sign-in…';
-  btn.disabled=true;
-
   S.auth.signInWithPopup(p)
     .then(r=>{
-      if(!r.user){ throw new Error('No user returned'); }
+      if(!r.user) throw new Error('No user returned');
       S.user=r.user;
-      loadUserData(r.user.uid);
-      setUserUI(r.user);
-      loadCloud();
-      openApp();
-      refreshSettingsUI();
-      updateGreeting();
+      loadUserData(r.user.uid);setUserUI(r.user);loadCloud();
+      openApp();refreshSettingsUI();updateGreeting();
       toast('Welcome, '+r.user.displayName.split(' ')[0]+' ✓','ok');
     })
     .catch(e=>{
       loadEl.style.display='none';
-      btn.disabled=false;
       if(e.code==='auth/popup-blocked'||e.code==='auth/popup-cancelled-by-user'){
-        // Redirect fallback
         loadEl.style.display='block';
         document.getElementById('ob-loading-txt').textContent='Redirecting to Google…';
         try{sessionStorage.setItem('qv_redirect_pending','1');}catch(ex){}
         S.auth.signInWithRedirect(p);
       } else if(e.code==='auth/unauthorized-domain'){
-        toast('This domain is not authorised. Add it in Firebase Console → Authentication → Settings → Authorised domains','err');
+        toast('This domain is not authorised in Firebase Console','err');
       } else {
         toast('Sign-in failed: '+e.message,'err');
       }
     });
-};
+}
+document.getElementById('ob-google').onclick = doGoogleAuth;
+document.getElementById('ob-google-si').onclick = doGoogleAuth;
 document.getElementById('ob-guest').onclick=()=>{S.user=null;loadUserData('guest');openApp();refreshSettingsUI();toast('Guest mode — sessions save locally','nfo');};
 document.getElementById('btn-out').onclick=()=>{
   if(!S.user){
@@ -2153,7 +2566,7 @@ function setUserUI(u){
     av.innerHTML='?';
     // Show sign in option for guest
     const btnOut=document.getElementById('btn-out');
-    if(btnOut){btnOut.textContent='Sign in';btnOut.style.borderColor='rgba(0,212,255,.3)';btnOut.style.color='var(--cyan)';}
+    if(btnOut){btnOut.textContent='Sign in';btnOut.style.borderColor='var(--accmd)';btnOut.style.color='var(--acc)';}
   }
 }
 
@@ -3246,90 +3659,100 @@ function runSplash(){
 runSplash();
 
 /* ═══════════════════════════════════
-   EMAIL AUTH
+   ONBOARDING — VIEW SWITCHES
 ═══════════════════════════════════ */
-let _emailMode = 'signin'; // 'signin' or 'signup'
+function switchToSignIn(){
+  document.getElementById('ob-signup-view').style.display='none';
+  document.getElementById('ob-signin-view').style.display='block';
+}
+function switchToSignUp(){
+  document.getElementById('ob-signin-view').style.display='none';
+  document.getElementById('ob-signup-view').style.display='block';
+}
 
-document.getElementById('ob-email-toggle').onclick = () => {
-  const form = document.getElementById('ob-email-form');
-  const btn = document.getElementById('ob-email-toggle');
-  const showing = form.classList.contains('show');
-  form.classList.toggle('show', !showing);
-  btn.textContent = showing ? '✉️ Continue with Email' : '✕ Hide email form';
-};
-
-document.getElementById('ob-auth-toggle').onclick = () => {
-  _emailMode = _emailMode === 'signin' ? 'signup' : 'signin';
-  const isSignup = _emailMode === 'signup';
-  document.getElementById('ob-pass2').style.display = isSignup ? 'block' : 'none';
-  document.getElementById('ob-email-submit').textContent = isSignup ? 'Create Account' : 'Sign In';
-  document.getElementById('ob-auth-toggle').textContent = isSignup 
-    ? 'Already have an account? Sign in' 
-    : "Don't have an account? Sign up";
-  document.getElementById('ob-err').classList.remove('show');
-};
+/* ═══════════════════════════════════
+   EMAIL AUTH — SIGNUP
+═══════════════════════════════════ */
+async function _doFirebaseWait(errElId){
+  if(!S.fb){
+    const e2=document.getElementById(errElId);
+    e2.textContent='Connecting…';e2.classList.add('show');
+    await new Promise(r=>setTimeout(r,2000));
+    e2.classList.remove('show');
+    if(!S.fb&&typeof firebase!=='undefined') bootFB(FB_CFG);
+    await new Promise(r=>setTimeout(r,1000));
+    if(!S.fb){e2.textContent='Connection failed. Check internet and retry.';e2.classList.add('show');return false;}
+  }
+  return true;
+}
 
 document.getElementById('ob-email-submit').onclick = async () => {
-  // If Firebase not ready yet, wait up to 3 seconds
-  if(!S.fb){
-    const errEl2 = document.getElementById('ob-err');
-    errEl2.textContent = 'Connecting…'; errEl2.classList.add('show');
-    await new Promise(res => setTimeout(res, 2000));
-    errEl2.classList.remove('show');
-    if(!S.fb){
-      // Try booting Firebase one more time
-      if(typeof firebase !== 'undefined') bootFB(FB_CFG);
-      await new Promise(res => setTimeout(res, 1000));
-    }
-    if(!S.fb){ errEl2.textContent = 'Connection failed. Check internet and retry.'; errEl2.classList.add('show'); return; }
-  }
+  if(!await _doFirebaseWait('ob-err')) return;
+  const name  = (document.getElementById('ob-name')?.value||'').trim();
   const email = document.getElementById('ob-email').value.trim();
   const pass  = document.getElementById('ob-pass').value;
   const pass2 = document.getElementById('ob-pass2').value;
   const errEl = document.getElementById('ob-err');
-
   errEl.classList.remove('show');
-  if(!email || !pass){ errEl.textContent='Enter email and password'; errEl.classList.add('show'); return; }
-  if(_emailMode === 'signup' && pass !== pass2){ errEl.textContent='Passwords do not match'; errEl.classList.add('show'); return; }
-  if(pass.length < 6){ errEl.textContent='Password must be at least 6 characters'; errEl.classList.add('show'); return; }
-
-  const btn = document.getElementById('ob-email-submit');
-  btn.textContent = 'Please wait…'; btn.disabled = true;
-
-  try {
-    let result;
-    if(_emailMode === 'signup'){
-      result = await S.auth.createUserWithEmailAndPassword(email, pass);
-    } else {
-      result = await S.auth.signInWithEmailAndPassword(email, pass);
-    }
-    S.user = result.user;
-    loadUserData(result.user.uid);
-    setUserUI(result.user);
-    loadCloud();
-    openApp();
-    refreshSettingsUI();
-    updateGreeting();
+  if(!email||!pass){errEl.textContent='Enter your email and password';errEl.classList.add('show');return;}
+  if(pass!==pass2){errEl.textContent='Passwords do not match';errEl.classList.add('show');return;}
+  if(pass.length<6){errEl.textContent='Password must be at least 6 characters';errEl.classList.add('show');return;}
+  const btn=document.getElementById('ob-email-submit');
+  btn.textContent='Creating account…';btn.disabled=true;
+  try{
+    const result=await S.auth.createUserWithEmailAndPassword(email,pass);
+    if(name) await result.user.updateProfile({displayName:name});
+    S.user=result.user;
+    loadUserData(result.user.uid);setUserUI(result.user);loadCloud();
+    openApp();refreshSettingsUI();updateGreeting();
     sendWelcomeEmail(result.user);
-    toast('Welcome' + (_emailMode==='signup'?' to Queva 🎉':'back ✓'), 'ok');
-  } catch(e) {
-    let msg = e.message;
-    if(e.code==='auth/user-not-found'||e.code==='auth/invalid-credential') msg = 'No account found or wrong password';
-    if(e.code==='auth/wrong-password') msg = 'Incorrect password';
-    if(e.code==='auth/email-already-in-use') msg = 'Email already registered — try signing in';
-    if(e.code==='auth/invalid-email') msg = 'Invalid email address';
-    if(e.code==='auth/weak-password') msg = 'Password too weak — use at least 6 characters';
-    errEl.textContent = msg;
-    errEl.classList.add('show');
-    btn.textContent = _emailMode==='signup' ? 'Create Account' : 'Sign In';
-    btn.disabled = false;
+    toast('Welcome to Queva 🎉','ok');
+  }catch(e){
+    let msg=e.message;
+    if(e.code==='auth/email-already-in-use') msg='Email already registered — try signing in';
+    if(e.code==='auth/invalid-email') msg='Invalid email address';
+    if(e.code==='auth/weak-password') msg='Password too weak — use at least 6 characters';
+    errEl.textContent=msg;errEl.classList.add('show');
+    btn.textContent='Create Account';btn.disabled=false;
   }
 };
 
-// Allow Enter key on email/password fields
-['ob-email','ob-pass','ob-pass2'].forEach(id => {
-  const el = document.getElementById(id);
-  if(el) el.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('ob-email-submit').click(); });
+/* ═══════════════════════════════════
+   EMAIL AUTH — SIGNIN
+═══════════════════════════════════ */
+document.getElementById('ob-si-submit').onclick = async () => {
+  if(!await _doFirebaseWait('ob-si-err')) return;
+  const email=document.getElementById('ob-si-email').value.trim();
+  const pass=document.getElementById('ob-si-pass').value;
+  const errEl=document.getElementById('ob-si-err');
+  errEl.classList.remove('show');
+  if(!email||!pass){errEl.textContent='Enter email and password';errEl.classList.add('show');return;}
+  const btn=document.getElementById('ob-si-submit');
+  btn.textContent='Signing in…';btn.disabled=true;
+  try{
+    const result=await S.auth.signInWithEmailAndPassword(email,pass);
+    S.user=result.user;
+    loadUserData(result.user.uid);setUserUI(result.user);loadCloud();
+    openApp();refreshSettingsUI();updateGreeting();
+    toast('Welcome back ✓','ok');
+  }catch(e){
+    let msg=e.message;
+    if(e.code==='auth/user-not-found'||e.code==='auth/invalid-credential') msg='No account found or wrong password';
+    if(e.code==='auth/wrong-password') msg='Incorrect password';
+    if(e.code==='auth/invalid-email') msg='Invalid email address';
+    errEl.textContent=msg;errEl.classList.add('show');
+    btn.textContent='Sign In';btn.disabled=false;
+  }
+};
+
+// Allow Enter key
+['ob-email','ob-pass','ob-pass2','ob-name'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('ob-email-submit').click();});
+});
+['ob-si-email','ob-si-pass'].forEach(id=>{
+  const el=document.getElementById(id);
+  if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('ob-si-submit').click();});
 });
 
 
@@ -3531,15 +3954,7 @@ runSplash();
 /* ═══════════════════════════════════
    EMAIL AUTH
 ═══════════════════════════════════ */
-// _emailMode already declared above
-
-document.getElementById('ob-email-toggle').onclick = () => {
-  const form = document.getElementById('ob-email-form');
-  const btn = document.getElementById('ob-email-toggle');
-  const showing = form.classList.contains('show');
-  form.classList.toggle('show', !showing);
-  btn.textContent = showing ? '✉️ Continue with Email' : '✕ Hide email form';
-};
+// (old email toggle removed)
 
 document.getElementById('ob-auth-toggle').onclick = () => {
   _emailMode = _emailMode === 'signin' ? 'signup' : 'signin';
@@ -3630,13 +4045,13 @@ document.getElementById('ob-email-submit').onclick = async () => {
    BOOT
 ═══════════════════════════════════ */
 load(); // loads global prefs only (theme, font, key)
-// Migrate: if user had no theme saved, use default blue/purple
-if(!S.theme) S.theme = 'default';
+// Default theme: light
+if(!S.theme || S.theme === 'default') S.theme = 'light';
 // Clean up legacy shared key that caused cross-account data leaking
 try{ localStorage.removeItem('qv5'); localStorage.removeItem('qv5_quiz'); }catch(e){}
 
 // Apply saved state to UI
-applyTheme(S.theme||'default');
+applyTheme(S.theme||'light');
 applyFontSize(S.fontSize||14);
 setUserUI(null); // default to guest UI until Firebase confirms auth
 applyAdmin();
