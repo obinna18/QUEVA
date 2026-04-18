@@ -23,11 +23,11 @@
 <style>
 :root {
   /* LIGHT THEME (default) — Queva White */
-  --bg:#FFFFFF; --bg1:#F7F7F8; --bg2:#EFEFEF; --bg3:#E5E5E5; --bg4:#D4D4D4; --bg5:#B5B5B5;
-  --t0:#0D0D0D; --t1:#3D3D3D; --t2:#717171; --t3:#BABABA;
-  --bdr:rgba(0,0,0,.1); --bdrc:rgba(0,0,0,.2);
+  --bg:#F0F2F5; --bg1:#FFFFFF; --bg2:#F7F8FA; --bg3:#ECEEF2; --bg4:#DDE0E7; --bg5:#BCC0CC;
+  --t0:#0D0F14; --t1:#3A3D47; --t2:#6B6F7C; --t3:#B0B4C1;
+  --bdr:rgba(0,0,0,.08); --bdrc:rgba(0,0,0,.16);
   --acc:#1D6EF5; --acc2:#1558CC;
-  --acclo:rgba(29,110,245,.07); --accmd:rgba(29,110,245,.2); --accglow:none;
+  --acclo:rgba(29,110,245,.08); --accmd:rgba(29,110,245,.22); --accglow:none;
   --amb:#F59E0B; --red:#DC2626; --grn:#16A34A;
   /* Compatibility aliases */
   --cyan:var(--acc); --cyan2:var(--acc2);
@@ -1526,7 +1526,8 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   display:none;position:fixed;left:0;right:0;bottom:0;z-index:601;
   background:var(--bg1);
   border-radius:24px 24px 0 0;
-  border-top:1px solid var(--bdr);
+  border-top:2px solid var(--bdr);
+  box-shadow:0 -8px 40px rgba(0,0,0,.12);
   max-height:88vh;overflow-y:auto;
   transform:translateY(100%);
   transition:transform .34s cubic-bezier(.34,1.12,.64,1);
@@ -1595,9 +1596,9 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 .pp-row:hover{background:var(--bg3)}
 .pp-row-ic{
   width:38px;height:38px;border-radius:10px;flex-shrink:0;
-  background:var(--bg3);border:1px solid var(--bdr);
+  background:var(--bg3);border:1.5px solid var(--bdr);
   display:flex;align-items:center;justify-content:center;
-  color:var(--t1);transition:all .14s;
+  color:var(--t0);transition:all .14s;
 }
 .pp-row:hover .pp-row-ic{border-color:var(--accmd);color:var(--acc);background:var(--acclo)}
 .pp-row-lbl{flex:1;font-size:.9rem;font-weight:600}
@@ -1629,6 +1630,42 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   transition:opacity .14s;
 }
 .pp-fb-send:hover{opacity:.86}
+
+
+/* ── LIGHT THEME CARD DEPTH ── */
+:root .home-cta,
+:root .ha-btn,
+:root .home-dq,
+:root .swipe-card,
+:root .ss,
+:root .dq-card,
+:root .prog-card,
+:root .aiq-card,
+:root .streak-card,
+:root .map-card {
+  background:var(--bg1) !important;
+  border-color:var(--bdr) !important;
+  box-shadow:0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.05) !important;
+}
+:root .wcc {
+  background:var(--bg1) !important;
+  border-color:var(--bdr) !important;
+  box-shadow:0 1px 3px rgba(0,0,0,.06) !important;
+}
+/* Profile panel cards in light theme */
+:root #profile-panel { background:var(--bg1) !important; }
+:root .pp-row:hover  { background:var(--bg3) !important; }
+:root .pp-divider    { background:var(--bdr) !important; }
+/* Sidebar in light theme */
+:root #sidebar  { background:var(--bg1) !important; border-right-color:var(--bdr) !important; }
+:root .sb-foot  { border-top-color:var(--bdr) !important; }
+:root .sb-foot-user { border-color:var(--bdr) !important; background:var(--bg3) !important; }
+/* Topbar in light theme */
+:root .topbar { background:var(--bg1) !important; border-bottom-color:var(--bdr) !important; }
+:root #bnav    { background:var(--bg1) !important; border-top-color:var(--bdr) !important; }
+/* Inbox in light theme */
+:root .inbox   { background:var(--bg1) !important; border-color:var(--bdr) !important; box-shadow:0 1px 4px rgba(0,0,0,.06) !important; }
+:root .inzone  { background:var(--bg) !important; border-top-color:var(--bdr) !important; }
 
 </style>
 </head>
@@ -2981,53 +3018,104 @@ async function extractPDFText(base64){
   }
 }
 
-async function callAI(text, attachment){
-  // Determine endpoint and auth
-  if(!S.online){toast("You're offline — AI unavailable",'warn');return null;}
+// Fallback model chain — ordered by TPM capacity (highest first after primary)
+const FALLBACK_MODELS = [
+  'llama-3.1-8b-instant',    // ~100k TPM — handles bursts
+  'gemma2-9b-it',            // stable fallback
+  'mixtral-8x7b-32768',      // broad context fallback
+];
 
-  // Build messages
-  const messages=[{role:'system',content:S.sys}];
+async function _groqRequest(endpoint, headers, model, messages) {
+  const res = await fetch(endpoint, {
+    method: 'POST', headers,
+    body: JSON.stringify({ model, messages, temperature: 0.72, max_tokens: 4096 })
+  });
+  if (!res.ok) {
+    const e = await res.json().catch(()=>({}));
+    const err = new Error(e?.error?.message || `API error ${res.status}`);
+    err.status = res.status;
+    throw err;
+  }
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || 'No response received.';
+}
+
+async function callAI(text, attachment){
+  if(!S.online){ toast("You're offline — AI unavailable",'warn'); return null; }
+
+  // Build message history
+  const messages = [{ role:'system', content:S.sys }];
   S.msgs.slice(-16).forEach(m=>{
-    messages.push({role:m.role==='user'?'user':'assistant',content:typeof m.content==='string'?m.content:'[context]'});
+    messages.push({ role: m.role==='user'?'user':'assistant',
+      content: typeof m.content==='string' ? m.content : '[context]' });
   });
 
   // Process attachment
-  let userContent=text;
+  let userContent = text;
   if(attachment){
     if(attachment.type==='text/plain'){
-      userContent=`[Attached: ${attachment.name}]\n\n${attachment.textContent}\n\n---\n${text||'Analyse this document and extract the key study points.'}`;
+      userContent = `[Attached: ${attachment.name}]
+
+${attachment.textContent}
+
+---
+${text||'Analyse this document and extract the key study points.'}`;
     } else if(attachment.type==='application/pdf'){
       toast('📄 Extracting PDF text…','nfo');
-      const pdfText=await extractPDFText(attachment.base64);
-      if(pdfText && pdfText.length>50){
+      const pdfText = await extractPDFText(attachment.base64);
+      if(pdfText && pdfText.length > 50){
         const MAX_CHARS = 24000;
         const truncated = pdfText.length > MAX_CHARS;
-        const pdfChunk = pdfText.slice(0, MAX_CHARS);
-        userContent=`[PDF: ${attachment.name} — ${Math.round(pdfText.length/4)} words extracted${truncated?' (large document — analysing first section)':''}]\n\n${pdfChunk}\n\n---\nUser instruction: ${text||'Do a FULL and DETAILED analysis. Extract every key concept, definition, and important point. Give comprehensive study notes with detailed explanations and exam questions with model answers.'}`;
-      }else{
-        userContent=`[PDF attached: ${attachment.name} — text extraction failed or PDF is image-based. Please describe what topics you need help with.]\n\n${text}`;
+        const chunk = pdfText.slice(0, MAX_CHARS);
+        userContent = `[PDF: ${attachment.name} — ${Math.round(pdfText.length/4)} words${truncated?' (first section)':''}]
+
+${chunk}
+
+---
+${text||'Do a FULL analysis. Extract every key concept, definition, and important point. Give comprehensive study notes with exam questions and model answers.'}`;
+      } else {
+        userContent = `[PDF attached: ${attachment.name} — text extraction failed. Please describe the topics you need help with.]
+
+${text}`;
       }
     } else {
-      // Image — Groq free tier is text-only
-      userContent=`[Image attached: ${attachment.name}. Note: image analysis requires vision API. Please describe the image content or type out the text you need help with.]\n\n${text}`;
+      userContent = `[File attached: ${attachment.name}. Please describe what you need help with.]
+
+${text}`;
     }
   }
-  messages.push({role:'user',content:userContent});
+  messages.push({ role:'user', content:userContent });
 
-  // Use user key if set, else use shared Vercel proxy
   const useGroq = !!S.groqKey;
   const endpoint = useGroq ? GROQ_EP : AI_EP;
-  const model = useGroq ? GROQ_MODEL : AI_MODEL;
-  const headers = {'Content-Type':'application/json'};
+  const primaryModel = useGroq ? GROQ_MODEL : AI_MODEL;
+  const headers = { 'Content-Type':'application/json' };
   if(useGroq) headers['Authorization'] = 'Bearer ' + S.groqKey;
 
-  const res=await fetch(endpoint,{
-    method:'POST',headers,
-    body:JSON.stringify({model,messages,temperature:0.72,max_tokens:4096})
-  });
-  if(!res.ok){const e=await res.json().catch(()=>{});throw new Error(e?.error?.message||`API error ${res.status}`);}
-  const data=await res.json();
-  return data.choices?.[0]?.message?.content||'No response received.';
+  // Try primary model first
+  try {
+    return await _groqRequest(endpoint, headers, primaryModel, messages);
+  } catch(err) {
+    const is429 = err.status === 429 || (err.message||'').includes('rate_limit') || (err.message||'').includes('Rate limit');
+    // Only fall back on rate limit errors, not auth or other failures
+    if(!is429 || useGroq) throw err; // user's own key — don't silently swap model
+  }
+
+  // Proxy fallback chain — try lighter models
+  for(const fallbackModel of FALLBACK_MODELS){
+    try {
+      updateTypingLabel('Switching model…');
+      const result = await _groqRequest(endpoint, headers, fallbackModel, messages);
+      return result;
+    } catch(e2) {
+      const still429 = e2.status===429 || (e2.message||'').includes('rate_limit') || (e2.message||'').includes('Rate limit');
+      if(!still429) throw e2; // non-rate-limit error — stop trying
+      // else try next fallback
+    }
+  }
+
+  // All models exhausted
+  throw new Error('DAILY_LIMIT');
 }
 
 /* ═══════════════════════════════════
@@ -3067,14 +3155,39 @@ async function send(){
     if(!ex){S.sessions.unshift({id:S.sid,title:getTitle()});renderHist();}
   }catch(err){
     hideTyping();
-    const errMsg = err.message.includes('fetch') ? 
-      'Connection failed. Check your internet and try again.' :
-      err.message.includes('401') ? 'AI key error. The proxy may need updating.' :
-      err.message.includes('429') ? 'Too many requests. Wait a moment and try again.' :
-      err.message;
-    const retryBtn = `<br><br><button onclick="document.getElementById('txtin').value='';send()" style="padding:6px 14px;border-radius:7px;background:var(--cylo);border:1px solid var(--cymd);color:var(--cyan);font-family:var(--ff);font-size:.76rem;cursor:pointer;margin-top:4px">↩ Retry</button>`;
-    renderMsg({role:'assistant',content:'**Error:** '+errMsg+retryBtn,timestamp:new Date().toISOString()});
-    scrollBtm();toast(err.message,'err');
+    const raw = err.message || '';
+    let errMsg;
+
+    if(raw === 'DAILY_LIMIT') {
+      errMsg = "You've reached today's AI usage limit. All models are at capacity — come back in a few hours to continue your session.";
+    } else {
+      // Extract human-readable wait time from Groq rate limit messages
+      const tpdMatch = raw.match(/tokens per day[^.]*try again in ([^.]+)/i);
+      const tpmMatch = raw.match(/tokens per minute[^.]*try again in ([\d.]+)s/i);
+      if(tpdMatch) {
+        errMsg = `Today's usage limit reached. Please wait **${tpdMatch[1].trim()}** and then continue — your session is saved.`;
+      } else if(tpmMatch) {
+        const secs = Math.ceil(parseFloat(tpmMatch[1]));
+        errMsg = `You're going fast! Please wait **${secs} seconds** and send again.`;
+        // Restore last user message to input so they can retry easily
+        setTimeout(()=>{
+          const lastUser = S.msgs.filter(m=>m.role==='user').slice(-1)[0];
+          if(lastUser && typeof lastUser.content==='string'){
+            document.getElementById('txtin').value = lastUser.content;
+            resizeTx();
+          }
+        }, secs * 1000);
+      } else if(raw.includes('Failed to fetch') || raw.includes('NetworkError') || raw.includes('fetch')) {
+        errMsg = "No connection. Check your internet and try again.";
+      } else if(raw.includes('401') || raw.includes('invalid_api_key')) {
+        errMsg = "AI connection error. Try again in a moment.";
+      } else {
+        errMsg = "Something went wrong. Please try again.";
+      }
+    }
+
+    renderMsg({ role:'assistant', content:errMsg, timestamp:new Date().toISOString(), isErr:true });
+    scrollBtm();
   }finally{S.busy=false;document.getElementById('btn-send').disabled=false;}
 }
 
@@ -3119,8 +3232,18 @@ function renderMsg(msg,attachment){
   if(aname){const ch=document.createElement('div');ch.className='mch';ch.innerHTML='📄 '+esc(aname);body.appendChild(ch);}
   const bubble=document.createElement('div');bubble.className='mbl';
   if(msg.role==='assistant'){
-    if(msg.content.includes('KEY:')){const f=document.createElement('div');f.className='kpflag';f.textContent='◆ Key Points Extracted';bubble.appendChild(f);}
-    const inner=document.createElement('div');inner.innerHTML=md(msg.content);bubble.appendChild(inner);
+    if(msg.isErr){
+      // Error messages: left-border accent, safe text only (no innerHTML injection)
+      bubble.style.cssText='background:var(--bg2);border:1px solid rgba(220,38,38,.18);border-left:3px solid var(--red);color:var(--t1);font-size:.86rem;line-height:1.65;padding:12px 14px;border-radius:0 12px 12px 0';
+      const inner = document.createElement('div');
+      // Only allow **bold** formatting, nothing else
+      const safe = (msg.content||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      inner.innerHTML = safe.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--t0)">$1</strong>');
+      bubble.appendChild(inner);
+    } else {
+      if(msg.content.includes('KEY:')){const f=document.createElement('div');f.className='kpflag';f.textContent='◆ Key Points Extracted';bubble.appendChild(f);}
+      const inner=document.createElement('div');inner.innerHTML=md(msg.content);bubble.appendChild(inner);
+    }
   }else{bubble.textContent=msg.content;}
   body.appendChild(bubble);
   const ts=document.createElement('div');ts.className='mts';ts.textContent=fmtT(msg.timestamp);body.appendChild(ts);
