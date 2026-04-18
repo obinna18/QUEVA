@@ -221,40 +221,70 @@ body::before{display:none}
 #sidebar.desktop-show{transform:translateX(0)}
 #sidebar.mobile-open{transform:translateX(0);box-shadow:10px 0 40px rgba(0,0,0,.6)}
 
-.sb-head{padding:16px 14px 12px;border-bottom:1px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;gap:10px}
+.sb-head{padding:14px 14px 10px;border-bottom:1px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;gap:10px}
 .sb-q{
-  width:32px;height:32px;border-radius:8px;flex-shrink:0;
-  background:linear-gradient(135deg,var(--bg3),var(--bg4));
-  border:1.5px solid var(--cymd);display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:900;color:var(--cyan);
-  box-shadow:0 0 14px rgba(0,212,255,.2);cursor:pointer;user-select:none;
+  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  background:var(--acc);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:900;color:#fff;
+  cursor:pointer;user-select:none;
 }
-.sb-nm{font-size:16px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,var(--t0),var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sb-sub{font-size:7.5px;color:var(--t2);font-family:var(--mono);letter-spacing:.1em}
+.sb-nm{font-size:15px;font-weight:800;letter-spacing:1px;color:var(--t0)}
+.sb-sub{font-size:7px;color:var(--t2);letter-spacing:.12em;text-transform:uppercase}
 
-.sb-user{margin:8px 10px 0;padding:9px 11px;border-radius:9px;background:var(--bg2);border:1px solid var(--bdr);display:flex;align-items:center;gap:8px;flex-shrink:0}
-.su-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:var(--bg4);border:1.5px solid var(--cymd);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--cyan);overflow:hidden}
-.su-av img{width:100%;height:100%;object-fit:cover}
-.su-nm{flex:1;min-width:0;font-size:.76rem;font-weight:600;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.su-st{font-size:.62rem;color:var(--t2)}
-.btn-out{font-size:.6rem;color:var(--t2);cursor:pointer;background:none;border:1px solid var(--bdr);border-radius:4px;padding:2px 6px;transition:all var(--dur);flex-shrink:0}
-.btn-out:hover{border-color:var(--red);color:var(--red)}
+/* New chat button in sidebar header */
+.sb-new{
+  margin-left:auto;width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  border:1px solid var(--bdr);background:none;color:var(--t2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all var(--dur);
+}
+.sb-new:hover{border-color:var(--accmd);color:var(--acc);background:var(--acclo)}
 
-.sb-nav{padding:9px 8px;flex-shrink:0}
-.nl{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all var(--dur);border:1px solid transparent;margin-bottom:2px;color:var(--t2);font-size:.8rem;font-weight:500;user-select:none}
-.nl:hover{background:var(--bg3);color:var(--t1)}
-.nl.active{background:var(--cylo);border-color:var(--cymd);color:var(--t0)}
-.nl-ic{width:16px;text-align:center;font-size:.85rem;flex-shrink:0}
-.sb-hl{font-family:var(--mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);padding:8px 13px 4px}
-.sb-hist{flex:1;overflow-y:auto;padding:2px 8px;scrollbar-width:thin;scrollbar-color:var(--bg5) transparent}
-.hi{display:flex;align-items:center;gap:6px;padding:7px 9px;border-radius:7px;cursor:pointer;border:1px solid transparent;transition:all var(--dur);margin-bottom:1px}
+/* Sessions list — takes all remaining space */
+.sb-hist{
+  flex:1;overflow-y:auto;padding:8px 8px 4px;
+  scrollbar-width:thin;scrollbar-color:var(--bg5) transparent;
+}
+.sb-hl{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);padding:8px 10px 5px}
+.hi{display:flex;align-items:center;gap:7px;padding:9px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;transition:all var(--dur);margin-bottom:1px}
 .hi:hover{background:var(--bg3)}
-.hi.active{background:var(--cylo);border-color:var(--cymd)}
-.hi-lb{flex:1;font-size:.74rem;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hi.active .hi-lb{color:var(--cyan2)}
-.hi-del{opacity:0;font-size:.6rem;color:var(--t2);cursor:pointer;padding:2px 4px;border-radius:3px;transition:all var(--dur)}
+.hi.active{background:var(--acclo);border-color:var(--accmd)}
+.hi-lb{flex:1;font-size:.78rem;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.hi.active .hi-lb{color:var(--acc);font-weight:600}
+.hi-del{opacity:0;font-size:.65rem;color:var(--t2);cursor:pointer;padding:3px 5px;border-radius:4px;transition:all var(--dur);flex-shrink:0}
 .hi:hover .hi-del{opacity:1}
-.hi-del:hover{background:rgba(239,68,68,.15);color:var(--red)}
+.hi-del:hover{background:rgba(220,38,38,.12);color:var(--red)}
+
+/* Sidebar footer — fixed at bottom with user + actions */
+.sb-foot{
+  flex-shrink:0;border-top:1px solid var(--bdr);padding:10px 10px;
+  display:flex;flex-direction:column;gap:2px;
+}
+.sb-foot-row{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;
+  border-radius:9px;cursor:pointer;transition:all var(--dur);
+  color:var(--t1);font-size:.82rem;font-weight:500;
+}
+.sb-foot-row:hover{background:var(--bg3);color:var(--t0)}
+.sb-foot-row.danger:hover{background:rgba(220,38,38,.08);color:var(--red)}
+.sb-foot-row svg{flex-shrink:0;opacity:.7}
+.sb-foot-user{
+  display:flex;align-items:center;gap:9px;padding:9px 10px;
+  border-radius:9px;margin-bottom:4px;border:1px solid var(--bdr);
+  background:var(--bg2);
+}
+.su-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:var(--acc);
+  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;overflow:hidden}
+.su-av img{width:100%;height:100%;object-fit:cover}
+.su-nm{flex:1;min-width:0;font-size:.78rem;font-weight:600;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.su-st{font-size:.62rem;color:var(--t2)}
+
+/* old sb-user/btn-out/sb-nav hidden */
+.sb-user{display:none}
+.btn-out{display:none}
+.sb-nav{display:none}
+.nl{display:none}
 
 /* ── MAIN ── */
 #main{
@@ -966,49 +996,89 @@ body::before{display:none}
 .ob-err.show { display:block; }
 
 
-/* ═══ SPLASH SCREEN — logo only, ChatGPT-style ═══ */
+/* ═══ SPLASH SCREEN ═══ */
 #splash {
   position:fixed; inset:0; z-index:1000;
-  background:var(--bg);
-  display:flex; align-items:center; justify-content:center;
-  transition:opacity .4s ease;
+  background:#0D0D0D;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:0;
+  transition:opacity .5s ease;
 }
+[data-theme="light"] #splash { background:#fff; }
 #splash.hide { opacity:0; pointer-events:none; }
 
 .splash-logo {
-  width:72px; height:72px;
-  animation:splashLogoIn .6s var(--spring) both;
-  opacity:0;
+  width:80px; height:80px; position:relative;
+  margin-bottom:22px;
+  animation:splashLogoIn .7s var(--spring) both;
+  animation-delay:.15s; opacity:0;
 }
 @keyframes splashLogoIn {
-  from { opacity:0; transform:scale(.7); }
+  from { opacity:0; transform:scale(.55); }
   to   { opacity:1; transform:scale(1); }
 }
 .splash-circle {
-  width:72px; height:72px; border-radius:18px;
+  width:80px; height:80px; border-radius:20px;
   background:var(--acc);
   display:flex; align-items:center; justify-content:center;
 }
 .splash-circle::before { display:none; }
 .splash-q {
-  font-size:32px; font-weight:900; color:#fff;
+  font-size:34px; font-weight:900; color:#fff !important;
   -webkit-text-fill-color:#fff !important;
   background:none !important;
 }
 .splash-star { display:none; }
-/* hide old text elements */
-.splash-brand,.splash-tag,.splash-sub,.splash-dots { display:none !important; }
+
+.splash-brand {
+  font-size:2rem; font-weight:900; letter-spacing:5px;
+  color:#fff !important;
+  -webkit-text-fill-color:#fff !important;
+  background:none !important;
+  line-height:1; margin-bottom:10px;
+  animation:splashTextIn .6s var(--spring) both;
+  animation-delay:.55s; opacity:0;
+}
+[data-theme="light"] .splash-brand { color:var(--t0) !important; -webkit-text-fill-color:var(--t0) !important; }
+
+.splash-tag {
+  font-size:.78rem; letter-spacing:.06em;
+  color:rgba(255,255,255,.45); text-align:center;
+  animation:splashTextIn .5s ease both;
+  animation-delay:.85s; opacity:0;
+}
+[data-theme="light"] .splash-tag { color:var(--t2); }
+
+.splash-sub { display:none; }
+
+.splash-dots {
+  display:flex; gap:5px; margin-top:36px;
+  animation:splashTextIn .4s ease both;
+  animation-delay:1.1s; opacity:0;
+}
+.splash-dot {
+  width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.2);
+  animation:dotPulse 1.1s ease-in-out infinite;
+}
+[data-theme="light"] .splash-dot { background:var(--bg4); }
+.splash-dot:nth-child(1){ animation-delay:.0s; }
+.splash-dot:nth-child(2){ animation-delay:.18s; }
+.splash-dot:nth-child(3){ animation-delay:.36s; }
+@keyframes dotPulse {
+  0%,100%{ transform:scale(1); opacity:.3; }
+  50%    { transform:scale(1.5); opacity:1; background:var(--acc); }
+}
+@keyframes splashTextIn {
+  from{ opacity:0; transform:translateY(12px); }
+  to  { opacity:1; transform:translateY(0); }
+}
 
 /* Onboard entry */
 #onboard {
-  transform:translateY(16px);
-  opacity:0;
-  transition:transform .4s var(--spring), opacity .35s ease;
+  transform:translateY(14px); opacity:0;
+  transition:transform .42s var(--spring), opacity .38s ease;
 }
-#onboard.ready {
-  transform:translateY(0);
-  opacity:1;
-}
+#onboard.ready { transform:translateY(0); opacity:1; }
 
 /* ── DOCUMENT ACTION CHIPS ── */
 .doc-ready {
@@ -1299,7 +1369,7 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   position:relative;
 }
 .bni:hover { color:var(--t1); }
-.bni.active { color:var(--acc); }
+.bni.active { color:var(--acc); } .bni.active .bni-ic svg { stroke:var(--acc); }
 .bni.active::before {
   content:'';
   position:absolute;
@@ -1307,7 +1377,7 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   background:var(--acc);
   border-radius:0 0 3px 3px;
 }
-.bni-ic { font-size:1.1rem; line-height:1; }
+.bni-ic { display:flex; align-items:center; justify-content:center; width:22px; height:22px; }
 --navh:64px;
 
 /* ── HOME PAGE: breathing room ── */
@@ -1445,6 +1515,30 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 }
 
 
+
+/* ── PROFILE PANEL ── */
+.pp-row{
+  display:flex;align-items:center;gap:12px;
+  padding:13px 10px;border-radius:11px;cursor:pointer;
+  transition:background .15s;color:var(--t0);
+}
+.pp-row:hover{background:var(--bg3)}
+.pp-row-ic{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  background:var(--bg3);border:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:center;color:var(--t1);
+}
+.pp-row-lbl{flex:1;font-size:.88rem;font-weight:600}
+.pp-danger .pp-row-ic{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.15);color:var(--red)}
+.pp-danger{color:var(--red)}
+.pp-danger:hover{background:rgba(220,38,38,.06)}
+.pp-fb-tag{
+  padding:6px 14px;border-radius:20px;border:1px solid var(--bdr);
+  background:var(--bg3);color:var(--t2);font-family:var(--ff);font-size:.76rem;
+  font-weight:600;cursor:pointer;transition:all .15s;
+}
+.pp-fb-tag.active{background:var(--acclo);border-color:var(--accmd);color:var(--acc)}
+
 </style>
 </head>
 <body>
@@ -1562,29 +1656,54 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 
   <!-- SIDEBAR -->
   <aside id="sidebar">
+    <!-- Header -->
     <div class="sb-head">
       <div class="sb-q" id="sb-logo" title="Tap 5× for developer mode">Q</div>
       <div><div class="sb-nm">QUEVA</div><div class="sb-sub">Study Intelligence</div></div>
+      <button class="sb-new" onclick="newSess();document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sb-overlay').classList.remove('show');swPage('ai')" title="New chat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
     </div>
-    <div class="sb-user">
-      <div class="su-av" id="su-av">?</div>
-      <div style="flex:1;min-width:0">
-        <div class="su-nm" id="su-nm">Guest</div>
-        <div class="su-st" id="su-st">not signed in</div>
-      </div>
-      <button class="btn-out" id="btn-out">Sign out</button>
-    </div>
-    <nav class="sb-nav">
-      <div class="nl active" data-pg="home"><div class="nl-ic">Home</div></div>
-      <div class="nl" data-pg="ai"><div class="nl-ic">AI</div></div>
-      <div class="nl" data-pg="quiz"><div class="nl-ic">Quiz</div></div>
-      <div class="nl" data-pg="kp"><div class="nl-ic">Keys</div></div>
-      <div class="nl" data-pg="set"><div class="nl-ic">Settings</div></div>
-    </nav>
-    <div class="sb-hl">Sessions</div>
+
+    <!-- Sessions list -->
+    <div class="sb-hl">Recent chats</div>
     <div class="sb-hist" id="sb-hist">
-      <div id="hist-empty" style="font-size:.72rem;color:var(--t2);padding:6px">Sign in to save sessions.</div>
+      <div id="hist-empty" style="font-size:.75rem;color:var(--t2);padding:10px 10px;line-height:1.5">No sessions yet.<br>Start a conversation to save it here.</div>
     </div>
+
+    <!-- Footer: user + settings + sign out -->
+    <div class="sb-foot">
+      <!-- User identity row -->
+      <div class="sb-foot-user">
+        <div class="su-av" id="su-av">?</div>
+        <div style="flex:1;min-width:0">
+          <div class="su-nm" id="su-nm">Guest</div>
+          <div class="su-st" id="su-st">not signed in</div>
+        </div>
+      </div>
+      <!-- Settings -->
+      <div class="sb-foot-row" onclick="swPage('set');document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sb-overlay').classList.remove('show')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Settings
+      </div>
+      <!-- Sign out / Sign in -->
+      <div class="sb-foot-row danger" id="btn-out">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Sign out
+      </div>
+    </div>
+
+    <!-- Hidden compat stubs -->
+    <div class="sb-user" style="display:none"><div class="su-av"></div><div><div class="su-nm"></div><div class="su-st"></div></div></div>
+    <nav class="sb-nav" style="display:none">
+      <div class="nl active" data-pg="home"></div><div class="nl" data-pg="ai"></div>
+      <div class="nl" data-pg="quiz"></div><div class="nl" data-pg="kp"></div>
+      <div class="nl" data-pg="set"></div>
+    </nav>
   </aside>
 
   <!-- MAIN -->
@@ -2061,13 +2180,93 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 
   <!-- BOTTOM NAV -->
   <nav id="bnav">
-    <div class="bni active" data-pg="home"><div class="bni-ic">⌂</div><div class="bni-lb">Home</div></div>
-    <div class="bni" data-pg="ai"><div class="bni-ic">✦</div><div class="bni-lb">AI</div></div>
-    <div class="bni" data-pg="quiz"><div class="bni-ic">🎯</div><div class="bni-lb">Quiz</div></div>
-    <div class="bni" data-pg="kp"><div class="bni-ic">◈</div><div class="bni-lb">Keys</div></div>
-    <div class="bni" data-pg="set"><div class="bni-ic">⚙</div><div class="bni-lb">Settings</div></div>
+    <div class="bni active" data-pg="home">
+      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+      <div class="bni-lb">Home</div>
+    </div>
+    <div class="bni" data-pg="ai">
+      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="bni-lb">AI</div>
+    </div>
+    <div class="bni" data-pg="quiz">
+      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+      <div class="bni-lb">Quiz</div>
+    </div>
+    <div class="bni" data-pg="kp">
+      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div class="bni-lb">Keys</div>
+    </div>
+    <div class="bni" id="bnav-profile" onclick="openProfile()">
+      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+      <div class="bni-lb">Profile</div>
+    </div>
   </nav>
 
+<!-- PROFILE PANEL (slide-up sheet) -->
+<div id="profile-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:600;backdrop-filter:blur(2px)" onclick="closeProfile()"></div>
+<div id="profile-panel" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:601;background:var(--bg1);border-radius:20px 20px 0 0;border-top:1px solid var(--bdr);padding:0;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.34,1.2,.64,1)">
+  <!-- Drag handle -->
+  <div style="display:flex;justify-content:center;padding:12px 0 4px">
+    <div style="width:36px;height:4px;border-radius:2px;background:var(--bg4)"></div>
+  </div>
+
+  <!-- User identity -->
+  <div style="display:flex;align-items:center;gap:14px;padding:16px 20px 18px">
+    <div id="pp-av" style="width:48px;height:48px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden">?</div>
+    <div style="flex:1;min-width:0">
+      <div id="pp-nm" style="font-size:1rem;font-weight:700;color:var(--t0)">Guest</div>
+      <div id="pp-em" style="font-size:.78rem;color:var(--t2);margin-top:2px">Not signed in</div>
+    </div>
+  </div>
+
+  <div style="height:1px;background:var(--bdr);margin:0 20px"></div>
+
+  <!-- Action rows -->
+  <div style="padding:8px 12px">
+
+    <!-- Settings -->
+    <div class="pp-row" onclick="closeProfile();swPage('set')">
+      <div class="pp-row-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <div class="pp-row-lbl">Settings</div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <!-- Send Feedback (expands inline) -->
+    <div class="pp-row" onclick="toggleFeedback()">
+      <div class="pp-row-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="pp-row-lbl">Send Feedback</div>
+      <svg id="fb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="transition:transform .2s"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <!-- Inline feedback form -->
+    <div id="pp-fb-form" style="display:none;padding:0 10px 10px">
+      <textarea id="pp-fb-txt" placeholder="Tell us about a bug, suggestion, or anything…" style="width:100%;border-radius:10px;border:1px solid var(--bdr);background:var(--bg2);color:var(--t0);font-family:var(--ff);font-size:.84rem;padding:12px 14px;resize:none;height:100px;outline:none;transition:border-color .15s;line-height:1.55" onfocus="this.style.borderColor='var(--accmd)'" onblur="this.style.borderColor='var(--bdr)'"></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+        <button class="pp-fb-tag active" data-tag="bug" onclick="setFbTag(this)">Bug</button>
+        <button class="pp-fb-tag" data-tag="suggestion" onclick="setFbTag(this)">Suggestion</button>
+        <button class="pp-fb-tag" data-tag="other" onclick="setFbTag(this)">Other</button>
+      </div>
+      <button onclick="submitFeedback()" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-family:var(--ff);font-size:.88rem;font-weight:700;cursor:pointer;transition:opacity .15s" onmouseenter="this.style.opacity='.86'" onmouseleave="this.style.opacity='1'">Send</button>
+    </div>
+
+  </div>
+
+  <div style="height:1px;background:var(--bdr);margin:0 12px 8px"></div>
+
+  <!-- Sign out -->
+  <div style="padding:0 12px 20px">
+    <div class="pp-row pp-danger" id="pp-signout">
+      <div class="pp-row-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+      <div class="pp-row-lbl">Sign out</div>
+    </div>
+  </div>
+</div>
 </div><!-- /app -->
 
 <!-- FILE MODAL -->
@@ -2253,7 +2452,7 @@ function save(){
     const uid = S.user ? S.user.uid : 'guest';
     localStorage.setItem(uKey(uid), JSON.stringify({
       g:S.groqKey,
-      sys:S.sys, kps:S.kps,
+      sys:isDev()?S.sys:DEF_SYS, kps:S.kps, // non-dev always stores DEF_SYS
       streak:S.streak, lastStudy:S.lastStudy,
       recentFiles:S.recentFiles.slice(0,5),
       sessions:S.sessions.slice(0,10).map(s=>({id:s.id,title:s.title})),
@@ -2268,7 +2467,7 @@ function load(){
     const g = JSON.parse(localStorage.getItem(gKey())||'{}');
     if(g.fontSize) S.fontSize=g.fontSize;
     if(g.theme) S.theme=g.theme;
-    if(g.adminOn) S.adminOn=g.adminOn;
+    if(g.adminOn) S.adminOn=g.adminOn; // will be cleared by applyAdmin() if not dev
     // ⚠️ No API key here — key is per-user, loaded in loadUserData()
   } catch(e){}
 }
@@ -2338,25 +2537,46 @@ document.querySelectorAll('.fso').forEach(o=>o.onclick=()=>applyFontSize(+o.data
 /* ═══════════════════════════════════
    ADMIN (5-tap logo)
 ═══════════════════════════════════ */
+/* ── DEV IDENTITY CHECK ── */
+const DEV_EMAIL = 'preciousobinna260@gmail.com';
+function isDev(){ return !!(S.user && S.user.email && S.user.email.toLowerCase() === DEV_EMAIL); }
+
 function tapLogo(){
   S.tapCount++;
   clearTimeout(S.tapTimer);
-  if(S.tapCount>=5){
-    S.tapCount=0; S.adminOn=!S.adminOn; save(); applyAdmin();
-    toast(S.adminOn?'🔓 Developer mode on':'🔒 Developer mode off','warn');
-    document.getElementById('tap-prog')?.remove(); return;
+  if(S.tapCount >= 5){
+    S.tapCount = 0;
+    document.getElementById('tap-prog')?.remove();
+    // Hard gate: only the dev email can ever unlock
+    if(!isDev()){
+      toast('Developer mode is restricted','err');
+      S.adminOn = false; // ensure it stays off
+      return;
+    }
+    S.adminOn = !S.adminOn;
+    save();
+    applyAdmin();
+    toast(S.adminOn ? '🔓 Developer mode on' : '🔒 Developer mode off', 'warn');
+    return;
   }
-  let el=document.getElementById('tap-prog');
-  if(!el){el=document.createElement('div');el.id='tap-prog';el.className='tap-prog';document.body.appendChild(el);}
-  el.textContent=`${S.tapCount}/5 taps`;
-  S.tapTimer=setTimeout(()=>{S.tapCount=0;document.getElementById('tap-prog')?.remove();},2000);
+  let el = document.getElementById('tap-prog');
+  if(!el){ el = document.createElement('div'); el.id='tap-prog'; el.className='tap-prog'; document.body.appendChild(el); }
+  el.textContent = `${S.tapCount}/5`;
+  S.tapTimer = setTimeout(()=>{ S.tapCount=0; document.getElementById('tap-prog')?.remove(); }, 2000);
 }
 function applyAdmin(){
-  document.getElementById('admin-section').classList.toggle('on',S.adminOn);
-  document.getElementById('adm-hint').style.display=S.adminOn?'none':'block';
+  // Double-check identity on every apply — even if adminOn is true in storage
+  const authorised = isDev() && S.adminOn;
+  document.getElementById('admin-section').classList.toggle('on', authorised);
+  document.getElementById('adm-hint').style.display = authorised ? 'none' : 'block';
   document.getElementById('tap-prog')?.remove();
+  if(!authorised && S.adminOn){
+    // Strip the stale flag silently
+    S.adminOn = false;
+    save();
+  }
 }
-function adminHint(){toast('Tap the Q logo 5× in the sidebar to unlock developer options','nfo')}
+function adminHint(){ if(isDev()) toast('Tap the Q logo 5× to toggle developer mode','nfo'); }
 document.getElementById('sb-logo').onclick=tapLogo;
 document.getElementById('ob-logo').onclick=tapLogo;
 
@@ -2417,6 +2637,8 @@ let _appOpened = false;
 function openApp(){
   if(_appOpened) return;
   _appOpened = true;
+  // Apply proxy only if authenticated user is the dev
+  if(typeof setProxyIfDev === 'function') setProxyIfDev();
   document.getElementById('onboard').style.display='none';
   document.getElementById('app').style.display='block';
   layoutCheck();
@@ -2458,40 +2680,23 @@ function doGoogleAuth(){
 }
 document.getElementById('ob-google').onclick = doGoogleAuth;
 document.getElementById('ob-guest').onclick=()=>{S.user=null;loadUserData('guest');openApp();refreshSettingsUI();toast('Guest mode — sessions save locally','nfo');};
-document.getElementById('btn-out').onclick=()=>{
-  if(!S.user){
-    // Guest — show onboard to sign in
-    _appOpened=false;
-    document.getElementById('onboard').style.display='flex';
-    document.getElementById('app').style.display='none';
-    return;
-  }
-  if(!confirm('Sign out?'))return;
-  if(S.auth) S.auth.signOut().then(()=>{
-    S.user=null;
-    loadUserData('guest');
-    renderHist();renderKP();renderRecent();renderStreak();
-    clearMsgs();
-    setUserUI(null);
-    toast('Signed out','nfo');
-  });
-  else{S.user=null;setUserUI(null);}
-};
+// btn-out signout now handled by sidebar footer onclick + profile panel pp-signout
+
 function setUserUI(u){
+  // Sidebar footer elements
   const av=document.getElementById('su-av'),nm=document.getElementById('su-nm'),st=document.getElementById('su-st');
+  // Sign out row in sidebar
+  const btnOut=document.getElementById('btn-out');
   if(u){
-    const btnOut=document.getElementById('btn-out');
-    if(btnOut){btnOut.textContent='Sign out';btnOut.style.borderColor='';btnOut.style.color='';}
-    nm.textContent=u.displayName||u.email||'Student';
-    st.textContent=S.online?'online':'offline';
-    av.innerHTML=u.photoURL?`<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:(u.displayName||'S')[0].toUpperCase();
+    if(nm) nm.textContent=u.displayName||u.email||'Student';
+    if(st) st.textContent=S.online?'online':'offline';
+    if(av) av.innerHTML=u.photoURL?`<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:(u.displayName||'S')[0].toUpperCase();
+    if(btnOut){ btnOut.style.cssText=''; btnOut.querySelector?.('.pp-row-lbl') && (btnOut.querySelector('.pp-row-lbl').textContent='Sign out'); }
   }else{
-    nm.textContent='Guest';
-    st.textContent='not signed in';
-    av.innerHTML='?';
-    // Show sign in option for guest
-    const btnOut=document.getElementById('btn-out');
-    if(btnOut){btnOut.textContent='Sign in';btnOut.style.borderColor='var(--accmd)';btnOut.style.color='var(--acc)';}
+    if(nm) nm.textContent='Guest';
+    if(st) st.textContent='not signed in';
+    if(av) av.innerHTML='?';
+    if(btnOut){ btnOut.style.color='var(--acc)'; }
   }
 }
 
@@ -3083,12 +3288,16 @@ document.getElementById('kp-clr').onclick=()=>{if(!confirm('Clear all key points
 
 // Admin Groq key save
 document.getElementById('save-key').onclick=()=>{
+  if(!isDev()){ toast('Restricted to developer account','err'); return; }
+
   S.groqKey=document.getElementById('in-groq').value.trim();
   document.getElementById('in-groq').value=S.groqKey; // keep hidden field in sync
   save();
   toast(S.groqKey?'Groq key saved ✓ — faster AI active':'Key cleared — using free AI',S.groqKey?'ok':'nfo');
 };
 document.getElementById('test-key').onclick=async()=>{
+  if(!isDev()){ toast('Restricted to developer account','err'); return; }
+
   const key=document.getElementById('in-groq').value.trim();
   if(!key){toast('Enter a key first','err');return;}
   const st=document.getElementById('key-st');
@@ -3101,6 +3310,8 @@ document.getElementById('test-key').onclick=async()=>{
   }catch(e){st.style.background='rgba(239,68,68,.08)';st.style.border='1px solid rgba(239,68,68,.3)';st.style.color='#fca5a5';st.textContent='✗ '+e.message;}
 };
 document.getElementById('save-proxy').onclick=()=>{
+  if(!isDev()){ toast('Restricted to developer account','err'); return; }
+
   const url=document.getElementById('proxy-url').value.trim();
   // Store proxy URL in a way it affects the PROXY_URL constant at runtime
   window._proxyURL=url;
@@ -3122,6 +3333,8 @@ updateGreeting();
 
 // Settings — Firebase
 document.getElementById('save-fb').onclick=()=>{
+  if(!isDev()){ toast('Restricted to developer account','err'); return; }
+
   const cfg={apiKey:document.getElementById('fb-key').value.trim(),authDomain:document.getElementById('fb-auth').value.trim(),projectId:document.getElementById('fb-proj').value.trim(),appId:document.getElementById('fb-app').value.trim()};
   if(!cfg.apiKey){toast('Enter Firebase API key','err');return;}
   const ok=bootFB(cfg);
@@ -3129,7 +3342,9 @@ document.getElementById('save-fb').onclick=()=>{
 };
 
 // Settings — system prompt
-document.getElementById('save-sys').onclick=()=>{S.sys=document.getElementById('in-sys').value.trim()||DEF_SYS;save();toast('System prompt updated','ok')};
+document.getElementById('save-sys').onclick=()=>{
+  if(!isDev()){ toast('Restricted to developer account','err'); return; }
+S.sys=document.getElementById('in-sys').value.trim()||DEF_SYS;save();toast('System prompt updated','ok')};
 
 // Admin
 document.getElementById('lock-adm').onclick=()=>{S.adminOn=false;save();applyAdmin();toast('🔒 Locked','warn')};
@@ -3571,14 +3786,14 @@ document.getElementById('aiq-topic').addEventListener('keydown',e=>{if(e.key==='
 function runSplash(){
   const splash = document.getElementById('splash');
   const onboard = document.getElementById('onboard');
-  // After 1.4s — hide splash, reveal onboard (like ChatGPT)
+  // Splash: 2.6s then fade out — logo + wordmark + dots
   setTimeout(()=>{
     splash.classList.add('hide');
     setTimeout(()=>{
       splash.style.display='none';
       onboard.classList.add('ready');
-    }, 420);
-  }, 1400);
+    }, 520);
+  }, 2600);
 }
 // Run splash immediately
 runSplash();
@@ -3897,14 +4112,14 @@ function showSpeedGuide(){
 function runSplash(){
   const splash = document.getElementById('splash');
   const onboard = document.getElementById('onboard');
-  // After 1.4s — hide splash, reveal onboard (like ChatGPT)
+  // Splash: 2.6s then fade out — logo + wordmark + dots
   setTimeout(()=>{
     splash.classList.add('hide');
     setTimeout(()=>{
       splash.style.display='none';
       onboard.classList.add('ready');
-    }, 420);
-  }, 1400);
+    }, 520);
+  }, 2600);
 }
 // Run splash immediately
 runSplash();
@@ -4066,13 +4281,27 @@ renderProgress();
 // Online state
 setOnline(navigator.onLine);
 
-// Load proxy URL if saved
-const savedProxy=localStorage.getItem('qv_proxy');
-if(savedProxy){ window._proxyURL=savedProxy; }
+// Load proxy URL if saved — ONLY for the dev account.
+// Any proxy stored by a non-dev user is silently ignored.
+// isDev() is defined later in the file, so we re-check email directly here.
+(function(){
+  const _savedProxy = localStorage.getItem('qv_proxy');
+  if(_savedProxy){
+    // Will be applied after auth resolves in setProxyIfDev()
+    window._pendingProxy = _savedProxy;
+  }
+})();
+function setProxyIfDev(){
+  if(window._pendingProxy && isDev()){
+    window._proxyURL = window._pendingProxy;
+  }
+  // Always clear the pending regardless — prevent delayed injection
+  delete window._pendingProxy;
+}
 
-// Fill proxy field if in admin
+// Fill proxy field if in admin (dev only)
 const proxyField=document.getElementById('proxy-url');
-if(proxyField) proxyField.value=savedProxy||'';
+if(proxyField && isDev()) proxyField.value=localStorage.getItem('qv_proxy')||'';
 
 // Init UI — always run regardless of proxy
 updateBanner();
@@ -4091,6 +4320,88 @@ initVoice();
   const h = document.getElementById('kb-hint');
   if(h) h.textContent = mob ? 'Tap ➤ to send' : 'Enter to send · Shift+Enter for new line';
 })();
+
+/* ═══════════════════════════════════
+   PROFILE PANEL
+═══════════════════════════════════ */
+let _fbTag = 'bug';
+
+function openProfile(){
+  const panel = document.getElementById('profile-panel');
+  const overlay = document.getElementById('profile-overlay');
+  // Sync user info
+  const u = S.user;
+  const av = document.getElementById('pp-av');
+  const nm = document.getElementById('pp-nm');
+  const em = document.getElementById('pp-em');
+  if(u){
+    nm.textContent = u.displayName || u.email || 'Student';
+    em.textContent = u.email || '';
+    av.innerHTML = u.photoURL
+      ? `<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+      : (u.displayName||u.email||'S')[0].toUpperCase();
+  } else {
+    nm.textContent = 'Guest'; em.textContent = 'Not signed in'; av.innerHTML = '?';
+  }
+  overlay.style.display = 'block';
+  panel.style.display = 'block';
+  requestAnimationFrame(()=>{ panel.style.transform = 'translateY(0)'; });
+}
+function closeProfile(){
+  const panel = document.getElementById('profile-panel');
+  const overlay = document.getElementById('profile-overlay');
+  panel.style.transform = 'translateY(100%)';
+  setTimeout(()=>{ panel.style.display='none'; overlay.style.display='none'; }, 340);
+}
+function toggleFeedback(){
+  const form = document.getElementById('pp-fb-form');
+  const chev = document.getElementById('fb-chevron');
+  const open = form.style.display !== 'none';
+  form.style.display = open ? 'none' : 'block';
+  chev.style.transform = open ? '' : 'rotate(90deg)';
+}
+function setFbTag(el){
+  document.querySelectorAll('.pp-fb-tag').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  _fbTag = el.dataset.tag;
+}
+function submitFeedback(){
+  const msg = document.getElementById('pp-fb-txt').value.trim();
+  if(!msg){ toast('Write something first','err'); return; }
+  const text = `[QUEVA FEEDBACK — ${_fbTag.toUpperCase()}]
+
+From: ${S.user?.email||'Guest'}
+
+${msg}`;
+  const waUrl = `https://wa.me/2349065995498?text=${encodeURIComponent(text)}`;
+  window.open(waUrl, '_blank');
+  document.getElementById('pp-fb-txt').value = '';
+  toggleFeedback();
+  closeProfile();
+  toast('Thanks for your feedback!','ok');
+}
+
+// Wire sign-out button in profile panel
+document.getElementById('pp-signout').onclick = () => {
+  if(!S.user){
+    closeProfile();
+    _appOpened=false;
+    document.getElementById('onboard').style.display='flex';
+    document.getElementById('app').style.display='none';
+    return;
+  }
+  if(!confirm('Sign out?')) return;
+  closeProfile();
+  if(S.auth) S.auth.signOut().then(()=>{
+    S.user=null;
+    loadUserData('guest');
+    renderHist();renderKP();renderRecent();renderStreak();
+    clearMsgs();
+    setUserUI(null);
+    toast('Signed out','nfo');
+  });
+  else{ S.user=null; setUserUI(null); }
+};
 
 // Register Service Worker for PWA
 if('serviceWorker' in navigator){
