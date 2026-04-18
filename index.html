@@ -1517,27 +1517,118 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 
 
 /* ── PROFILE PANEL ── */
+#profile-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.4);z-index:600;
+  backdrop-filter:blur(3px);
+}
+#profile-panel{
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:601;
+  background:var(--bg1);
+  border-radius:24px 24px 0 0;
+  border-top:1px solid var(--bdr);
+  max-height:88vh;overflow-y:auto;
+  transform:translateY(100%);
+  transition:transform .34s cubic-bezier(.34,1.12,.64,1);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.pp-handle-wrap{display:flex;justify-content:center;padding:14px 0 6px}
+.pp-handle{width:40px;height:4px;border-radius:2px;background:var(--bg5)}
+
+/* User header */
+.pp-user-header{
+  display:flex;align-items:flex-start;gap:16px;
+  padding:10px 22px 20px;
+}
+.pp-avatar-wrap{position:relative;flex-shrink:0}
+.pp-avatar{
+  width:64px;height:64px;border-radius:50%;
+  background:var(--acc);
+  display:flex;align-items:center;justify-content:center;
+  font-size:24px;font-weight:700;color:#fff;
+  overflow:hidden;
+}
+.pp-avatar img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.pp-avatar-edit{
+  position:absolute;bottom:0;right:0;
+  width:22px;height:22px;border-radius:50%;
+  background:var(--bg1);border:2px solid var(--bg1);
+  background-clip:padding-box;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;color:var(--t2);
+  box-shadow:0 1px 4px rgba(0,0,0,.15);
+}
+.pp-avatar-edit:hover{color:var(--acc)}
+.pp-name-wrap{flex:1;min-width:0;padding-top:6px}
+.pp-name{
+  display:flex;align-items:center;gap:6px;
+  font-size:1.05rem;font-weight:700;color:var(--t0);
+  cursor:pointer;width:fit-content;margin-bottom:4px;
+}
+.pp-name:hover{color:var(--acc)}
+.pp-email{font-size:.8rem;color:var(--t2);line-height:1.4}
+.pp-name-input{
+  width:100%;padding:10px 14px;border-radius:10px;
+  border:1.5px solid var(--accmd);background:var(--bg2);
+  color:var(--t0);font-family:var(--ff);font-size:.95rem;
+  outline:none;
+}
+.pp-save-btn{
+  padding:8px 20px;border-radius:8px;border:none;
+  background:var(--acc);color:#fff;font-family:var(--ff);
+  font-size:.82rem;font-weight:700;cursor:pointer;
+}
+.pp-cancel-btn{
+  padding:8px 16px;border-radius:8px;
+  border:1px solid var(--bdr);background:none;
+  color:var(--t2);font-family:var(--ff);font-size:.82rem;cursor:pointer;
+}
+.pp-divider{height:1px;background:var(--bdr);margin:0 20px}
+.pp-rows{padding:6px 12px}
+
+/* Action rows */
 .pp-row{
-  display:flex;align-items:center;gap:12px;
-  padding:13px 10px;border-radius:11px;cursor:pointer;
-  transition:background .15s;color:var(--t0);
+  display:flex;align-items:center;gap:13px;
+  padding:14px 10px;border-radius:12px;cursor:pointer;
+  transition:background .14s;color:var(--t0);
 }
 .pp-row:hover{background:var(--bg3)}
 .pp-row-ic{
-  width:34px;height:34px;border-radius:9px;flex-shrink:0;
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
   background:var(--bg3);border:1px solid var(--bdr);
-  display:flex;align-items:center;justify-content:center;color:var(--t1);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--t1);transition:all .14s;
 }
-.pp-row-lbl{flex:1;font-size:.88rem;font-weight:600}
-.pp-danger .pp-row-ic{background:rgba(220,38,38,.08);border-color:rgba(220,38,38,.15);color:var(--red)}
+.pp-row:hover .pp-row-ic{border-color:var(--accmd);color:var(--acc);background:var(--acclo)}
+.pp-row-lbl{flex:1;font-size:.9rem;font-weight:600}
+.pp-danger .pp-row-ic{background:rgba(220,38,38,.07);border-color:rgba(220,38,38,.15);color:var(--red)}
 .pp-danger{color:var(--red)}
 .pp-danger:hover{background:rgba(220,38,38,.06)}
+.pp-danger:hover .pp-row-ic{background:rgba(220,38,38,.12);border-color:rgba(220,38,38,.25);color:var(--red)}
+
+/* Feedback form */
+.pp-fb-form{padding:4px 10px 12px;animation:fadeUp .18s ease both}
+.pp-fb-txt{
+  width:100%;border-radius:12px;border:1.5px solid var(--bdr);
+  background:var(--bg2);color:var(--t0);font-family:var(--ff);
+  font-size:.86rem;padding:13px 14px;resize:none;height:110px;
+  outline:none;transition:border-color .15s;line-height:1.55;
+}
+.pp-fb-txt:focus{border-color:var(--accmd)}
+.pp-fb-tags{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
 .pp-fb-tag{
-  padding:6px 14px;border-radius:20px;border:1px solid var(--bdr);
-  background:var(--bg3);color:var(--t2);font-family:var(--ff);font-size:.76rem;
-  font-weight:600;cursor:pointer;transition:all .15s;
+  padding:7px 14px;border-radius:20px;border:1px solid var(--bdr);
+  background:var(--bg3);color:var(--t2);font-family:var(--ff);
+  font-size:.78rem;font-weight:600;cursor:pointer;transition:all .14s;
 }
 .pp-fb-tag.active{background:var(--acclo);border-color:var(--accmd);color:var(--acc)}
+.pp-fb-send{
+  width:100%;margin-top:10px;padding:13px;border-radius:11px;border:none;
+  background:var(--acc);color:#fff;font-family:var(--ff);
+  font-size:.9rem;font-weight:700;cursor:pointer;
+  transition:opacity .14s;
+}
+.pp-fb-send:hover{opacity:.86}
 
 </style>
 </head>
@@ -2085,19 +2176,6 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
       </div>
 
       <div class="ss">
-        <div class="ss-hd">💬 Send Feedback</div>
-        <div style="font-size:.78rem;color:var(--t1);line-height:1.6;margin-bottom:10px">
-          Found a bug? Have a suggestion? We want to hear from you — Queva is built on your feedback.
-        </div>
-        <button class="btn-sec" onclick="sendFeedbackWA()" style="display:flex;align-items:center;gap:8px;justify-content:center">
-          <span>📲</span> Send feedback on WhatsApp
-        </button>
-        <button class="btn-sec" onclick="sendFeedbackEmail()" style="margin-top:6px;display:flex;align-items:center;gap:8px;justify-content:center">
-          <span>✉️</span> Send feedback by Email
-        </button>
-      </div>
-
-      <div class="ss">
         <div class="ss-hd">ℹ️ About Queva</div>
         <div style="font-size:.78rem;color:var(--t1);line-height:1.7">
           <div style="margin-bottom:6px">Queva is a free AI study companion built for students.</div>
@@ -2178,7 +2256,7 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 
   </div><!-- /main -->
 
-  <!-- BOTTOM NAV -->
+  <!-- BOTTOM NAV — 4 tabs -->
   <nav id="bnav">
     <div class="bni active" data-pg="home">
       <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -2192,10 +2270,6 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
       <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div class="bni-lb">Quiz</div>
     </div>
-    <div class="bni" data-pg="kp">
-      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
-      <div class="bni-lb">Keys</div>
-    </div>
     <div class="bni" id="bnav-profile" onclick="openProfile()">
       <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
       <div class="bni-lb">Profile</div>
@@ -2203,26 +2277,41 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   </nav>
 
 <!-- PROFILE PANEL (slide-up sheet) -->
-<div id="profile-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:600;backdrop-filter:blur(2px)" onclick="closeProfile()"></div>
-<div id="profile-panel" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:601;background:var(--bg1);border-radius:20px 20px 0 0;border-top:1px solid var(--bdr);padding:0;max-height:85vh;overflow-y:auto;transform:translateY(100%);transition:transform .32s cubic-bezier(.34,1.2,.64,1)">
+<div id="profile-overlay" onclick="closeProfile()"></div>
+<div id="profile-panel">
   <!-- Drag handle -->
-  <div style="display:flex;justify-content:center;padding:12px 0 4px">
-    <div style="width:36px;height:4px;border-radius:2px;background:var(--bg4)"></div>
-  </div>
+  <div class="pp-handle-wrap"><div class="pp-handle"></div></div>
 
-  <!-- User identity -->
-  <div style="display:flex;align-items:center;gap:14px;padding:16px 20px 18px">
-    <div id="pp-av" style="width:48px;height:48px;border-radius:50%;background:var(--acc);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;color:#fff;flex-shrink:0;overflow:hidden">?</div>
-    <div style="flex:1;min-width:0">
-      <div id="pp-nm" style="font-size:1rem;font-weight:700;color:var(--t0)">Guest</div>
-      <div id="pp-em" style="font-size:.78rem;color:var(--t2);margin-top:2px">Not signed in</div>
+  <!-- ── USER HEADER ── -->
+  <div class="pp-user-header">
+    <!-- Avatar — shows initial, tappable to edit name -->
+    <div class="pp-avatar-wrap">
+      <div id="pp-av" class="pp-avatar">?</div>
+      <div class="pp-avatar-edit" onclick="startEditName()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+    </div>
+    <!-- Name (tappable → editable input) -->
+    <div class="pp-name-wrap">
+      <div id="pp-name-display" class="pp-name" onclick="startEditName()">
+        <span id="pp-nm">Guest</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="opacity:.4;flex-shrink:0"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div id="pp-name-edit" style="display:none">
+        <input id="pp-name-inp" type="text" class="pp-name-input" placeholder="Your name" autocomplete="name"/>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="pp-save-btn" onclick="saveEditName()">Save</button>
+          <button class="pp-cancel-btn" onclick="cancelEditName()">Cancel</button>
+        </div>
+      </div>
+      <div id="pp-em" class="pp-email">Not signed in</div>
     </div>
   </div>
 
-  <div style="height:1px;background:var(--bdr);margin:0 20px"></div>
+  <div class="pp-divider"></div>
 
-  <!-- Action rows -->
-  <div style="padding:8px 12px">
+  <!-- ── ACTION ROWS ── -->
+  <div class="pp-rows">
 
     <!-- Settings -->
     <div class="pp-row" onclick="closeProfile();swPage('set')">
@@ -2233,37 +2322,37 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
     </div>
 
-    <!-- Send Feedback (expands inline) -->
+    <!-- Message / Feedback row — expands inline -->
     <div class="pp-row" onclick="toggleFeedback()">
       <div class="pp-row-ic">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
       </div>
-      <div class="pp-row-lbl">Send Feedback</div>
-      <svg id="fb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="transition:transform .2s"><path d="M9 18l6-6-6-6"/></svg>
+      <div class="pp-row-lbl">Send a Message</div>
+      <svg id="fb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="transition:transform .22s"><path d="M6 9l6 6 6-6"/></svg>
     </div>
 
-    <!-- Inline feedback form -->
-    <div id="pp-fb-form" style="display:none;padding:0 10px 10px">
-      <textarea id="pp-fb-txt" placeholder="Tell us about a bug, suggestion, or anything…" style="width:100%;border-radius:10px;border:1px solid var(--bdr);background:var(--bg2);color:var(--t0);font-family:var(--ff);font-size:.84rem;padding:12px 14px;resize:none;height:100px;outline:none;transition:border-color .15s;line-height:1.55" onfocus="this.style.borderColor='var(--accmd)'" onblur="this.style.borderColor='var(--bdr)'"></textarea>
-      <div style="display:flex;gap:8px;margin-top:8px">
-        <button class="pp-fb-tag active" data-tag="bug" onclick="setFbTag(this)">Bug</button>
-        <button class="pp-fb-tag" data-tag="suggestion" onclick="setFbTag(this)">Suggestion</button>
-        <button class="pp-fb-tag" data-tag="other" onclick="setFbTag(this)">Other</button>
+    <!-- Inline feedback form — hidden by default -->
+    <div id="pp-fb-form" style="display:none" class="pp-fb-form">
+      <textarea id="pp-fb-txt" class="pp-fb-txt" placeholder="Bug report, suggestion, or just say hi…"></textarea>
+      <div class="pp-fb-tags">
+        <button class="pp-fb-tag active" data-tag="bug" onclick="setFbTag(this)">🐛 Bug</button>
+        <button class="pp-fb-tag" data-tag="suggestion" onclick="setFbTag(this)">💡 Idea</button>
+        <button class="pp-fb-tag" data-tag="other" onclick="setFbTag(this)">💬 Other</button>
       </div>
-      <button onclick="submitFeedback()" style="width:100%;margin-top:10px;padding:12px;border-radius:10px;border:none;background:var(--acc);color:#fff;font-family:var(--ff);font-size:.88rem;font-weight:700;cursor:pointer;transition:opacity .15s" onmouseenter="this.style.opacity='.86'" onmouseleave="this.style.opacity='1'">Send</button>
+      <button class="pp-fb-send" onclick="submitFeedback()">Send Message</button>
     </div>
 
   </div>
 
-  <div style="height:1px;background:var(--bdr);margin:0 12px 8px"></div>
+  <div class="pp-divider" style="margin-top:4px"></div>
 
   <!-- Sign out -->
-  <div style="padding:0 12px 20px">
+  <div class="pp-rows" style="padding-bottom:24px">
     <div class="pp-row pp-danger" id="pp-signout">
       <div class="pp-row-ic">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
       </div>
-      <div class="pp-row-lbl">Sign out</div>
+      <div class="pp-row-lbl" id="pp-signout-lbl">Sign out</div>
     </div>
   </div>
 </div>
@@ -2680,24 +2769,45 @@ function doGoogleAuth(){
 }
 document.getElementById('ob-google').onclick = doGoogleAuth;
 document.getElementById('ob-guest').onclick=()=>{S.user=null;loadUserData('guest');openApp();refreshSettingsUI();toast('Guest mode — sessions save locally','nfo');};
-// btn-out signout now handled by sidebar footer onclick + profile panel pp-signout
+// Sidebar sign-out row
+document.getElementById('btn-out').onclick = () => {
+  if(!S.user){
+    _appOpened=false;
+    document.getElementById('sidebar').classList.remove('mobile-open');
+    document.getElementById('sb-overlay').classList.remove('show');
+    document.getElementById('onboard').style.display='flex';
+    document.getElementById('app').style.display='none';
+    return;
+  }
+  if(!confirm('Sign out?')) return;
+  document.getElementById('sidebar').classList.remove('mobile-open');
+  document.getElementById('sb-overlay').classList.remove('show');
+  if(S.auth) S.auth.signOut().then(()=>{
+    S.user=null; loadUserData('guest');
+    renderHist();renderKP();renderRecent();renderStreak();
+    clearMsgs(); setUserUI(null);
+    toast('Signed out','nfo');
+  }); else { S.user=null; setUserUI(null); }
+};
 
 function setUserUI(u){
-  // Sidebar footer elements
-  const av=document.getElementById('su-av'),nm=document.getElementById('su-nm'),st=document.getElementById('su-st');
-  // Sign out row in sidebar
-  const btnOut=document.getElementById('btn-out');
+  const av=document.getElementById('su-av');
+  const nm=document.getElementById('su-nm');
+  const st=document.getElementById('su-st');
   if(u){
-    if(nm) nm.textContent=u.displayName||u.email||'Student';
-    if(st) st.textContent=S.online?'online':'offline';
-    if(av) av.innerHTML=u.photoURL?`<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`:(u.displayName||'S')[0].toUpperCase();
-    if(btnOut){ btnOut.style.cssText=''; btnOut.querySelector?.('.pp-row-lbl') && (btnOut.querySelector('.pp-row-lbl').textContent='Sign out'); }
+    const name = u.displayName||u.email||'Student';
+    if(nm) nm.textContent=name;
+    if(st) st.textContent=S.online?'● online':'○ offline';
+    if(av) av.innerHTML=u.photoURL
+      ?`<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
+      :name[0].toUpperCase();
   }else{
     if(nm) nm.textContent='Guest';
     if(st) st.textContent='not signed in';
     if(av) av.innerHTML='?';
-    if(btnOut){ btnOut.style.color='var(--acc)'; }
   }
+  // Keep profile panel in sync if open
+  if(typeof _syncProfilePanel==='function') _syncProfilePanel();
 }
 
 /* ═══════════════════════════════════
@@ -4326,39 +4436,87 @@ initVoice();
 ═══════════════════════════════════ */
 let _fbTag = 'bug';
 
-function openProfile(){
-  const panel = document.getElementById('profile-panel');
-  const overlay = document.getElementById('profile-overlay');
-  // Sync user info
+function _syncProfilePanel(){
   const u = S.user;
   const av = document.getElementById('pp-av');
   const nm = document.getElementById('pp-nm');
   const em = document.getElementById('pp-em');
+  const lbl = document.getElementById('pp-signout-lbl');
   if(u){
-    nm.textContent = u.displayName || u.email || 'Student';
-    em.textContent = u.email || '';
-    av.innerHTML = u.photoURL
-      ? `<img src="${u.photoURL}" style="width:100%;height:100%;border-radius:50%;object-fit:cover">`
-      : (u.displayName||u.email||'S')[0].toUpperCase();
+    const displayName = u.displayName || u.email?.split('@')[0] || 'Student';
+    if(nm) nm.textContent = displayName;
+    if(em) em.textContent = u.email || '';
+    if(av){
+      av.innerHTML = u.photoURL
+        ? `<img src="${u.photoURL}">`
+        : displayName[0].toUpperCase();
+    }
+    if(lbl) lbl.textContent = 'Sign out';
   } else {
-    nm.textContent = 'Guest'; em.textContent = 'Not signed in'; av.innerHTML = '?';
+    if(nm) nm.textContent = 'Guest';
+    if(em) em.textContent = 'Sign in to save your progress';
+    if(av) av.innerHTML = '?';
+    if(lbl) lbl.textContent = 'Sign in';
   }
+}
+
+function openProfile(){
+  _syncProfilePanel();
+  // Reset feedback form state
+  document.getElementById('pp-fb-form').style.display = 'none';
+  document.getElementById('fb-chevron').style.transform = '';
+  document.getElementById('pp-name-edit').style.display = 'none';
+  document.getElementById('pp-name-display').style.display = 'flex';
+  const overlay = document.getElementById('profile-overlay');
+  const panel   = document.getElementById('profile-panel');
   overlay.style.display = 'block';
-  panel.style.display = 'block';
+  panel.style.display   = 'block';
   requestAnimationFrame(()=>{ panel.style.transform = 'translateY(0)'; });
 }
 function closeProfile(){
-  const panel = document.getElementById('profile-panel');
+  const panel   = document.getElementById('profile-panel');
   const overlay = document.getElementById('profile-overlay');
   panel.style.transform = 'translateY(100%)';
-  setTimeout(()=>{ panel.style.display='none'; overlay.style.display='none'; }, 340);
+  setTimeout(()=>{ panel.style.display='none'; overlay.style.display='none'; }, 360);
 }
+
+/* Name editing */
+function startEditName(){
+  if(!S.user){ toast('Sign in to edit your profile','nfo'); return; }
+  const inp = document.getElementById('pp-name-inp');
+  inp.value = S.user.displayName || '';
+  document.getElementById('pp-name-display').style.display = 'none';
+  document.getElementById('pp-name-edit').style.display   = 'block';
+  setTimeout(()=>inp.focus(), 50);
+}
+function cancelEditName(){
+  document.getElementById('pp-name-edit').style.display   = 'none';
+  document.getElementById('pp-name-display').style.display = 'flex';
+}
+async function saveEditName(){
+  const val = document.getElementById('pp-name-inp').value.trim();
+  if(!val){ toast('Enter a name','err'); return; }
+  if(!S.user){ toast('Not signed in','err'); return; }
+  try{
+    await S.user.updateProfile({ displayName: val });
+    cancelEditName();
+    _syncProfilePanel();
+    setUserUI(S.user);
+    toast('Name updated ✓','ok');
+  }catch(e){ toast('Could not update name: '+e.message,'err'); }
+}
+document.getElementById('pp-name-inp')?.addEventListener('keydown', e=>{
+  if(e.key==='Enter') saveEditName();
+  if(e.key==='Escape') cancelEditName();
+});
+
+/* Feedback toggle */
 function toggleFeedback(){
   const form = document.getElementById('pp-fb-form');
   const chev = document.getElementById('fb-chevron');
   const open = form.style.display !== 'none';
   form.style.display = open ? 'none' : 'block';
-  chev.style.transform = open ? '' : 'rotate(90deg)';
+  chev.style.transform = open ? '' : 'rotate(180deg)';
 }
 function setFbTag(el){
   document.querySelectorAll('.pp-fb-tag').forEach(b=>b.classList.remove('active'));
@@ -4368,39 +4526,37 @@ function setFbTag(el){
 function submitFeedback(){
   const msg = document.getElementById('pp-fb-txt').value.trim();
   if(!msg){ toast('Write something first','err'); return; }
-  const text = `[QUEVA FEEDBACK — ${_fbTag.toUpperCase()}]
-
+  const text = `[QUEVA ${_fbTag.toUpperCase()}]
 From: ${S.user?.email||'Guest'}
 
 ${msg}`;
-  const waUrl = `https://wa.me/2349065995498?text=${encodeURIComponent(text)}`;
-  window.open(waUrl, '_blank');
+  window.open(`https://wa.me/2349065995498?text=${encodeURIComponent(text)}`, '_blank');
   document.getElementById('pp-fb-txt').value = '';
   toggleFeedback();
-  closeProfile();
-  toast('Thanks for your feedback!','ok');
+  toast('Opening WhatsApp…','ok');
 }
 
-// Wire sign-out button in profile panel
+/* Sign out */
 document.getElementById('pp-signout').onclick = () => {
   if(!S.user){
     closeProfile();
-    _appOpened=false;
-    document.getElementById('onboard').style.display='flex';
-    document.getElementById('app').style.display='none';
+    setTimeout(()=>{
+      _appOpened=false;
+      document.getElementById('onboard').style.display='flex';
+      document.getElementById('app').style.display='none';
+    }, 380);
     return;
   }
-  if(!confirm('Sign out?')) return;
+  if(!confirm('Sign out of Queva?')) return;
   closeProfile();
-  if(S.auth) S.auth.signOut().then(()=>{
-    S.user=null;
-    loadUserData('guest');
-    renderHist();renderKP();renderRecent();renderStreak();
-    clearMsgs();
-    setUserUI(null);
-    toast('Signed out','nfo');
-  });
-  else{ S.user=null; setUserUI(null); }
+  setTimeout(()=>{
+    if(S.auth) S.auth.signOut().then(()=>{
+      S.user=null; loadUserData('guest');
+      renderHist();renderKP();renderRecent();renderStreak();
+      clearMsgs(); setUserUI(null);
+      toast('Signed out','nfo');
+    }); else { S.user=null; setUserUI(null); }
+  }, 380);
 };
 
 // Register Service Worker for PWA
