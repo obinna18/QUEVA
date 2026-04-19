@@ -2765,9 +2765,15 @@ function bootFB(cfg){
     if(typeof firebase==='undefined') throw new Error('Firebase SDK not loaded');
     if(!firebase.apps.length) firebase.initializeApp(cfg);
     S.db=firebase.firestore(); S.auth=firebase.auth(); S.fb=true;
+    S.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
     try{S.db.enablePersistence({synchronizeTabs:true}).catch(()=>{});}catch(e){}
     S.auth.onAuthStateChanged(u=>{
-      if(u){S.user=u;loadUserData(u.uid);setUserUI(u);loadCloud();openApp();refreshSettingsUI();sendWelcomeEmail(u);}
+      if(u){
+        S.user=u; loadUserData(u.uid); setUserUI(u); loadCloud(); openApp(); refreshSettingsUI();
+        const isNew = !localStorage.getItem('qv_welcomed_' + u.uid);
+        if(isNew){ sendWelcomeEmail(u); }
+        else { sendSignInEmail(u); }
+      }
     });
     S.auth.getRedirectResult().then(r=>{
       if(r&&r.user){
@@ -4223,7 +4229,6 @@ function sendWelcomeEmail(user){
   if(!user || !user.email) return;
   const key = 'qv_welcomed_' + user.uid;
   if(localStorage.getItem(key)) return;
-  // Do NOT set localStorage here — only mark as sent after confirmed success
 
   let attempts = 0;
   const tryInit = setInterval(()=>{
@@ -4239,15 +4244,46 @@ function sendWelcomeEmail(user){
       }
       emailjs.send(EJS_SVC, EJS_TPL, { to_name: firstName, to_email: user.email })
         .then(()=>{
-          localStorage.setItem(key, '1'); // ✅ Only mark as sent after success
+          localStorage.setItem(key, '1'); // only mark sent after confirmed success
           console.log('✅ Welcome email sent to', user.email);
         })
-        .catch(e=>console.warn('❌ Email send failed:', e));
+        .catch(e=>console.warn('❌ Welcome email failed:', e));
     } else if(attempts > 10){
       clearInterval(tryInit);
       console.warn('EmailJS never loaded after 5s');
     }
   }, 500);
+}
+
+const EJS_SIGNIN_TPL = 'template_signin01'; // replace with your actual EmailJS signin template ID
+
+function sendSignInEmail(user){
+  if(!user || !user.email) return;
+  if(typeof emailjs === 'undefined') return;
+
+  // Throttle: only send once per 24 hours per user
+  const throttleKey = 'qv_signin_last_' + user.uid;
+  const last = localStorage.getItem(throttleKey);
+  if(last && (Date.now() - parseInt(last)) < 86400000) return;
+  localStorage.setItem(throttleKey, Date.now().toString());
+
+  emailjs.init({ publicKey: EJS_KEY });
+  let firstName = 'there';
+  if(user.displayName) firstName = user.displayName.split(' ')[0];
+  else if(user.email){
+    const name = user.email.split('@')[0];
+    firstName = name.charAt(0).toUpperCase() + name.slice(1);
+  }
+  const signInTime = new Date().toLocaleString('en-NG', { dateStyle:'medium', timeStyle:'short' });
+  const device = navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop';
+  emailjs.send(EJS_SVC, EJS_SIGNIN_TPL, {
+    to_name: firstName,
+    to_email: user.email,
+    sign_in_time: signInTime,
+    device: device
+  })
+    .then(()=>console.log('✅ Sign-in email sent to', user.email))
+    .catch(e=>console.warn('❌ Sign-in email failed:', e));
 }
 
 /* ═══════════════════════════════════
