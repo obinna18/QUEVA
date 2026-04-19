@@ -1073,7 +1073,7 @@ body::before{display:none}
   align-items:center; justify-content:center; gap:0;
   transition:opacity .5s ease;
 }
-[data-theme="light"] #splash { background:#fff; }
+[data-theme="light"] #splash { background:#0D0D0D; }
 #splash.hide { opacity:0; pointer-events:none; }
 
 .splash-logo {
@@ -1101,22 +1101,22 @@ body::before{display:none}
 
 .splash-brand {
   font-size:2rem; font-weight:900; letter-spacing:5px;
-  color:#fff !important;
-  -webkit-text-fill-color:#fff !important;
+  color:#ffffff !important;
+  -webkit-text-fill-color:#ffffff !important;
   background:none !important;
   line-height:1; margin-bottom:10px;
   animation:splashTextIn .6s var(--spring) both;
   animation-delay:.55s; opacity:0;
 }
-[data-theme="light"] .splash-brand { color:var(--t0) !important; -webkit-text-fill-color:var(--t0) !important; }
+[data-theme="light"] .splash-brand { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
 
 .splash-tag {
   font-size:.78rem; letter-spacing:.06em;
-  color:rgba(255,255,255,.45); text-align:center;
+  color:rgba(255,255,255,.85); text-align:center;
   animation:splashTextIn .5s ease both;
   animation-delay:.85s; opacity:0;
 }
-[data-theme="light"] .splash-tag { color:var(--t2); }
+[data-theme="light"] .splash-tag { color:rgba(255,255,255,.85); }
 
 .splash-sub { display:none; }
 
@@ -1853,9 +1853,12 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
           <input type="text" class="ob-inp" id="ob-name" placeholder="Full name" autocomplete="name" style="margin-bottom:10px"/>
         </div>
 
-        <div class="ob-inp-group">
-          <input type="password" class="ob-inp" id="ob-pass"  placeholder="Password"         autocomplete="current-password"/>
-          <input type="password" class="ob-inp" id="ob-pass2" placeholder="Confirm password" autocomplete="new-password" style="display:none"/>
+        <div class="ob-inp-group" style="position:relative;">
+          <input type="password" class="ob-inp" id="ob-pass"  placeholder="Password"         autocomplete="current-password" style="padding-right:44px"/>
+          <input type="password" class="ob-inp" id="ob-pass2" placeholder="Confirm password" autocomplete="new-password" style="display:none;padding-right:44px"/>
+          <button type="button" onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--t2);padding:4px;display:flex;align-items:center;" id="pass-eye">
+            <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
         </div>
 
         <div class="ob-err" id="ob-err2"></div>
@@ -4524,6 +4527,19 @@ document.getElementById('ob-email-submit').onclick = async () => {
 /* ═══════════════════════════════════
    EMAILJS — WELCOME EMAIL
 ═══════════════════════════════════ */
+// Password eye toggle
+function togglePassVis(){
+  const p1 = document.getElementById('ob-pass');
+  const p2 = document.getElementById('ob-pass2');
+  const icon = document.getElementById('eye-icon');
+  const show = p1.type === 'password';
+  p1.type = show ? 'text' : 'password';
+  if(p2) p2.type = show ? 'text' : 'password';
+  icon.innerHTML = show
+    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
+    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+}
+
 // EmailJS constants declared above
 
 /* ═══════════════════════════════════
@@ -4766,17 +4782,20 @@ document.getElementById('pp-signout').onclick = () => {
     if(S.auth) S.auth.signOut().then(()=>{
       S.user=null; loadUserData('guest');
       renderHist();renderKP();renderRecent();renderStreak();
-      clearMsgs(); setUserUI(null);
+      clearMsgs(); setUserUI(null); _syncProfilePanel();
       toast('Signed out','nfo');
-    }); else { S.user=null; setUserUI(null); }
+    }); else { S.user=null; setUserUI(null); _syncProfilePanel(); }
   }, 380);
 };
 
-// Register Service Worker for PWA
+// Register Service Worker for PWA — force update on every load
 if('serviceWorker' in navigator){
   window.addEventListener('load', ()=>{
     navigator.serviceWorker.register('/QUEVA/sw.js')
-      .then(()=>console.log('SW registered'))
+      .then(reg=>{
+        reg.update(); // force check for new version
+        console.log('SW registered');
+      })
       .catch(e=>console.warn('SW failed:', e));
   });
 }
