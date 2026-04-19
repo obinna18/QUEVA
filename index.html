@@ -213,78 +213,147 @@ body::before{display:none}
 /* ── SIDEBAR ── */
 #sidebar{
   position:fixed;left:0;top:0;bottom:0;width:var(--sb);
-  background:var(--bg1);border-right:1px solid var(--bdr);
+  background:var(--bg1);border-right:none;
   display:flex;flex-direction:column;z-index:400;
-  transition:transform .22s var(--ease);
-  transform:translateX(-100%); /* hidden by default, shown on desktop via JS */
+  transition:transform .24s cubic-bezier(.4,0,.2,1);
+  transform:translateX(-100%);
 }
-#sidebar.desktop-show{transform:translateX(0)}
-#sidebar.mobile-open{transform:translateX(0);box-shadow:10px 0 40px rgba(0,0,0,.6)}
+#sidebar.desktop-show{transform:translateX(0);border-right:1px solid var(--bdr)}
+#sidebar.mobile-open{
+  transform:translateX(0);
+  box-shadow:4px 0 24px rgba(0,0,0,.12), 12px 0 48px rgba(0,0,0,.08);
+}
 
-.sb-head{padding:14px 14px 10px;border-bottom:1px solid var(--bdr);flex-shrink:0;display:flex;align-items:center;gap:10px}
+/* ══════════════════════════════════
+   NAVIGATION DRAWER — Architectural
+   3-level hierarchy: Brand / Section labels / Nav rows
+   ══════════════════════════════════ */
+
+/* ── Level 1: App Header ── */
+.sb-head{
+  padding:18px 16px 14px;
+  flex-shrink:0;
+  display:flex;align-items:center;gap:10px;
+}
 .sb-q{
-  width:32px;height:32px;border-radius:9px;flex-shrink:0;
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;
   background:var(--acc);
   display:flex;align-items:center;justify-content:center;
-  font-size:15px;font-weight:900;color:#fff;
+  font-size:16px;font-weight:900;color:#fff;
   cursor:pointer;user-select:none;
 }
-.sb-nm{font-size:15px;font-weight:800;letter-spacing:1px;color:var(--t0)}
-.sb-sub{font-size:7px;color:var(--t2);letter-spacing:.12em;text-transform:uppercase}
-
-/* New chat button in sidebar header */
+.sb-brand{flex:1;min-width:0}
+.sb-nm{
+  font-size:16px;font-weight:800;letter-spacing:-.01em;
+  color:var(--t0);line-height:1.1;
+}
+.sb-sub{
+  font-size:.6rem;color:var(--t2);
+  letter-spacing:.12em;text-transform:uppercase;
+  margin-top:1px;
+}
+/* New chat — icon button, right of header */
 .sb-new{
-  margin-left:auto;width:30px;height:30px;border-radius:8px;flex-shrink:0;
+  margin-left:auto;flex-shrink:0;
+  width:32px;height:32px;border-radius:8px;
   border:1px solid var(--bdr);background:none;color:var(--t2);
   display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all var(--dur);
+  cursor:pointer;transition:all .14s;
 }
 .sb-new:hover{border-color:var(--accmd);color:var(--acc);background:var(--acclo)}
 
-/* Sessions list — takes all remaining space */
+/* ── Divider ── */
+.sb-divider{height:1px;background:var(--bdr);margin:0 16px}
+
+/* ── Level 2: Section Label ── */
+.sb-hl{
+  font-size:.65rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--t2);
+  padding:16px 16px 6px;
+  flex-shrink:0;
+}
+
+/* ── Level 3: Interactive Session Rows ── */
 .sb-hist{
-  flex:1;overflow-y:auto;padding:8px 8px 4px;
+  flex:1;overflow-y:auto;padding:0 8px 4px;
   scrollbar-width:thin;scrollbar-color:var(--bg5) transparent;
 }
-.sb-hl{font-size:.62rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);padding:8px 10px 5px}
-.hi{display:flex;align-items:center;gap:7px;padding:9px 10px;border-radius:9px;cursor:pointer;border:1px solid transparent;transition:all var(--dur);margin-bottom:1px}
-.hi:hover{background:var(--bg3)}
-.hi.active{background:var(--acclo);border-color:var(--accmd)}
-.hi-lb{flex:1;font-size:.78rem;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
-.hi.active .hi-lb{color:var(--acc);font-weight:600}
-.hi-del{opacity:0;font-size:.65rem;color:var(--t2);cursor:pointer;padding:3px 5px;border-radius:4px;transition:all var(--dur);flex-shrink:0}
-.hi:hover .hi-del{opacity:1}
-.hi-del:hover{background:rgba(220,38,38,.12);color:var(--red)}
-
-/* Sidebar footer — fixed at bottom with user + actions */
-.sb-foot{
-  flex-shrink:0;border-top:1px solid var(--bdr);padding:10px 10px;
-  display:flex;flex-direction:column;gap:2px;
+.hi{
+  display:flex;align-items:center;gap:8px;
+  padding:9px 10px;border-radius:8px;
+  cursor:pointer;border:none;
+  transition:background .13s;
+  margin-bottom:0;
 }
+.hi:hover{background:var(--bg3)}
+.hi.active{background:var(--acclo)}
+.hi-ic{
+  flex-shrink:0;color:var(--t2);
+  display:flex;align-items:center;justify-content:center;
+  width:16px;opacity:.6;
+}
+.hi.active .hi-ic{color:var(--acc);opacity:1}
+.hi-lb{
+  flex:1;font-size:.84rem;font-weight:600;
+  color:var(--t0);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:-.01em;
+}
+.hi.active .hi-lb{color:var(--acc)}
+.hi-del{
+  opacity:0;color:var(--t2);cursor:pointer;
+  padding:4px;border-radius:4px;
+  transition:all .13s;flex-shrink:0;
+  display:flex;align-items:center;
+}
+.hi:hover .hi-del{opacity:1}
+.hi-del:hover{background:rgba(220,38,38,.1);color:var(--red)}
+
+/* ── Footer: Profile Area ── */
+.sb-foot{
+  flex-shrink:0;
+  border-top:1px solid var(--bdr);
+  padding:10px 8px 12px;
+  display:flex;flex-direction:column;gap:1px;
+}
+
+/* User identity row */
+.sb-foot-user{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 10px;border-radius:10px;
+  margin-bottom:2px;
+  transition:background .13s;cursor:default;
+}
+.su-av{
+  width:32px;height:32px;border-radius:50%;flex-shrink:0;
+  background:var(--acc);
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:700;color:#fff;overflow:hidden;
+}
+.su-av img{width:100%;height:100%;object-fit:cover}
+.su-nm{
+  font-size:.83rem;font-weight:700;color:var(--t0);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  flex:1;min-width:0;
+}
+.su-st{font-size:.63rem;color:var(--t2);margin-top:1px}
+
+/* Footer action rows (Settings, Sign out) */
 .sb-foot-row{
-  display:flex;align-items:center;gap:9px;padding:9px 10px;
-  border-radius:9px;cursor:pointer;transition:all var(--dur);
-  color:var(--t1);font-size:.82rem;font-weight:500;
+  display:flex;align-items:center;gap:10px;
+  padding:10px 10px;border-radius:8px;
+  cursor:pointer;transition:background .13s;
+  color:var(--t1);font-size:.84rem;font-weight:600;
 }
 .sb-foot-row:hover{background:var(--bg3);color:var(--t0)}
-.sb-foot-row.danger:hover{background:rgba(220,38,38,.08);color:var(--red)}
-.sb-foot-row svg{flex-shrink:0;opacity:.7}
-.sb-foot-user{
-  display:flex;align-items:center;gap:9px;padding:9px 10px;
-  border-radius:9px;margin-bottom:4px;border:1px solid var(--bdr);
-  background:var(--bg2);
-}
-.su-av{width:30px;height:30px;border-radius:50%;flex-shrink:0;background:var(--acc);
-  display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;overflow:hidden}
-.su-av img{width:100%;height:100%;object-fit:cover}
-.su-nm{flex:1;min-width:0;font-size:.78rem;font-weight:600;color:var(--t0);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.su-st{font-size:.62rem;color:var(--t2)}
+.sb-foot-row.danger{ color:var(--t2); }
+.sb-foot-row.danger:hover{background:rgba(220,38,38,.07);color:var(--red)}
+.sb-foot-row svg{flex-shrink:0;color:var(--t2)}
+.sb-foot-row:hover svg{color:currentColor}
 
-/* old sb-user/btn-out/sb-nav hidden */
-.sb-user{display:none}
-.btn-out{display:none}
-.sb-nav{display:none}
-.nl{display:none}
+/* old stubs hidden */
+.sb-user{display:none}.btn-out{display:none}.sb-nav{display:none}.nl{display:none}
 
 /* ── MAIN ── */
 #main{
@@ -1147,13 +1216,6 @@ body::before{display:none}
   color:var(--t0) !important;
   letter-spacing:2px;
 }
-.sb-nm {
-  background:none !important;
-  -webkit-background-clip:unset !important;
-  -webkit-text-fill-color:var(--t0) !important;
-  background-clip:unset !important;
-  color:var(--t0) !important;
-}
 .splash-brand {
   background:none !important;
   -webkit-background-clip:unset !important;
@@ -1519,18 +1581,19 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 /* ── PROFILE PANEL ── */
 #profile-overlay{
   display:none;position:fixed;inset:0;
-  background:rgba(0,0,0,.4);z-index:600;
-  backdrop-filter:blur(3px);
+  background:rgba(0,0,0,.55);z-index:9000;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
 }
 #profile-panel{
-  display:none;position:fixed;left:0;right:0;bottom:0;z-index:601;
+  display:none;position:fixed;left:0;right:0;bottom:0;z-index:9001;
   background:var(--bg1);
-  border-radius:24px 24px 0 0;
-  border-top:2px solid var(--bdr);
-  box-shadow:0 -8px 40px rgba(0,0,0,.12);
-  max-height:88vh;overflow-y:auto;
+  border-radius:22px 22px 0 0;
+  border-top:1.5px solid var(--bdr);
+  box-shadow:0 -12px 48px rgba(0,0,0,.18), 0 -1px 0 var(--bdr);
+  max-height:90vh;overflow-y:auto;
   transform:translateY(100%);
-  transition:transform .34s cubic-bezier(.34,1.12,.64,1);
+  transition:transform .36s cubic-bezier(.32,1.08,.64,1);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
 .pp-handle-wrap{display:flex;justify-content:center;padding:14px 0 6px}
@@ -1653,19 +1716,56 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   box-shadow:0 1px 3px rgba(0,0,0,.06) !important;
 }
 /* Profile panel cards in light theme */
-:root #profile-panel { background:var(--bg1) !important; }
 :root .pp-row:hover  { background:var(--bg3) !important; }
 :root .pp-divider    { background:var(--bdr) !important; }
 /* Sidebar in light theme */
-:root #sidebar  { background:var(--bg1) !important; border-right-color:var(--bdr) !important; }
-:root .sb-foot  { border-top-color:var(--bdr) !important; }
-:root .sb-foot-user { border-color:var(--bdr) !important; background:var(--bg3) !important; }
 /* Topbar in light theme */
 :root .topbar { background:var(--bg1) !important; border-bottom-color:var(--bdr) !important; }
 :root #bnav    { background:var(--bg1) !important; border-top-color:var(--bdr) !important; }
 /* Inbox in light theme */
 :root .inbox   { background:var(--bg1) !important; border-color:var(--bdr) !important; box-shadow:0 1px 4px rgba(0,0,0,.06) !important; }
 :root .inzone  { background:var(--bg) !important; border-top-color:var(--bdr) !important; }
+
+
+/* ═══ CLAUDE-STYLE TYPOGRAPHY SYSTEM ═══ */
+:root {
+  --ff:'Outfit',system-ui,-apple-system,sans-serif;
+  --mono:'DM Mono',ui-monospace,'Cascadia Code',monospace;
+}
+/* Base text rendering */
+body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
+
+/* Session/nav text — heavier */
+.hi-lb     { font-weight:600 !important; }
+.su-nm      { font-weight:700 !important; font-size:.8rem !important; }
+
+/* Home page — Claude-style clean headings */
+.hg-title { font-weight:800 !important; letter-spacing:-.02em !important; }
+.hg-sub   { font-weight:400 !important; }
+.hc-title { font-weight:700 !important; letter-spacing:-.01em !important; }
+.sc-title { font-weight:800 !important; letter-spacing:-.01em !important; }
+.sec-ttl  { font-weight:700 !important; }
+
+/* Bottom nav labels */
+.bni-lb { font-weight:600 !important; font-size:.62rem !important; letter-spacing:.01em !important; }
+
+/* Topbar title */
+.tb-ttl { font-weight:700 !important; letter-spacing:-.01em !important; }
+
+/* Profile panel */
+.pp-name     { font-weight:700 !important; font-size:1.1rem !important; }
+.pp-row-lbl  { font-weight:600 !important; }
+.pp-email    { font-weight:400 !important; }
+
+/* Settings */
+.ss-hd  { font-weight:700 !important; font-size:.82rem !important; }
+
+/* Buttons */
+.btn-prim, .ob-btn-guest, .pp-fb-send { font-weight:700 !important; letter-spacing:.01em !important; }
+
+/* Quiz */
+.dq-q, .aiq-q-num { font-weight:600 !important; }
+.prog-val { font-weight:800 !important; letter-spacing:-.02em !important; }
 
 </style>
 </head>
@@ -1783,25 +1883,41 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
   <div id="sb-overlay"></div>
 
   <!-- SIDEBAR -->
+  <!-- ══ NAVIGATION DRAWER ══ -->
   <aside id="sidebar">
-    <!-- Header -->
+
+    <!-- ── Level 1: Brand Header ── -->
     <div class="sb-head">
       <div class="sb-q" id="sb-logo" title="Tap 5× for developer mode">Q</div>
-      <div><div class="sb-nm">QUEVA</div><div class="sb-sub">Study Intelligence</div></div>
-      <button class="sb-new" onclick="newSess();document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sb-overlay').classList.remove('show');swPage('ai')" title="New chat">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      <div class="sb-brand">
+        <div class="sb-nm">QUEVA</div>
+        <div class="sb-sub">Study Intelligence</div>
+      </div>
+      <button class="sb-new"
+        onclick="newSess();document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sb-overlay').classList.remove('show');swPage('ai')"
+        title="New chat">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
       </button>
     </div>
 
-    <!-- Sessions list -->
-    <div class="sb-hl">Recent chats</div>
+    <div class="sb-divider"></div>
+
+    <!-- ── Level 2: Section Label ── -->
+    <div class="sb-hl">Recent Chats</div>
+
+    <!-- ── Level 3: Session Rows (scrollable) ── -->
     <div class="sb-hist" id="sb-hist">
-      <div id="hist-empty" style="font-size:.75rem;color:var(--t2);padding:10px 10px;line-height:1.5">No sessions yet.<br>Start a conversation to save it here.</div>
+      <div id="hist-empty" style="padding:8px 10px 4px;font-size:.8rem;color:var(--t2);line-height:1.6">
+        No sessions yet.<br>Start a conversation.
+      </div>
     </div>
 
-    <!-- Footer: user + settings + sign out -->
+    <!-- ── Footer: Profile Area ── -->
     <div class="sb-foot">
-      <!-- User identity row -->
+
+      <!-- User identity -->
       <div class="sb-foot-user">
         <div class="su-av" id="su-av">?</div>
         <div style="flex:1;min-width:0">
@@ -1809,30 +1925,36 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
           <div class="su-st" id="su-st">not signed in</div>
         </div>
       </div>
-      <!-- Settings -->
+
+      <!-- Settings row -->
       <div class="sb-foot-row" onclick="swPage('set');document.getElementById('sidebar').classList.remove('mobile-open');document.getElementById('sb-overlay').classList.remove('show')">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
         Settings
       </div>
-      <!-- Sign out / Sign in -->
+
+      <!-- Sign out row -->
       <div class="sb-foot-row danger" id="btn-out">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
         </svg>
         Sign out
       </div>
-    </div>
 
-    <!-- Hidden compat stubs -->
+    </div><!-- /sb-foot -->
+
+    <!-- Compat stubs (hidden) -->
     <div class="sb-user" style="display:none"><div class="su-av"></div><div><div class="su-nm"></div><div class="su-st"></div></div></div>
     <nav class="sb-nav" style="display:none">
       <div class="nl active" data-pg="home"></div><div class="nl" data-pg="ai"></div>
-      <div class="nl" data-pg="quiz"></div><div class="nl" data-pg="kp"></div>
-      <div class="nl" data-pg="set"></div>
+      <div class="nl" data-pg="quiz"></div><div class="nl" data-pg="kp"></div><div class="nl" data-pg="set"></div>
     </nav>
-  </aside>
+
+  </aside><!-- /sidebar -->
 
   <!-- MAIN -->
   <div id="main">
@@ -2293,7 +2415,7 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 
   </div><!-- /main -->
 
-  <!-- BOTTOM NAV — 4 tabs -->
+  <!-- BOTTOM NAV — 3 tabs -->
   <nav id="bnav">
     <div class="bni active" data-pg="home">
       <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
@@ -2307,92 +2429,9 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
       <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
       <div class="bni-lb">Quiz</div>
     </div>
-    <div class="bni" id="bnav-profile" onclick="openProfile()">
-      <div class="bni-ic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-      <div class="bni-lb">Profile</div>
-    </div>
   </nav>
 
-<!-- PROFILE PANEL (slide-up sheet) -->
-<div id="profile-overlay" onclick="closeProfile()"></div>
-<div id="profile-panel">
-  <!-- Drag handle -->
-  <div class="pp-handle-wrap"><div class="pp-handle"></div></div>
 
-  <!-- ── USER HEADER ── -->
-  <div class="pp-user-header">
-    <!-- Avatar — shows initial, tappable to edit name -->
-    <div class="pp-avatar-wrap">
-      <div id="pp-av" class="pp-avatar">?</div>
-      <div class="pp-avatar-edit" onclick="startEditName()">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
-    </div>
-    <!-- Name (tappable → editable input) -->
-    <div class="pp-name-wrap">
-      <div id="pp-name-display" class="pp-name" onclick="startEditName()">
-        <span id="pp-nm">Guest</span>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="opacity:.4;flex-shrink:0"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      </div>
-      <div id="pp-name-edit" style="display:none">
-        <input id="pp-name-inp" type="text" class="pp-name-input" placeholder="Your name" autocomplete="name"/>
-        <div style="display:flex;gap:8px;margin-top:8px">
-          <button class="pp-save-btn" onclick="saveEditName()">Save</button>
-          <button class="pp-cancel-btn" onclick="cancelEditName()">Cancel</button>
-        </div>
-      </div>
-      <div id="pp-em" class="pp-email">Not signed in</div>
-    </div>
-  </div>
-
-  <div class="pp-divider"></div>
-
-  <!-- ── ACTION ROWS ── -->
-  <div class="pp-rows">
-
-    <!-- Settings -->
-    <div class="pp-row" onclick="closeProfile();swPage('set')">
-      <div class="pp-row-ic">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      </div>
-      <div class="pp-row-lbl">Settings</div>
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-    </div>
-
-    <!-- Message / Feedback row — expands inline -->
-    <div class="pp-row" onclick="toggleFeedback()">
-      <div class="pp-row-ic">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </div>
-      <div class="pp-row-lbl">Send a Message</div>
-      <svg id="fb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="transition:transform .22s"><path d="M6 9l6 6 6-6"/></svg>
-    </div>
-
-    <!-- Inline feedback form — hidden by default -->
-    <div id="pp-fb-form" style="display:none" class="pp-fb-form">
-      <textarea id="pp-fb-txt" class="pp-fb-txt" placeholder="Bug report, suggestion, or just say hi…"></textarea>
-      <div class="pp-fb-tags">
-        <button class="pp-fb-tag active" data-tag="bug" onclick="setFbTag(this)">🐛 Bug</button>
-        <button class="pp-fb-tag" data-tag="suggestion" onclick="setFbTag(this)">💡 Idea</button>
-        <button class="pp-fb-tag" data-tag="other" onclick="setFbTag(this)">💬 Other</button>
-      </div>
-      <button class="pp-fb-send" onclick="submitFeedback()">Send Message</button>
-    </div>
-
-  </div>
-
-  <div class="pp-divider" style="margin-top:4px"></div>
-
-  <!-- Sign out -->
-  <div class="pp-rows" style="padding-bottom:24px">
-    <div class="pp-row pp-danger" id="pp-signout">
-      <div class="pp-row-ic">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      </div>
-      <div class="pp-row-lbl" id="pp-signout-lbl">Sign out</div>
-    </div>
-  </div>
-</div>
 </div><!-- /app -->
 
 <!-- FILE MODAL -->
@@ -2983,8 +3022,15 @@ function renderHist(){
   emp.style.display='none';
   S.sessions.forEach(s=>{
     const el=document.createElement('div');el.className='hi'+(s.id===S.sid?' active':'');
-    el.innerHTML=`<span style="font-size:.7rem;color:var(--t2)">💬</span><span class="hi-lb">${esc(s.title||'Session')}</span><span class="hi-del">✕</span>`;
-    el.querySelector('.hi-del').onclick=e=>{e.stopPropagation();if(confirm('Delete?'))delSess(s.id);};
+    el.innerHTML=`
+      <div class="hi-ic">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <span class="hi-lb">${esc(s.title||'Session')}</span>
+      <span class="hi-del" title="Delete">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>`;
+    el.querySelector('.hi-del').onclick=e=>{e.stopPropagation();if(confirm('Delete this session?'))delSess(s.id);};
     el.onclick=()=>loadSess(s.id);c.appendChild(el);
   });
 }
@@ -4585,16 +4631,22 @@ function _syncProfilePanel(){
 
 function openProfile(){
   _syncProfilePanel();
-  // Reset feedback form state
   document.getElementById('pp-fb-form').style.display = 'none';
   document.getElementById('fb-chevron').style.transform = '';
   document.getElementById('pp-name-edit').style.display = 'none';
   document.getElementById('pp-name-display').style.display = 'flex';
   const overlay = document.getElementById('profile-overlay');
   const panel   = document.getElementById('profile-panel');
+  // Make visible first
   overlay.style.display = 'block';
   panel.style.display   = 'block';
-  requestAnimationFrame(()=>{ panel.style.transform = 'translateY(0)'; });
+  panel.style.transform = 'translateY(100%)'; // ensure starting position
+  // Double rAF ensures the transition actually fires on all mobile browsers
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      panel.style.transform = 'translateY(0)';
+    });
+  });
 }
 function closeProfile(){
   const panel   = document.getElementById('profile-panel');
@@ -4701,5 +4753,85 @@ if('serviceWorker' in navigator){
   <circle id="srf" style="display:none"></circle>
 </div>
 
+<!-- PROFILE PANEL (slide-up sheet) -->
+<div id="profile-overlay" onclick="closeProfile()"></div>
+<div id="profile-panel">
+  <!-- Drag handle -->
+  <div class="pp-handle-wrap"><div class="pp-handle"></div></div>
+
+  <!-- ── USER HEADER ── -->
+  <div class="pp-user-header">
+    <!-- Avatar — shows initial, tappable to edit name -->
+    <div class="pp-avatar-wrap">
+      <div id="pp-av" class="pp-avatar">?</div>
+      <div class="pp-avatar-edit" onclick="startEditName()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+    </div>
+    <!-- Name (tappable → editable input) -->
+    <div class="pp-name-wrap">
+      <div id="pp-name-display" class="pp-name" onclick="startEditName()">
+        <span id="pp-nm">Guest</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="opacity:.4;flex-shrink:0"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+      </div>
+      <div id="pp-name-edit" style="display:none">
+        <input id="pp-name-inp" type="text" class="pp-name-input" placeholder="Your name" autocomplete="name"/>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="pp-save-btn" onclick="saveEditName()">Save</button>
+          <button class="pp-cancel-btn" onclick="cancelEditName()">Cancel</button>
+        </div>
+      </div>
+      <div id="pp-em" class="pp-email">Not signed in</div>
+    </div>
+  </div>
+
+  <div class="pp-divider"></div>
+
+  <!-- ── ACTION ROWS ── -->
+  <div class="pp-rows">
+
+    <!-- Settings -->
+    <div class="pp-row" onclick="closeProfile();swPage('set')">
+      <div class="pp-row-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <div class="pp-row-lbl">Settings</div>
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <!-- Message / Feedback row — expands inline -->
+    <div class="pp-row" onclick="toggleFeedback()">
+      <div class="pp-row-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      </div>
+      <div class="pp-row-lbl">Send a Message</div>
+      <svg id="fb-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" style="transition:transform .22s"><path d="M6 9l6 6 6-6"/></svg>
+    </div>
+
+    <!-- Inline feedback form — hidden by default -->
+    <div id="pp-fb-form" style="display:none" class="pp-fb-form">
+      <textarea id="pp-fb-txt" class="pp-fb-txt" placeholder="Bug report, suggestion, or just say hi…"></textarea>
+      <div class="pp-fb-tags">
+        <button class="pp-fb-tag active" data-tag="bug" onclick="setFbTag(this)">🐛 Bug</button>
+        <button class="pp-fb-tag" data-tag="suggestion" onclick="setFbTag(this)">💡 Idea</button>
+        <button class="pp-fb-tag" data-tag="other" onclick="setFbTag(this)">💬 Other</button>
+      </div>
+      <button class="pp-fb-send" onclick="submitFeedback()">Send Message</button>
+    </div>
+
+  </div>
+
+  <div class="pp-divider" style="margin-top:4px"></div>
+
+  <!-- Sign out -->
+  <div class="pp-rows" style="padding-bottom:24px">
+    <div class="pp-row pp-danger" id="pp-signout">
+      <div class="pp-row-ic">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </div>
+      <div class="pp-row-lbl" id="pp-signout-lbl">Sign out</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
