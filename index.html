@@ -5292,33 +5292,40 @@ window.alarmCloseSetup = function(){
   if(m){ m.style.display = 'none'; m.classList.remove('open'); }
 };
 window.alarmSubmit = async function(){
-  const topic   = document.getElementById('alarm-topic-inp').value.trim();
-  const timeVal = document.getElementById('alarm-time-inp').value;
-  if (!topic)   { toast('Enter a course or topic name', 'err'); return; }
-  if (!timeVal) { toast('Pick an alarm time', 'err'); return; }
+  var topicEl = document.getElementById('alarm-topic-inp');
+  var timeEl  = document.getElementById('alarm-time-inp');
+  if(!topicEl || !timeEl) { toast('Form not found','err'); return; }
 
-  const [h, m] = timeVal.split(':').map(Number);
-  const target  = new Date();
+  var topic   = topicEl.value.trim();
+  var timeVal = timeEl.value;
+  if(!topic)   { toast('Enter a course or topic name','err'); return; }
+  if(!timeVal) { toast('Pick an alarm time','err'); return; }
+
+  // Build target time
+  var parts  = timeVal.split(':');
+  var h = parseInt(parts[0]), m = parseInt(parts[1]);
+  var target = new Date();
   target.setHours(h, m, 0, 0);
-  if (target <= new Date()) target.setDate(target.getDate() + 1);
+  if(target.getTime() <= Date.now()) target.setDate(target.getDate() + 1);
 
-  let notifGranted = false;
-  if ('Notification' in window && Notification.permission !== 'denied') {
-    const p = await Notification.requestPermission();
-    notifGranted = p === 'granted';
-  } else if ('Notification' in window && Notification.permission === 'granted') {
-    notifGranted = true;
-  }
-
-  await window.alarmSet(topic, target.getTime());
+  // Close modal immediately — don't wait on permission prompt
   window.alarmCloseSetup();
 
-  const tStr = target.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  if (notifGranted) {
-    toast('⏰ Alarm set for ' + tStr + ' — ' + topic, 'ok');
-  } else {
-    toast('⏰ Alarm set for ' + tStr + '. Allow notifications so it fires in background.', 'warn');
-  }
+  // Save + start tab timer right away
+  await window.alarmSet(topic, target.getTime());
+
+  var tStr = target.toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+  toast('⏰ Alarm set for ' + tStr + ' — ' + topic, 'ok');
+
+  // Request notification permission in background — non-blocking
+  try {
+    if('Notification' in window && Notification.permission === 'default') {
+      Notification.requestPermission().then(function(p){
+        if(p === 'granted') toast('Notifications enabled — alarm fires even with tab closed ✓','ok');
+        else toast('Tip: Allow notifications so alarm fires in background','nfo');
+      });
+    }
+  } catch(e) {}
 };
 
 /* Trigger alarm */
@@ -5532,7 +5539,7 @@ if('serviceWorker' in navigator){
         <input type="time" id="alarm-time-inp"/>
         <div class="alarm-hint">Already passed today? The alarm will fire tomorrow at this time.</div>
       </div>
-      <button class="alarm-submit-btn" onclick="alarmSubmit()">Set Alarm</button>
+      <button class="alarm-submit-btn" onclick="window.alarmSubmit()">Set Alarm</button>
     </div>
   </div>
 </div>
