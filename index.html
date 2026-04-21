@@ -2223,7 +2223,21 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
 
     <!-- ── Level 1: Brand Header ── -->
     <div class="sb-head">
-      <div class="sb-q" id="sb-logo" title="Tap 5× for developer mode">Q</div>
+      <div class="sb-q" id="sb-logo" title="Tap 5× for developer mode" style="background:#0A0F2E;border:none;overflow:visible">
+        <svg width="22" height="22" viewBox="0 0 52 52" fill="none">
+          <circle cx="26" cy="26" r="22" stroke="url(#sbg1)" stroke-width="3.5"/>
+          <text x="26" y="33" text-anchor="middle" font-family="Outfit,system-ui,sans-serif" font-size="22" font-weight="900" fill="url(#sbg2)">Q</text>
+          <circle cx="41" cy="11" r="4" fill="#7C3AED"/>
+          <defs>
+            <linearGradient id="sbg1" x1="4" y1="4" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/>
+            </linearGradient>
+            <linearGradient id="sbg2" x1="16" y1="14" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
       <div class="sb-brand">
         <div class="sb-nm">QUEVA</div>
         <div class="sb-sub">Study Intelligence</div>
@@ -2448,7 +2462,21 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
 
       <div id="msgs">
         <div id="welcome">
-          <div class="wc-qi" style="font-size:1.5rem;font-weight:900">Q</div>
+          <div class="wc-qi">
+            <svg width="40" height="40" viewBox="0 0 52 52" fill="none">
+              <circle cx="26" cy="26" r="22" stroke="url(#wcg1)" stroke-width="3.5"/>
+              <text x="26" y="33" text-anchor="middle" font-family="Outfit,system-ui,sans-serif" font-size="22" font-weight="900" fill="url(#wcg2)">Q</text>
+              <circle cx="41" cy="11" r="4" fill="#7C3AED"/>
+              <defs>
+                <linearGradient id="wcg1" x1="4" y1="4" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/>
+                </linearGradient>
+                <linearGradient id="wcg2" x1="16" y1="14" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+                  <stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#06B6D4"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
           <div class="wc-ttl">Ask <span>anything.</span></div>
           <div class="wc-sub">Type a question below — or attach a PDF / lecture note above to analyse your material.</div>
           <div class="wc-cards">
@@ -5282,7 +5310,7 @@ window.alarmSubmit = async function(){
     notifGranted = true;
   }
 
-  await alarmSet(topic, target.getTime());
+  await window.alarmSet(topic, target.getTime());
   window.alarmCloseSetup();
 
   const tStr = target.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
