@@ -1,5 +1,5 @@
 // Queva Service Worker — v2 (offline caching + study alarm)
-const CACHE = 'queva-v1'; // keep same name — no cache purge forced on existing users
+const CACHE = 'queva-v2'; // bumped — forces cache refresh for alarm fix
 const OFFLINE_URL = '/QUEVA/';
 
 const PRECACHE = [

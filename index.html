@@ -1101,14 +1101,14 @@ body::before{display:none}
 
 .splash-brand {
   font-size:2rem; font-weight:900; letter-spacing:5px;
-  color:#ffffff !important;
-  -webkit-text-fill-color:#ffffff !important;
+  color:var(--t0) !important;
+  -webkit-text-fill-color:var(--t0) !important;
   background:none !important;
   line-height:1; margin-bottom:10px;
   animation:splashTextIn .6s var(--spring) both;
   animation-delay:.55s; opacity:0;
 }
-[data-theme="light"] .splash-brand { color:#ffffff !important; -webkit-text-fill-color:#ffffff !important; }
+[data-theme="light"] .splash-brand { color:var(--t0) !important; -webkit-text-fill-color:var(--t0) !important; }
 
 .splash-tag {
   font-size:.78rem; letter-spacing:.06em;
@@ -1356,6 +1356,9 @@ body::before{display:none}
 
 /* — Splash: use theme bg not hardcoded black — */
 #splash { background:var(--bg) !important; }
+.splash-tag { color:var(--t0) !important; -webkit-text-fill-color:var(--t0) !important; opacity:1 !important; }
+[data-theme="light"] .splash-tag { color:var(--t0) !important; -webkit-text-fill-color:var(--t0) !important; }
+[data-theme="dark"] .splash-tag { color:var(--t0) !important; -webkit-text-fill-color:var(--t0) !important; }
 
 /* — Auth input focus — */
 .ob-inp:focus { border-color:var(--accmd) !important; }
@@ -2085,13 +2088,26 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
 <!-- CINEMATIC SPLASH SCREEN -->
 <div id="splash">
   <div class="splash-logo">
-    <div class="splash-circle">
-      <div class="splash-q">Q</div>
+    <div style="width:80px;height:80px;border-radius:20px;background:#0A0F2E;display:flex;align-items:center;justify-content:center;animation:splashLogoIn .7s var(--spring) both;animation-delay:.15s;opacity:0;box-shadow:0 4px 24px rgba(0,0,0,.18)">
+      <svg width="52" height="52" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="26" cy="26" r="22" stroke="url(#qg1)" stroke-width="3.5"/>
+        <text x="26" y="33" text-anchor="middle" font-family="Outfit,system-ui,sans-serif" font-size="22" font-weight="900" fill="url(#qg2)">Q</text>
+        <circle cx="41" cy="11" r="4" fill="#7C3AED"/>
+        <defs>
+          <linearGradient id="qg1" x1="4" y1="4" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#7C3AED"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+          </linearGradient>
+          <linearGradient id="qg2" x1="16" y1="14" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+            <stop offset="0%" stop-color="#7C3AED"/>
+            <stop offset="100%" stop-color="#06B6D4"/>
+          </linearGradient>
+        </defs>
+      </svg>
     </div>
-    <div class="splash-star">✦</div>
   </div>
   <div class="splash-brand">QUEVA</div>
-  <div class="splash-tag">Question Everything. Learn Anything.</div>
+  <div class="splash-tag" style="-webkit-text-fill-color:var(--t0) !important;color:var(--t0) !important;font-weight:600;opacity:1">Question Everything. Learn Anything.</div>
   <div class="splash-sub">Your AI-powered study companion</div>
   <div class="splash-dots">
     <div class="splash-dot"></div>
@@ -2105,8 +2121,24 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
   <div class="ob-wrap">
 
     <!-- Logo -->
-    <div class="q-logo" id="ob-logo">
-      <div class="q-circle"><div class="q-letter">Q</div></div>
+    <div class="q-logo" id="ob-logo" onclick="tapLogo()" style="cursor:pointer">
+      <div style="width:56px;height:56px;border-radius:14px;background:#0A0F2E;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.15)">
+        <svg width="38" height="38" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="22" stroke="url(#qg3)" stroke-width="3.5"/>
+          <text x="26" y="33" text-anchor="middle" font-family="Outfit,system-ui,sans-serif" font-size="22" font-weight="900" fill="url(#qg4)">Q</text>
+          <circle cx="41" cy="11" r="4" fill="#7C3AED"/>
+          <defs>
+            <linearGradient id="qg3" x1="4" y1="4" x2="48" y2="48" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7C3AED"/>
+              <stop offset="100%" stop-color="#06B6D4"/>
+            </linearGradient>
+            <linearGradient id="qg4" x1="16" y1="14" x2="36" y2="36" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#7C3AED"/>
+              <stop offset="100%" stop-color="#06B6D4"/>
+            </linearGradient>
+          </defs>
+        </svg>
+      </div>
     </div>
 
     <!-- Heading + tagline -->
@@ -5181,13 +5213,13 @@ function _setTabTimer(topic, alarmTime){
   if (delay > 0) _tabTimer = setTimeout(() => _triggerAlarm(topic), delay);
 }
 
-/* Set alarm */
-async function alarmSet(topic, alarmTime){
+/* Set alarm — exposed to window so alarmSubmit() can reach it */
+window.alarmSet = async function(topic, alarmTime){
   _saveLocal(topic, alarmTime);
   _setTabTimer(topic, alarmTime);
   await _swSend({ type: 'ALARM_SET', topic, alarmTime });
   _renderStatus();
-}
+};
 
 /* Cancel alarm */
 window.alarmCancel = async function(){
