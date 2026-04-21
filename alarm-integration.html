@@ -1,0 +1,771 @@
+<!--
+=================================================================
+  QUEVA ALARM FEATURE — Integration Guide
+  Three paste blocks: CSS, HTML, JavaScript
+  All reference exact unique strings in your index.html
+=================================================================
+-->
+
+
+<!-- ─────────────────────────────────────────────────────────────
+  STEP 1 — REPLACE sw.js
+  Replace /QUEVA/sw.js with the new sw.js file delivered alongside
+  this document. Your existing cache logic is preserved. The new
+  version adds IndexedDB alarm storage + push notification firing.
+──────────────────────────────────────────────────────────────── -->
+
+
+<!-- ─────────────────────────────────────────────────────────────
+  STEP 2 — CSS
+  Paste this entire block immediately before:
+    </style>
+  (the closing style tag, currently around line 1770)
+──────────────────────────────────────────────────────────────── -->
+
+/* ═══ STUDY ALARM CARD (inside Quiz page) ═══ */
+.alarm-card {
+  background: var(--bg1);
+  border: 1px solid var(--bdr);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06), 0 0 0 1px rgba(0,0,0,.05);
+}
+.alarm-card-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.alarm-card-title {
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--t0);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.alarm-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .78rem;
+  color: var(--t2);
+  flex-wrap: wrap;
+}
+.alarm-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bg5);
+  flex-shrink: 0;
+}
+.alarm-status-dot.active {
+  background: var(--acc);
+  animation: blink 1.4s ease-in-out infinite;
+}
+.alarm-status-text { color: var(--t2); }
+.alarm-status-text.active { color: var(--acc); font-weight: 600; }
+
+.alarm-set-btn {
+  padding: 9px 16px;
+  border-radius: 9px;
+  border: none;
+  background: var(--acc);
+  color: #fff;
+  font-family: var(--ff);
+  font-size: .8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity var(--dur);
+  white-space: nowrap;
+}
+.alarm-set-btn:hover { opacity: .88; }
+.alarm-cancel-btn {
+  padding: 5px 11px;
+  border-radius: 7px;
+  border: 1px solid var(--bdr);
+  background: none;
+  color: var(--t2);
+  font-family: var(--ff);
+  font-size: .74rem;
+  cursor: pointer;
+  transition: all var(--dur);
+}
+.alarm-cancel-btn:hover { border-color: var(--red); color: var(--red); }
+
+/* ── Alarm Setup Modal ── */
+#alarm-setup-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.65);
+  z-index: 800;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#alarm-setup-modal.open { display: flex; }
+.alarm-modal-box {
+  background: var(--bg1);
+  border: 1px solid var(--bdr);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+  animation: riseUp .28s var(--spring) both;
+  overflow: hidden;
+}
+.alarm-modal-hd {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--bdr);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.alarm-modal-hd-title {
+  font-size: .94rem;
+  font-weight: 700;
+  color: var(--t0);
+}
+.alarm-modal-close {
+  background: none;
+  border: none;
+  color: var(--t2);
+  font-size: 1.2rem;
+  cursor: pointer;
+  line-height: 1;
+  padding: 2px 6px;
+}
+.alarm-modal-close:hover { color: var(--t0); }
+.alarm-modal-body { padding: 18px 20px 20px; display: flex; flex-direction: column; gap: 14px; }
+.alarm-fld label {
+  display: block;
+  font-size: .72rem;
+  font-weight: 600;
+  color: var(--t2);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  margin-bottom: 6px;
+}
+.alarm-fld input {
+  width: 100%;
+  padding: 10px 13px;
+  background: var(--bg2);
+  border: 1px solid var(--bdr);
+  border-radius: 9px;
+  color: var(--t0);
+  font-family: var(--ff);
+  font-size: .88rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color var(--dur);
+}
+.alarm-fld input:focus { border-color: var(--accmd); }
+.alarm-fld input::placeholder { color: var(--t3); }
+.alarm-hint { font-size: .72rem; color: var(--t2); margin-top: 4px; line-height: 1.5; }
+.alarm-submit-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--acc);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--ff);
+  font-size: .9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity var(--dur);
+}
+.alarm-submit-btn:hover { opacity: .88; }
+
+/* ── Alarm Quiz Modal (fires when alarm rings) ── */
+#alarm-quiz-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.8);
+  z-index: 900;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px;
+  overflow-y: auto;
+}
+#alarm-quiz-modal.open { display: flex; }
+.alarm-quiz-box {
+  background: var(--bg1);
+  border: 1px solid var(--bdr);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 480px;
+  margin: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  animation: riseUp .3s var(--spring) both;
+  overflow: hidden;
+}
+.alarm-quiz-hd {
+  padding: 16px 20px 14px;
+  background: var(--acc);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.alarm-quiz-hd-left { display: flex; flex-direction: column; gap: 2px; }
+.alarm-quiz-hd-title { font-size: .9rem; font-weight: 700; color: #fff; }
+.alarm-quiz-hd-sub { font-size: .72rem; color: rgba(255,255,255,.8); }
+.alarm-pass-pill {
+  background: rgba(255,255,255,.2);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+}
+.alarm-quiz-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+
+/* Loading state inside quiz modal */
+.alarm-loading {
+  text-align: center;
+  padding: 32px 16px;
+  color: var(--t2);
+  font-size: .84rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.alarm-spinner {
+  width: 32px;
+  height: 32px;
+  border: 2.5px solid var(--bg4);
+  border-top-color: var(--acc);
+  border-radius: 50%;
+  animation: qva-spin .8s linear infinite;
+}
+@keyframes qva-spin { to { transform: rotate(360deg); } }
+
+/* Question card */
+.alarm-q-card {
+  background: var(--bg2);
+  border: 1px solid var(--bdr);
+  border-radius: 12px;
+  padding: 14px;
+}
+.alarm-q-num {
+  font-family: var(--mono);
+  font-size: .62rem;
+  color: var(--acc);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.alarm-q-text {
+  font-size: .87rem;
+  font-weight: 600;
+  color: var(--t0);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+.alarm-opts { display: flex; flex-direction: column; gap: 7px; }
+.alarm-opt {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 12px;
+  border-radius: 9px;
+  border: 1px solid var(--bdr);
+  background: var(--bg3);
+  cursor: pointer;
+  transition: all var(--dur);
+  font-size: .82rem;
+  color: var(--t1);
+  line-height: 1.4;
+  user-select: none;
+}
+.alarm-opt:hover { border-color: var(--accmd); background: var(--acclo); color: var(--t0); }
+.alarm-opt-lbl {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  font-family: var(--mono);
+}
+.alarm-opt.correct { border-color: var(--grn); background: rgba(34,197,94,.1); color: var(--grn); pointer-events: none; }
+.alarm-opt.wrong   { border-color: var(--red); background: rgba(239,68,68,.08); color: #fca5a5; pointer-events: none; }
+.alarm-opt.disabled { pointer-events: none; opacity: .55; }
+.alarm-expl {
+  display: none;
+  margin-top: 10px;
+  padding: 10px 13px;
+  border-radius: 9px;
+  background: var(--acclo);
+  border: 1px solid var(--accmd);
+  font-size: .8rem;
+  color: var(--t1);
+  line-height: 1.6;
+}
+.alarm-expl.show { display: block; }
+
+/* Round fail state */
+.alarm-fail-card {
+  text-align: center;
+  padding: 28px 16px;
+  color: var(--t2);
+  font-size: .84rem;
+  line-height: 1.6;
+}
+.alarm-fail-icon { font-size: 2.4rem; margin-bottom: 10px; }
+.alarm-fail-card strong { color: var(--t0); }
+
+
+<!-- ─────────────────────────────────────────────────────────────
+  STEP 3 — HTML (two insertions)
+
+  3A: ALARM CARD in the Quiz page
+  Paste immediately after this line in index.html (around line 2227):
+    <button class="btn-prim" id="aiq-gen">Generate Quiz ✦</button>
+    </div>          ← close of .aiq-card
+  i.e. place it as a new sibling card inside #pg-quiz, after the
+  existing AI Quiz Generator card closes.
+──────────────────────────────────────────────────────────────── -->
+
+      <!-- Study Alarm -->
+      <div class="alarm-card" id="alarm-card">
+        <div class="alarm-card-hd">
+          <div class="alarm-card-title">
+            <span>⏰</span> Study Alarm
+          </div>
+          <button class="alarm-set-btn" onclick="alarmOpenSetup()">Set Alarm</button>
+        </div>
+        <div class="alarm-status" id="alarm-status-row">
+          <div class="alarm-status-dot" id="alarm-dot"></div>
+          <span class="alarm-status-text" id="alarm-status-text">No alarm set</span>
+          <button class="alarm-cancel-btn" id="alarm-cancel-btn" style="display:none" onclick="alarmCancel()">Cancel</button>
+        </div>
+      </div>
+
+
+<!-- 3B: MODALS (two modals)
+  Paste immediately before:
+    <div id="profile-overlay" onclick="closeProfile()"></div>
+  (around line 4813 in your file)
+──────────────────────────────────────────────────────────────── -->
+
+<!-- Alarm Setup Modal -->
+<div id="alarm-setup-modal">
+  <div class="alarm-modal-box">
+    <div class="alarm-modal-hd">
+      <div class="alarm-modal-hd-title">⏰ Set Study Alarm</div>
+      <button class="alarm-modal-close" onclick="alarmCloseSetup()">✕</button>
+    </div>
+    <div class="alarm-modal-body">
+      <div class="alarm-fld">
+        <label>Course or Topic</label>
+        <input type="text" id="alarm-topic-inp" placeholder="e.g. Data Structures — Binary Trees" autocomplete="off"/>
+        <div class="alarm-hint">Queva will generate quiz questions from this topic when the alarm fires.</div>
+      </div>
+      <div class="alarm-fld">
+        <label>Alarm Time</label>
+        <input type="time" id="alarm-time-inp"/>
+        <div class="alarm-hint">Already passed today? The alarm will fire tomorrow at this time.</div>
+      </div>
+      <button class="alarm-submit-btn" onclick="alarmSubmit()">Set Alarm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Alarm Quiz Modal (fires when alarm rings) -->
+<div id="alarm-quiz-modal">
+  <div class="alarm-quiz-box">
+    <div class="alarm-quiz-hd">
+      <div class="alarm-quiz-hd-left">
+        <div class="alarm-quiz-hd-title" id="alarm-quiz-title">⏰ Study Alarm</div>
+        <div class="alarm-quiz-hd-sub" id="alarm-quiz-sub">Answer 3 correctly to dismiss</div>
+      </div>
+      <div class="alarm-pass-pill" id="alarm-pass-pill">0 / 3</div>
+    </div>
+    <div class="alarm-quiz-body" id="alarm-quiz-body">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+
+<!-- ─────────────────────────────────────────────────────────────
+  STEP 4 — JAVASCRIPT
+  Paste immediately before the SW registration block at the bottom:
+    // Register Service Worker for PWA — force update on every load
+    if('serviceWorker' in navigator){
+  (around line 4791)
+──────────────────────────────────────────────────────────────── -->
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   QUEVA STUDY ALARM
+   Uses existing: AI_EP, GROQ_EP, GROQ_MODEL, AI_MODEL,
+                  S (state), parseQuizText(), esc(), toast()
+═══════════════════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+const ALARM_KEY    = 'qv_alarm';
+const PASS_NEEDED  = 3;   // correct answers to dismiss
+const TOTAL_Q      = 5;   // questions per round
+
+/* ── State ─────────────────────────────────────────────── */
+let _alarmAudioCtx = null, _alarmBeepInt = null;
+let _alarmTopic    = '';
+let _roundCorrect  = 0;
+let _roundAnswered = 0;
+let _tabTimer      = null;
+let _currentQList  = [];
+
+/* ── localStorage helpers ───────────────────────────────── */
+function _saveLocal(topic, alarmTime){
+  localStorage.setItem(ALARM_KEY, JSON.stringify({ topic, alarmTime }));
+}
+function _getLocal(){
+  try { return JSON.parse(localStorage.getItem(ALARM_KEY)); } catch { return null; }
+}
+function _clearLocal(){
+  localStorage.removeItem(ALARM_KEY);
+}
+
+/* ── Web Audio beep ─────────────────────────────────────── */
+function _startBeep(){
+  _stopBeep();
+  try {
+    _alarmAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    _playBeep();
+    _alarmBeepInt = setInterval(_playBeep, 2400);
+  } catch(e) {}
+}
+function _playBeep(){
+  if (!_alarmAudioCtx) return;
+  [[880, 0, .18], [660, .22, .4]].forEach(([freq, start, end]) => {
+    const osc  = _alarmAudioCtx.createOscillator();
+    const gain = _alarmAudioCtx.createGain();
+    osc.connect(gain); gain.connect(_alarmAudioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(freq, _alarmAudioCtx.currentTime + start);
+    gain.gain.setValueAtTime(0, _alarmAudioCtx.currentTime + start);
+    gain.gain.linearRampToValueAtTime(.5, _alarmAudioCtx.currentTime + start + .02);
+    gain.gain.exponentialRampToValueAtTime(.001, _alarmAudioCtx.currentTime + end);
+    osc.start(_alarmAudioCtx.currentTime + start);
+    osc.stop(_alarmAudioCtx.currentTime + end + .05);
+  });
+}
+function _stopBeep(){
+  if (_alarmBeepInt) { clearInterval(_alarmBeepInt); _alarmBeepInt = null; }
+  if (_alarmAudioCtx) { try { _alarmAudioCtx.close(); } catch(e){} _alarmAudioCtx = null; }
+}
+
+/* ── Service Worker communication ──────────────────────── */
+async function _getSW(){
+  if (!('serviceWorker' in navigator)) return null;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    return reg.active;
+  } catch { return null; }
+}
+async function _swSend(msg){
+  const sw = await _getSW();
+  if (sw) sw.postMessage(msg);
+}
+
+/* ── Tab-open fallback timer ────────────────────────────── */
+function _setTabTimer(topic, alarmTime){
+  if (_tabTimer) clearTimeout(_tabTimer);
+  const delay = alarmTime - Date.now();
+  if (delay > 0) _tabTimer = setTimeout(() => _triggerAlarm(topic), delay);
+}
+
+/* ── Main: set alarm ────────────────────────────────────── */
+async function alarmSet(topic, alarmTime){
+  _saveLocal(topic, alarmTime);
+  _setTabTimer(topic, alarmTime);
+  await _swSend({ type: 'ALARM_SET', topic, alarmTime });
+  _renderStatus();
+}
+
+/* ── Cancel alarm ───────────────────────────────────────── */
+window.alarmCancel = async function(){
+  _clearLocal();
+  if (_tabTimer) { clearTimeout(_tabTimer); _tabTimer = null; }
+  await _swSend({ type: 'ALARM_CANCEL' });
+  _renderStatus();
+  toast('Alarm cancelled', 'nfo');
+};
+
+/* ── Status display ─────────────────────────────────────── */
+function _renderStatus(){
+  const alarm = _getLocal();
+  const dot   = document.getElementById('alarm-dot');
+  const txt   = document.getElementById('alarm-status-text');
+  const btn   = document.getElementById('alarm-cancel-btn');
+  if (!dot || !txt) return;
+
+  if (!alarm || alarm.alarmTime < Date.now()) {
+    dot.classList.remove('active');
+    txt.className  = 'alarm-status-text';
+    txt.textContent = 'No alarm set';
+    if (btn) btn.style.display = 'none';
+    return;
+  }
+  const d   = new Date(alarm.alarmTime);
+  const t   = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const day = d.toDateString() === new Date().toDateString() ? 'Today' : 'Tomorrow';
+  dot.classList.add('active');
+  txt.className   = 'alarm-status-text active';
+  txt.textContent = `${esc(alarm.topic)} — ${day} at ${t}`;
+  if (btn) btn.style.display = 'inline-flex';
+}
+
+/* ── Setup modal ────────────────────────────────────────── */
+window.alarmOpenSetup = function(){
+  document.getElementById('alarm-setup-modal').classList.add('open');
+};
+window.alarmCloseSetup = function(){
+  document.getElementById('alarm-setup-modal').classList.remove('open');
+};
+window.alarmSubmit = async function(){
+  const topic   = document.getElementById('alarm-topic-inp').value.trim();
+  const timeVal = document.getElementById('alarm-time-inp').value;
+  if (!topic)   { toast('Enter a course or topic name', 'err'); return; }
+  if (!timeVal) { toast('Pick an alarm time', 'err'); return; }
+
+  const [h, m] = timeVal.split(':').map(Number);
+  const target  = new Date();
+  target.setHours(h, m, 0, 0);
+  if (target <= new Date()) target.setDate(target.getDate() + 1); // next day
+
+  // Request notification permission
+  let notifGranted = false;
+  if ('Notification' in window && Notification.permission !== 'denied') {
+    const p = await Notification.requestPermission();
+    notifGranted = p === 'granted';
+  } else if (Notification.permission === 'granted') {
+    notifGranted = true;
+  }
+
+  await alarmSet(topic, target.getTime());
+  alarmCloseSetup();
+
+  const tStr = target.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  if (notifGranted) {
+    toast(`⏰ Alarm set for ${tStr} — ${topic}`, 'ok');
+  } else {
+    toast(`⏰ Alarm set for ${tStr}. Allow notifications so it fires in background.`, 'warn');
+  }
+};
+
+/* ── Trigger: fires alarm, starts sound + quiz ──────────── */
+function _triggerAlarm(topic){
+  _alarmTopic   = topic;
+  _roundCorrect = 0;
+  _roundAnswered = 0;
+  _clearLocal();
+  _renderStatus();
+  _openQuizModal();
+  _startBeep();
+  swPage('quiz'); // navigate to quiz page so modal is visible
+  _loadRound();
+}
+
+/* ── Quiz modal open/close ──────────────────────────────── */
+function _openQuizModal(){
+  const modal = document.getElementById('alarm-quiz-modal');
+  if (modal) modal.classList.add('open');
+  document.getElementById('alarm-quiz-title').textContent = `⏰ ${esc(_alarmTopic)}`;
+}
+function _closeQuizModal(){
+  const modal = document.getElementById('alarm-quiz-modal');
+  if (modal) modal.classList.remove('open');
+}
+function _setQuizBody(html){
+  const el = document.getElementById('alarm-quiz-body');
+  if (el) el.innerHTML = html;
+}
+function _updatePassPill(){
+  const el = document.getElementById('alarm-pass-pill');
+  if (el) el.textContent = `${_roundCorrect} / ${PASS_NEEDED}`;
+}
+
+/* ── Question generation (same endpoint as existing quiz) ── */
+async function _fetchQuestions(topic){
+  const prompt = `Generate exactly ${TOTAL_Q} multiple-choice quiz questions about "${topic}" at medium difficulty.
+
+STRICT FORMAT — follow exactly:
+Q1: [question text]
+A) [option A]
+B) [option B]
+C) [option C]
+D) [option D]
+Answer: [A or B or C or D]
+Explanation: [one clear sentence explaining why]
+
+Q2: ...and so on for all ${TOTAL_Q} questions. Output ONLY the questions, nothing else.`;
+
+  const messages = [
+    { role: 'system', content: 'You are a quiz generator. Output ONLY questions in the exact format. No preamble, no summary.' },
+    { role: 'user', content: prompt }
+  ];
+
+  // Reuse QUEVA's existing endpoint + auth pattern
+  const useGroq = !!S.groqKey;
+  const endpoint = useGroq ? GROQ_EP : AI_EP;
+  const model    = useGroq ? GROQ_MODEL : AI_MODEL;
+  const headers  = { 'Content-Type': 'application/json' };
+  if (useGroq) headers['Authorization'] = 'Bearer ' + S.groqKey;
+
+  const res  = await fetch(endpoint, {
+    method: 'POST', headers,
+    body: JSON.stringify({ model, messages, temperature: 0.6, max_tokens: TOTAL_Q * 280 })
+  });
+  if (!res.ok) throw new Error('API error ' + res.status);
+  const data = await res.json();
+  const text = data.choices?.[0]?.message?.content || '';
+  return parseQuizText(text); // reuse existing QUEVA parser
+}
+
+/* ── Load a round ───────────────────────────────────────── */
+async function _loadRound(){
+  _setQuizBody(`
+    <div class="alarm-loading">
+      <div class="alarm-spinner"></div>
+      <div>Generating questions for <strong>${esc(_alarmTopic)}</strong>…</div>
+    </div>`);
+  try {
+    const qs = await _fetchQuestions(_alarmTopic);
+    if (!qs || qs.length < 1) throw new Error('No questions returned');
+    _currentQList  = qs;
+    _roundCorrect  = 0;
+    _roundAnswered = 0;
+    _updatePassPill();
+    _renderRound(qs);
+  } catch(e) {
+    _setQuizBody(`
+      <div class="alarm-loading">
+        <div style="font-size:1.8rem">⚠️</div>
+        <div>Could not load questions.<br>Check your connection.</div>
+        <button class="btn-prim" style="width:auto;padding:9px 20px" onclick="window._alarmRetry()">Try Again</button>
+      </div>`);
+  }
+}
+window._alarmRetry = () => _loadRound();
+
+/* ── Render a full round of questions ───────────────────── */
+function _renderRound(qs){
+  const letters = ['A','B','C','D'];
+  // parseQuizText() returns { q, opts, ansIdx, expl } — use those exact keys
+  const html = qs.map((q, qi) => `
+    <div class="alarm-q-card" id="alq-card-${qi}">
+      <div class="alarm-q-num">Question ${qi + 1} of ${qs.length}</div>
+      <div class="alarm-q-text">${esc(q.q)}</div>
+      <div class="alarm-opts">
+        ${q.opts.map((opt, oi) => `
+          <div class="alarm-opt"
+            data-qi="${qi}" data-oi="${oi}" data-correct="${q.ansIdx}"
+            onclick="window._alarmAnswer(this)">
+            <div class="alarm-opt-lbl">${letters[oi]}</div>
+            <span>${esc(opt)}</span>
+          </div>`).join('')}
+      </div>
+      <div class="alarm-expl" id="alq-expl-${qi}">${esc(q.expl||'')}</div>
+    </div>`).join('');
+  _setQuizBody(html);
+  _updatePassPill();
+}
+
+/* ── Handle answer tap ──────────────────────────────────── */
+window._alarmAnswer = function(btn){
+  const qi      = parseInt(btn.dataset.qi);
+  const oi      = parseInt(btn.dataset.oi);
+  const correct = parseInt(btn.dataset.correct);
+  const card    = document.getElementById(`alq-card-${qi}`);
+  if (card.dataset.answered) return; // no double tap
+  card.dataset.answered = '1';
+
+  const isCorrect = oi === correct;
+  card.querySelectorAll('.alarm-opt').forEach((b, i) => {
+    b.classList.add('disabled');
+    if (i === correct) b.classList.add('correct');
+    if (b === btn && !isCorrect) b.classList.add('wrong');
+  });
+  const expl = document.getElementById(`alq-expl-${qi}`);
+  // Show explanation box only if it has actual content (expl may be empty string)
+  if (expl && expl.textContent.trim().length > 0) expl.classList.add('show');
+
+  if (isCorrect) _roundCorrect++;
+  _roundAnswered++;
+  _updatePassPill();
+
+  if (_roundAnswered === _currentQList.length) {
+    setTimeout(_endRound, 800);
+  }
+};
+
+/* ── End of round ───────────────────────────────────────── */
+function _endRound(){
+  if (_roundCorrect >= PASS_NEEDED) {
+    // Pass — dismiss alarm
+    _stopBeep();
+    _closeQuizModal();
+    toast(`✅ ${_roundCorrect}/${_currentQList.length} correct — alarm dismissed. Go study!`, 'ok');
+  } else {
+    // Fail — show result then reload fresh questions
+    _setQuizBody(`
+      <div class="alarm-fail-card">
+        <div class="alarm-fail-icon">❌</div>
+        <p>You got <strong>${_roundCorrect} / ${_currentQList.length}</strong> correct.</p>
+        <p>You need at least <strong>${PASS_NEEDED}</strong> to dismiss the alarm.<br>
+        New questions coming up…</p>
+      </div>`);
+    setTimeout(_loadRound, 2800);
+  }
+}
+
+/* ── Init: runs on page load ────────────────────────────── */
+async function _alarmInit(){
+  // Re-arm SW timer in case SW was restarted
+  await _swSend({ type: 'ALARM_REARM' });
+
+  // Listen for alarm fired from SW (background notification tap)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.addEventListener('message', e => {
+      if (e.data?.type === 'QUEVA_ALARM_FIRED') _triggerAlarm(e.data.topic);
+    });
+  }
+
+  // Check URL param — SW opens app with ?alarm=topic after notification tap
+  const params = new URLSearchParams(window.location.search);
+  const alarmParam = params.get('alarm');
+  if (alarmParam) {
+    window.history.replaceState({}, '', window.location.pathname);
+    setTimeout(() => _triggerAlarm(decodeURIComponent(alarmParam)), 900);
+    return;
+  }
+
+  // Restore existing alarm: show status + re-arm tab fallback
+  const existing = _getLocal();
+  if (existing && existing.alarmTime > Date.now()) {
+    _setTabTimer(existing.topic, existing.alarmTime);
+  } else if (existing) {
+    _clearLocal();
+  }
+  _renderStatus();
+}
+
+// Run after DOM is ready
+document.addEventListener('DOMContentLoaded', _alarmInit);
+
+})();
+</script>
