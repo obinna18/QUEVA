@@ -1561,6 +1561,54 @@ a[style*="color:var(--cyan)"] { color:var(--acc) !important; }
 /* ── Remove old ob-email-form class (now inline in views) ── */
 .ob-email-form { display:none !important; }
 
+/* ═══ NEW ONBOARDING SCREENS ═══ */
+.ob-screen { animation:obSlideIn .22s var(--ease) both; }
+@keyframes obSlideIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* Spinner */
+.ob-spinner {
+  width:24px; height:24px; border-radius:50%;
+  border:2.5px solid var(--bdr); border-top-color:var(--acc);
+  animation:qva-spin .8s linear infinite;
+  display:inline-block;
+}
+
+/* Outline button (Create Account on landing) */
+.ob-btn-outline {
+  background:transparent !important;
+  border:1.5px solid var(--bdr) !important;
+  color:var(--t0) !important;
+}
+.ob-btn-outline:hover { background:var(--bg2) !important; border-color:var(--accmd) !important; }
+
+/* Back row button */
+.ob-back-row {
+  display:flex; align-items:center; gap:6px;
+  background:none; border:none; cursor:pointer;
+  color:var(--t2); font-size:.82rem; font-family:var(--ff);
+  padding:0; margin-bottom:24px;
+  transition:color .14s;
+}
+.ob-back-row:hover { color:var(--t0); }
+
+/* Eye toggle inside password field */
+.ob-eye {
+  position:absolute; right:12px; top:50%; transform:translateY(-50%);
+  background:none; border:none; cursor:pointer;
+  color:var(--t2); padding:4px;
+  display:flex; align-items:center;
+  transition:color .14s;
+}
+.ob-eye:hover { color:var(--t0); }
+
+/* Success message */
+.ob-ok {
+  font-size:.8rem; color:var(--grn);
+  padding:10px 14px; margin-bottom:10px;
+  background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.22);
+  border-radius:8px;
+}
+
 /* ── Onboarding view padding on tall phones ── */
 @media(min-height:750px){
   .ob-wrap { padding-top:72px !important; }
@@ -2120,7 +2168,7 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
 <div id="onboard">
   <div class="ob-wrap">
 
-    <!-- Logo -->
+    <!-- Logo — always visible -->
     <div class="q-logo" id="ob-logo" onclick="tapLogo()" style="cursor:pointer">
       <div style="width:56px;height:56px;border-radius:14px;background:#0A0F2E;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,.15)">
         <svg width="38" height="38" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -2141,72 +2189,109 @@ body { -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility; }
       </div>
     </div>
 
-    <!-- Heading + tagline -->
-    <div class="ob-heading">Log in or sign up</div>
-    <div class="ob-tag">Save your sessions, track progress,<br>and sync across devices.</div>
-
-    <!-- Auth card -->
-    <div class="ob-card" id="ob-card">
-
-      <!-- ── STEP 1: Email entry (default) ── -->
-      <div id="ob-step1">
-        <div style="margin-bottom:12px">
-          <input type="email" class="ob-inp" id="ob-email" placeholder="Email address" autocomplete="email"/>
-        </div>
-        <div class="ob-err" id="ob-err"></div>
-        <button class="ob-btn ob-btn-guest" id="ob-continue-btn">Continue</button>
-
-        <div class="ob-divider"><span>OR</span></div>
-
-        <button class="ob-btn-google" id="ob-google" type="button">
-          <svg width="18" height="18" viewBox="0 0 24 24">
-            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
-            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-          </svg>
-          Continue with Google
-        </button>
-      </div>
-
-      <!-- ── STEP 2: Password / complete signup ── -->
-      <div id="ob-step2" style="display:none">
-        <!-- Back row -->
-        <button id="ob-back-btn" type="button" style="background:none;border:none;cursor:pointer;color:var(--t2);font-size:.82rem;display:flex;align-items:center;gap:5px;padding:0;margin-bottom:20px;font-family:var(--ff)">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
-          Back
-        </button>
-
-        <!-- Email display (non-editable) -->
-        <div id="ob-email-display" style="font-size:.84rem;color:var(--t1);margin-bottom:20px;padding:10px 14px;background:var(--bg2);border-radius:10px;border:1px solid var(--bdr)"></div>
-
-        <!-- Signup extra fields (shown only for new accounts) -->
-        <div id="ob-signup-extra" style="display:none;margin-bottom:12px">
-          <input type="text" class="ob-inp" id="ob-name" placeholder="Full name" autocomplete="name" style="margin-bottom:10px"/>
-        </div>
-
-        <div class="ob-inp-group" style="position:relative;">
-          <input type="password" class="ob-inp" id="ob-pass"  placeholder="Password"         autocomplete="current-password" style="padding-right:44px"/>
-          <input type="password" class="ob-inp" id="ob-pass2" placeholder="Confirm password" autocomplete="new-password" style="display:none;padding-right:44px"/>
-          <button type="button" onclick="togglePassVis()" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--t2);padding:4px;display:flex;align-items:center;" id="pass-eye">
-            <svg id="eye-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-
-        <div class="ob-err" id="ob-err2"></div>
-
-        <button class="ob-btn ob-btn-guest" id="ob-email-submit" style="margin-top:12px">Continue</button>
-        <div class="ob-auth-toggle" id="ob-step2-toggle"></div>
-      </div>
-
-      <div id="ob-loading" style="display:none;text-align:center;padding:20px 0;font-size:.84rem;color:var(--t2)">
-        <span id="ob-loading-txt">Please wait…</span>
-      </div>
+    <!-- CHECKING: shown while Firebase resolves auth state -->
+    <div id="ob-checking" class="ob-screen" style="width:100%;text-align:center;padding:24px 0 0">
+      <div class="ob-spinner"></div>
+      <div style="margin-top:14px;font-size:.82rem;color:var(--t2)">Checking session…</div>
     </div>
 
-    <!-- Guest access -->
-    <div class="ob-note">
-      Just exploring? <span style="color:var(--acc);cursor:pointer;font-weight:600" id="ob-guest">Continue without account →</span>
+    <!-- LANDING: Sign In / Create Account -->
+    <div id="ob-landing" class="ob-screen" style="display:none;width:100%">
+      <div class="ob-heading" style="text-align:left;margin-bottom:6px">Hi, Welcome!</div>
+      <div class="ob-tag" style="text-align:left;margin-bottom:32px">Your AI study companion.<br>Save sessions and track your progress.</div>
+      <button class="ob-btn ob-btn-guest" onclick="showObScreen('signin')">Sign In</button>
+      <div style="height:10px"></div>
+      <button class="ob-btn ob-btn-outline" onclick="showObScreen('signup')">Create Account</button>
+      <div class="ob-divider" style="margin-top:22px"><span>OR</span></div>
+      <button class="ob-btn-google" id="ob-google" type="button" onclick="doGoogleAuth()">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+    </div>
+
+    <!-- SIGN IN -->
+    <div id="ob-signin" class="ob-screen" style="display:none;width:100%">
+      <button class="ob-back-row" onclick="showObScreen('landing')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
+        Back
+      </button>
+      <div class="ob-heading" style="text-align:left;margin-bottom:6px">Welcome back!</div>
+      <div class="ob-tag" style="text-align:left;margin-bottom:24px">Sign in to continue your sessions.</div>
+      <div style="margin-bottom:10px">
+        <input type="email" class="ob-inp" id="si-email" placeholder="Email address" autocomplete="email"/>
+      </div>
+      <div style="position:relative;margin-bottom:10px">
+        <input type="password" class="ob-inp" id="si-pass" placeholder="Password" autocomplete="current-password" style="padding-right:46px"/>
+        <button type="button" onclick="toggleFieldPass('si-pass','si-eye')" class="ob-eye" id="si-eye">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="ob-err" id="si-err"></div>
+      <button class="ob-btn ob-btn-guest" id="si-submit">Sign In</button>
+      <div style="text-align:right;margin-top:12px">
+        <span onclick="showObScreen('forgot')" style="font-size:.8rem;color:var(--acc);cursor:pointer;font-weight:500">Forgot Password?</span>
+      </div>
+      <div class="ob-divider"><span>OR</span></div>
+      <button class="ob-btn-google" onclick="doGoogleAuth()" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <div class="ob-auth-toggle">No account? <span onclick="showObScreen('signup')">Sign up</span></div>
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="ob-signup" class="ob-screen" style="display:none;width:100%">
+      <button class="ob-back-row" onclick="showObScreen('landing')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
+        Back
+      </button>
+      <div class="ob-heading" style="text-align:left;margin-bottom:6px">Create account</div>
+      <div class="ob-tag" style="text-align:left;margin-bottom:24px">Start studying smarter today.</div>
+      <div style="margin-bottom:10px">
+        <input type="text" class="ob-inp" id="su-name" placeholder="Full name" autocomplete="name"/>
+      </div>
+      <div style="margin-bottom:10px">
+        <input type="email" class="ob-inp" id="su-email" placeholder="Email address" autocomplete="email"/>
+      </div>
+      <div style="position:relative;margin-bottom:10px">
+        <input type="password" class="ob-inp" id="su-pass" placeholder="Password (min 6 chars)" autocomplete="new-password" style="padding-right:46px"/>
+        <button type="button" onclick="toggleFieldPass('su-pass','su-eye')" class="ob-eye" id="su-eye">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div style="margin-bottom:10px">
+        <input type="password" class="ob-inp" id="su-pass2" placeholder="Confirm password" autocomplete="new-password"/>
+      </div>
+      <div class="ob-err" id="su-err"></div>
+      <button class="ob-btn ob-btn-guest" id="su-submit">Create Account</button>
+      <div class="ob-divider"><span>OR</span></div>
+      <button class="ob-btn-google" onclick="doGoogleAuth()" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+        Continue with Google
+      </button>
+      <div class="ob-auth-toggle">Have an account? <span onclick="showObScreen('signin')">Sign in</span></div>
+    </div>
+
+    <!-- FORGOT PASSWORD -->
+    <div id="ob-forgot" class="ob-screen" style="display:none;width:100%">
+      <button class="ob-back-row" onclick="showObScreen('signin')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M5 12l7 7M5 12l7-7"/></svg>
+        Back to Sign In
+      </button>
+      <div class="ob-heading" style="text-align:left;margin-bottom:6px">Reset Password</div>
+      <div class="ob-tag" style="text-align:left;margin-bottom:24px">Enter your email and we'll send a reset link.</div>
+      <div style="margin-bottom:10px">
+        <input type="email" class="ob-inp" id="fp-email" placeholder="Email address" autocomplete="email"/>
+      </div>
+      <div class="ob-err" id="fp-err"></div>
+      <div class="ob-ok" id="fp-ok" style="display:none">✓ Reset link sent — check your inbox.</div>
+      <button class="ob-btn ob-btn-guest" id="fp-submit">Send Reset Link</button>
+    </div>
+
+    <!-- AUTH LOADING (Google popup / redirect) -->
+    <div id="ob-loading" class="ob-screen" style="display:none;width:100%;text-align:center;padding:24px 0">
+      <div class="ob-spinner" style="margin:0 auto 12px"></div>
+      <div style="font-size:.84rem;color:var(--t2)"><span id="ob-loading-txt">Please wait…</span></div>
     </div>
 
   </div>
@@ -3150,11 +3235,17 @@ function bootFB(cfg){
     S.auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL).catch(()=>{});
     try{S.db.enablePersistence({synchronizeTabs:true}).catch(()=>{});}catch(e){}
     S.auth.onAuthStateChanged(u=>{
+      // Always hide the checking spinner once Firebase responds
+      const ck = document.getElementById('ob-checking');
+      if(ck) ck.style.display = 'none';
       if(u){
         S.user=u; loadUserData(u.uid); setUserUI(u); loadCloud(); openApp(); refreshSettingsUI();
         const isNew = !localStorage.getItem('qv_welcomed_' + u.uid);
         if(isNew){ sendWelcomeEmail(u); }
         else { sendSignInEmail(u); }
+      } else {
+        // Not signed in — show landing screen (not sign up)
+        if(!_appOpened) showObScreen('landing');
       }
     });
     S.auth.getRedirectResult().then(r=>{
@@ -3204,9 +3295,7 @@ function doGoogleAuth(){
   }
   const p=new firebase.auth.GoogleAuthProvider();
   p.addScope('email'); p.addScope('profile');
-  const loadEl=document.getElementById('ob-loading');
-  loadEl.style.display='block';
-  document.getElementById('ob-step1').style.display='none';
+  showObScreen('loading');
   document.getElementById('ob-loading-txt').textContent='Opening Google sign-in…';
   S.auth.signInWithPopup(p)
     .then(r=>{
@@ -3217,10 +3306,9 @@ function doGoogleAuth(){
       toast('Welcome, '+r.user.displayName.split(' ')[0]+' ✓','ok');
     })
     .catch(e=>{
-      loadEl.style.display='none';
-      document.getElementById('ob-step1').style.display='block';
+      showObScreen('landing');
       if(e.code==='auth/popup-blocked'||e.code==='auth/popup-cancelled-by-user'){
-        loadEl.style.display='block';
+        showObScreen('loading');
         document.getElementById('ob-loading-txt').textContent='Redirecting to Google…';
         try{sessionStorage.setItem('qv_redirect_pending','1');}catch(ex){}
         S.auth.signInWithRedirect(p);
@@ -3231,27 +3319,40 @@ function doGoogleAuth(){
       }
     });
 }
-document.getElementById('ob-google').onclick = doGoogleAuth;
-document.getElementById('ob-guest').onclick=()=>{S.user=null;loadUserData('guest');openApp();refreshSettingsUI();toast('Guest mode — sessions save locally','nfo');};
+// ob-google onclick is now inline in HTML (all three Google buttons)
+// Guest mode removed
 // Sidebar sign-out row
 document.getElementById('btn-out').onclick = () => {
   if(!S.user){
     _appOpened=false;
+    closeProfile();
     document.getElementById('sidebar').classList.remove('mobile-open');
     document.getElementById('sb-overlay').classList.remove('show');
     document.getElementById('onboard').style.display='flex';
     document.getElementById('app').style.display='none';
+    showObScreen('landing');
     return;
   }
   if(!confirm('Sign out?')) return;
+  closeProfile();
   document.getElementById('sidebar').classList.remove('mobile-open');
   document.getElementById('sb-overlay').classList.remove('show');
   if(S.auth) S.auth.signOut().then(()=>{
     S.user=null; loadUserData('guest');
     renderHist();renderKP();renderRecent();renderStreak();
     clearMsgs(); setUserUI(null);
+    _appOpened=false;
+    document.getElementById('app').style.display='none';
+    document.getElementById('onboard').style.display='flex';
+    showObScreen('landing');
     toast('Signed out','nfo');
-  }); else { S.user=null; setUserUI(null); }
+  }); else {
+    S.user=null; setUserUI(null);
+    _appOpened=false;
+    document.getElementById('app').style.display='none';
+    document.getElementById('onboard').style.display='flex';
+    showObScreen('landing');
+  }
 };
 
 function setUserUI(u){
@@ -4453,12 +4554,24 @@ document.getElementById('aiq-topic').addEventListener('keydown',e=>{if(e.key==='
 function runSplash(){
   const splash = document.getElementById('splash');
   const onboard = document.getElementById('onboard');
-  // Splash: 2.6s then fade out — logo + wordmark + dots
+  // Splash: 2.6s then fade out
   setTimeout(()=>{
     splash.classList.add('hide');
     setTimeout(()=>{
       splash.style.display='none';
       onboard.classList.add('ready');
+      // Show checking spinner — Firebase onAuthStateChanged will hide it
+      // and either openApp() or showObScreen('landing')
+      const ck = document.getElementById('ob-checking');
+      if(ck) ck.style.display = 'block';
+      // Safety fallback: if Firebase never resolves in 5s, show landing
+      setTimeout(()=>{
+        if(!_appOpened){
+          const ck2 = document.getElementById('ob-checking');
+          if(ck2) ck2.style.display = 'none';
+          showObScreen('landing');
+        }
+      }, 5000);
     }, 520);
   }, 2600);
 }
@@ -4466,133 +4579,158 @@ function runSplash(){
 runSplash();
 
 /* ═══════════════════════════════════
-   ONBOARDING — TWO-STEP AUTH (ChatGPT flow)
+   ONBOARDING — MULTI-SCREEN FLOW
 ═══════════════════════════════════ */
-let _obEmail = '';
-let _obIsNewUser = false;
 
-// Step 1 → Step 2: detect if email exists
-document.getElementById('ob-continue-btn').onclick = async () => {
-  const email = document.getElementById('ob-email').value.trim();
-  const errEl = document.getElementById('ob-err');
+const OB_SCREENS = ['ob-checking','ob-landing','ob-signin','ob-signup','ob-forgot','ob-loading'];
+
+function showObScreen(name){
+  const id = name === 'checking' ? 'ob-checking'
+           : name === 'landing'  ? 'ob-landing'
+           : name === 'signin'   ? 'ob-signin'
+           : name === 'signup'   ? 'ob-signup'
+           : name === 'forgot'   ? 'ob-forgot'
+           : name === 'loading'  ? 'ob-loading'
+           : null;
+  if(!id) return;
+  OB_SCREENS.forEach(s => {
+    const el = document.getElementById(s);
+    if(el) el.style.display = (s === id) ? 'block' : 'none';
+  });
+  // Scroll onboard wrap to top on screen change
+  const wrap = document.querySelector('.ob-wrap');
+  if(wrap) wrap.scrollTop = 0;
+}
+
+// ── Helper: wait for Firebase if not ready ──
+async function _ensureFB(errId){
+  if(S.fb) return true;
+  const errEl = document.getElementById(errId);
+  if(errEl){ errEl.textContent = 'Connecting…'; errEl.classList.add('show'); }
+  if(typeof firebase !== 'undefined') bootFB(FB_CFG);
+  await new Promise(r => setTimeout(r, 2000));
+  if(errEl) errEl.classList.remove('show');
+  if(!S.fb){
+    if(typeof firebase !== 'undefined') bootFB(FB_CFG);
+    await new Promise(r => setTimeout(r, 1500));
+  }
+  if(!S.fb){
+    if(errEl){ errEl.textContent = 'Connection failed. Check your internet.'; errEl.classList.add('show'); }
+    return false;
+  }
+  return true;
+}
+
+// ── Toggle password visibility for a specific field ──
+function toggleFieldPass(fieldId, btnId){
+  const inp = document.getElementById(fieldId);
+  const btn = document.getElementById(btnId);
+  if(!inp) return;
+  const show = inp.type === 'password';
+  inp.type = show ? 'text' : 'password';
+  if(btn){
+    btn.innerHTML = show
+      ? '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+      : '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  }
+}
+
+// ── SIGN IN submit ──
+document.getElementById('si-submit').onclick = async () => {
+  const email = document.getElementById('si-email').value.trim();
+  const pass  = document.getElementById('si-pass').value;
+  const errEl = document.getElementById('si-err');
   errEl.classList.remove('show');
   if(!email || !email.includes('@')){ errEl.textContent='Enter a valid email'; errEl.classList.add('show'); return; }
-  _obEmail = email;
-  const btn = document.getElementById('ob-continue-btn');
-  btn.textContent='Checking…'; btn.disabled=true;
-  // Try to detect if user exists using Firebase (sign in with wrong pass → 'wrong-password' = exists, 'user-not-found' = new)
-  let isExisting = false;
-  if(S.fb){
-    try{
-      await S.auth.signInWithEmailAndPassword(email, '___probe___');
-    }catch(e){
-      if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') isExisting=true;
-      else if(e.code==='auth/user-not-found'||e.code==='auth/invalid-email') isExisting=false;
-      else isExisting=false;
-    }
-  }
-  _obIsNewUser = !isExisting;
-  // Show step 2
-  document.getElementById('ob-step1').style.display='none';
-  document.getElementById('ob-step2').style.display='block';
-  document.getElementById('ob-email-display').textContent=email;
-  if(_obIsNewUser){
-    document.getElementById('ob-signup-extra').style.display='block';
-    document.getElementById('ob-pass2').style.display='block';
-    document.getElementById('ob-email-submit').textContent='Create Account';
-    document.getElementById('ob-step2-toggle').innerHTML='Already have an account? <span onclick="obForceSignin()">Sign in</span>';
-    // Update heading
-    document.querySelector('.ob-heading').textContent='Create your account';
-  } else {
-    document.getElementById('ob-signup-extra').style.display='none';
-    document.getElementById('ob-pass2').style.display='none';
-    document.getElementById('ob-email-submit').textContent='Sign In';
-    document.getElementById('ob-step2-toggle').innerHTML='New to Queva? <span onclick="obForceSignup()">Create account</span>';
-    document.querySelector('.ob-heading').textContent='Welcome back';
-  }
-  document.getElementById('ob-pass').focus();
-  btn.textContent='Continue'; btn.disabled=false;
-};
-
-function obForceSignin(){
-  _obIsNewUser=false;
-  document.getElementById('ob-signup-extra').style.display='none';
-  document.getElementById('ob-pass2').style.display='none';
-  document.getElementById('ob-email-submit').textContent='Sign In';
-  document.querySelector('.ob-heading').textContent='Welcome back';
-  document.getElementById('ob-step2-toggle').innerHTML='New to Queva? <span onclick="obForceSignup()">Create account</span>';
-}
-function obForceSignup(){
-  _obIsNewUser=true;
-  document.getElementById('ob-signup-extra').style.display='block';
-  document.getElementById('ob-pass2').style.display='block';
-  document.getElementById('ob-email-submit').textContent='Create Account';
-  document.querySelector('.ob-heading').textContent='Create your account';
-  document.getElementById('ob-step2-toggle').innerHTML='Already have an account? <span onclick="obForceSignin()">Sign in</span>';
-}
-
-// Back button
-document.getElementById('ob-back-btn').onclick = () => {
-  document.getElementById('ob-step2').style.display='none';
-  document.getElementById('ob-step1').style.display='block';
-  document.querySelector('.ob-heading').textContent='Log in or sign up';
-  document.getElementById('ob-err2').classList.remove('show');
-};
-
-// Step 2 submit
-document.getElementById('ob-email-submit').onclick = async () => {
-  if(!S.fb){
-    const e2=document.getElementById('ob-err2');
-    e2.textContent='Connecting…';e2.classList.add('show');
-    await new Promise(r=>setTimeout(r,2000));
-    e2.classList.remove('show');
-    if(!S.fb&&typeof firebase!=='undefined') bootFB(FB_CFG);
-    await new Promise(r=>setTimeout(r,1000));
-    if(!S.fb){e2.textContent='Connection failed. Check your internet.';e2.classList.add('show');return;}
-  }
-  const pass  = document.getElementById('ob-pass').value;
-  const pass2 = document.getElementById('ob-pass2').value;
-  const name  = (document.getElementById('ob-name')?.value||'').trim();
-  const errEl = document.getElementById('ob-err2');
-  errEl.classList.remove('show');
-  if(!pass){errEl.textContent='Enter your password';errEl.classList.add('show');return;}
-  if(_obIsNewUser&&pass!==pass2){errEl.textContent='Passwords do not match';errEl.classList.add('show');return;}
-  if(pass.length<6){errEl.textContent='Password must be at least 6 characters';errEl.classList.add('show');return;}
-  const btn=document.getElementById('ob-email-submit');
-  btn.textContent='Please wait…';btn.disabled=true;
+  if(!pass){ errEl.textContent='Enter your password'; errEl.classList.add('show'); return; }
+  if(!await _ensureFB('si-err')) return;
+  const btn = document.getElementById('si-submit');
+  btn.textContent = 'Signing in…'; btn.disabled = true;
   try{
-    let result;
-    if(_obIsNewUser){
-      result=await S.auth.createUserWithEmailAndPassword(_obEmail,pass);
-      if(name) await result.user.updateProfile({displayName:name});
-    } else {
-      result=await S.auth.signInWithEmailAndPassword(_obEmail,pass);
-    }
-    S.user=result.user;
-    loadUserData(result.user.uid);setUserUI(result.user);loadCloud();
-    openApp();refreshSettingsUI();updateGreeting();
-    sendWelcomeEmail(result.user);
-    toast('Welcome'+ (_obIsNewUser?' to Queva 🎉':'back ✓'),'ok');
+    const result = await S.auth.signInWithEmailAndPassword(email, pass);
+    S.user = result.user;
+    loadUserData(result.user.uid); setUserUI(result.user); loadCloud();
+    openApp(); refreshSettingsUI(); updateGreeting();
+    sendSignInEmail(result.user);
+    toast('Welcome back ✓', 'ok');
   }catch(e){
-    let msg=e.message;
-    if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') msg='Wrong password';
-    if(e.code==='auth/email-already-in-use') msg='Email already registered — sign in instead';
-    if(e.code==='auth/weak-password') msg='Password too weak — 6+ characters';
-    errEl.textContent=msg;errEl.classList.add('show');
-    btn.textContent=_obIsNewUser?'Create Account':'Sign In';btn.disabled=false;
+    let msg = 'Sign in failed. Try again.';
+    if(e.code==='auth/wrong-password'||e.code==='auth/invalid-credential') msg='Incorrect email or password';
+    if(e.code==='auth/user-not-found') msg='No account found with this email';
+    if(e.code==='auth/invalid-email') msg='Invalid email address';
+    if(e.code==='auth/too-many-requests') msg='Too many attempts — try again later';
+    errEl.textContent = msg; errEl.classList.add('show');
+    btn.textContent = 'Sign In'; btn.disabled = false;
   }
 };
 
-// Enter key on email
-document.getElementById('ob-email').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('ob-continue-btn').click();});
-['ob-pass','ob-pass2','ob-name'].forEach(id=>{
-  const el=document.getElementById(id);
-  if(el) el.addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('ob-email-submit').click();});
-});
+// ── SIGN UP submit ──
+document.getElementById('su-submit').onclick = async () => {
+  const name  = document.getElementById('su-name').value.trim();
+  const email = document.getElementById('su-email').value.trim();
+  const pass  = document.getElementById('su-pass').value;
+  const pass2 = document.getElementById('su-pass2').value;
+  const errEl = document.getElementById('su-err');
+  errEl.classList.remove('show');
+  if(!email || !email.includes('@')){ errEl.textContent='Enter a valid email'; errEl.classList.add('show'); return; }
+  if(!pass){ errEl.textContent='Enter a password'; errEl.classList.add('show'); return; }
+  if(pass.length < 6){ errEl.textContent='Password must be at least 6 characters'; errEl.classList.add('show'); return; }
+  if(pass !== pass2){ errEl.textContent='Passwords do not match'; errEl.classList.add('show'); return; }
+  if(!await _ensureFB('su-err')) return;
+  const btn = document.getElementById('su-submit');
+  btn.textContent = 'Creating account…'; btn.disabled = true;
+  try{
+    const result = await S.auth.createUserWithEmailAndPassword(email, pass);
+    if(name) await result.user.updateProfile({displayName: name});
+    S.user = result.user;
+    loadUserData(result.user.uid); setUserUI(result.user); loadCloud();
+    openApp(); refreshSettingsUI(); updateGreeting();
+    sendWelcomeEmail(result.user);
+    toast('Welcome to Queva 🎉', 'ok');
+  }catch(e){
+    let msg = 'Registration failed. Try again.';
+    if(e.code==='auth/email-already-in-use') msg='Email already registered — sign in instead';
+    if(e.code==='auth/invalid-email') msg='Invalid email address';
+    if(e.code==='auth/weak-password') msg='Password too weak — use 6+ characters';
+    errEl.textContent = msg; errEl.classList.add('show');
+    btn.textContent = 'Create Account'; btn.disabled = false;
+  }
+};
 
-// Backward compat stubs (referenced in old code)
-function switchToSignIn(){ obForceSignin(); }
-function switchToSignUp(){ obForceSignup(); }
+// ── FORGOT PASSWORD submit ──
+document.getElementById('fp-submit').onclick = async () => {
+  const email = document.getElementById('fp-email').value.trim();
+  const errEl = document.getElementById('fp-err');
+  const okEl  = document.getElementById('fp-ok');
+  errEl.classList.remove('show');
+  okEl.style.display = 'none';
+  if(!email || !email.includes('@')){ errEl.textContent='Enter a valid email'; errEl.classList.add('show'); return; }
+  if(!await _ensureFB('fp-err')) return;
+  const btn = document.getElementById('fp-submit');
+  btn.textContent = 'Sending…'; btn.disabled = true;
+  try{
+    await S.auth.sendPasswordResetEmail(email);
+    okEl.style.display = 'block';
+    btn.textContent = 'Sent ✓'; // keep disabled so they don't spam
+  }catch(e){
+    let msg = 'Could not send reset email. Try again.';
+    if(e.code==='auth/user-not-found') msg='No account with this email address';
+    if(e.code==='auth/invalid-email') msg='Invalid email address';
+    errEl.textContent = msg; errEl.classList.add('show');
+    btn.textContent = 'Send Reset Link'; btn.disabled = false;
+  }
+};
+
+// ── Enter key shortcuts ──
+['si-email','si-pass'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('si-submit').click(); });
+});
+['su-name','su-email','su-pass','su-pass2'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('su-submit').click(); });
+});
+document.getElementById('fp-email').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('fp-submit').click(); });
 
 /* ═══════════════════════════════════
    EMAILJS — WELCOME EMAIL
@@ -4811,12 +4949,24 @@ function showSpeedGuide(){
 function runSplash(){
   const splash = document.getElementById('splash');
   const onboard = document.getElementById('onboard');
-  // Splash: 2.6s then fade out — logo + wordmark + dots
+  // Splash: 2.6s then fade out
   setTimeout(()=>{
     splash.classList.add('hide');
     setTimeout(()=>{
       splash.style.display='none';
       onboard.classList.add('ready');
+      // Show checking spinner — Firebase onAuthStateChanged will hide it
+      // and either openApp() or showObScreen('landing')
+      const ck = document.getElementById('ob-checking');
+      if(ck) ck.style.display = 'block';
+      // Safety fallback: if Firebase never resolves in 5s, show landing
+      setTimeout(()=>{
+        if(!_appOpened){
+          const ck2 = document.getElementById('ob-checking');
+          if(ck2) ck2.style.display = 'none';
+          showObScreen('landing');
+        }
+      }, 5000);
     }, 520);
   }, 2600);
 }
@@ -4824,100 +4974,10 @@ function runSplash(){
 runSplash();
 
 /* ═══════════════════════════════════
-   EMAIL AUTH
-═══════════════════════════════════ */
-// (old email toggle removed)
-
-document.getElementById('ob-auth-toggle').onclick = () => {
-  _emailMode = _emailMode === 'signin' ? 'signup' : 'signin';
-  const isSignup = _emailMode === 'signup';
-  document.getElementById('ob-pass2').style.display = isSignup ? 'block' : 'none';
-  document.getElementById('ob-email-submit').textContent = isSignup ? 'Create Account' : 'Sign In';
-  document.getElementById('ob-auth-toggle').textContent = isSignup 
-    ? 'Already have an account? Sign in' 
-    : "Don't have an account? Sign up";
-  document.getElementById('ob-err').classList.remove('show');
-};
-
-document.getElementById('ob-email-submit').onclick = async () => {
-  // If Firebase not ready yet, wait up to 3 seconds
-  if(!S.fb){
-    const errEl2 = document.getElementById('ob-err');
-    errEl2.textContent = 'Connecting…'; errEl2.classList.add('show');
-    await new Promise(res => setTimeout(res, 2000));
-    errEl2.classList.remove('show');
-    if(!S.fb){
-      // Try booting Firebase one more time
-      if(typeof firebase !== 'undefined') bootFB(FB_CFG);
-      await new Promise(res => setTimeout(res, 1000));
-    }
-    if(!S.fb){ errEl2.textContent = 'Connection failed. Check internet and retry.'; errEl2.classList.add('show'); return; }
-  }
-  const email = document.getElementById('ob-email').value.trim();
-  const pass  = document.getElementById('ob-pass').value;
-  const pass2 = document.getElementById('ob-pass2').value;
-  const errEl = document.getElementById('ob-err');
-
-  errEl.classList.remove('show');
-  if(!email || !pass){ errEl.textContent='Enter email and password'; errEl.classList.add('show'); return; }
-  if(_emailMode === 'signup' && pass !== pass2){ errEl.textContent='Passwords do not match'; errEl.classList.add('show'); return; }
-  if(pass.length < 6){ errEl.textContent='Password must be at least 6 characters'; errEl.classList.add('show'); return; }
-
-  const btn = document.getElementById('ob-email-submit');
-  btn.textContent = 'Please wait…'; btn.disabled = true;
-
-  try {
-    let result;
-    if(_emailMode === 'signup'){
-      result = await S.auth.createUserWithEmailAndPassword(email, pass);
-    } else {
-      result = await S.auth.signInWithEmailAndPassword(email, pass);
-    }
-    S.user = result.user;
-    loadUserData(result.user.uid);
-    setUserUI(result.user);
-    loadCloud();
-    openApp();
-    refreshSettingsUI();
-    updateGreeting();
-    sendWelcomeEmail(result.user);
-    toast('Welcome' + (_emailMode==='signup'?' to Queva 🎉':'back ✓'), 'ok');
-  } catch(e) {
-    let msg = e.message;
-    if(e.code==='auth/user-not-found'||e.code==='auth/invalid-credential') msg = 'No account found or wrong password';
-    if(e.code==='auth/wrong-password') msg = 'Incorrect password';
-    if(e.code==='auth/email-already-in-use') msg = 'Email already registered — try signing in';
-    if(e.code==='auth/invalid-email') msg = 'Invalid email address';
-    if(e.code==='auth/weak-password') msg = 'Password too weak — use at least 6 characters';
-    errEl.textContent = msg;
-    errEl.classList.add('show');
-    btn.textContent = _emailMode==='signup' ? 'Create Account' : 'Sign In';
-    btn.disabled = false;
-  }
-};
-
-// Allow Enter key on email/password fields
-['ob-email','ob-pass','ob-pass2'].forEach(id => {
-  const el = document.getElementById(id);
-  if(el) el.addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('ob-email-submit').click(); });
-});
-
-
-/* ═══════════════════════════════════
    EMAILJS — WELCOME EMAIL
 ═══════════════════════════════════ */
-// Password eye toggle
-function togglePassVis(){
-  const p1 = document.getElementById('ob-pass');
-  const p2 = document.getElementById('ob-pass2');
-  const icon = document.getElementById('eye-icon');
-  const show = p1.type === 'password';
-  p1.type = show ? 'text' : 'password';
-  if(p2) p2.type = show ? 'text' : 'password';
-  icon.innerHTML = show
-    ? '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>'
-    : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-}
+// togglePassVis legacy stub (no longer needed — toggleFieldPass() used instead)
+function togglePassVis(){}
 
 // EmailJS constants declared above
 
