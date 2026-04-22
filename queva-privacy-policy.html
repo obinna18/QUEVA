@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Privacy Policy — Queva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#F0F2F5; --bg1:#FFFFFF; --bg2:#F7F8FA; --bg3:#ECEEF2; --bg4:#DDE0E7;
+  --t0:#0D0F14; --t1:#3A3D47; --t2:#6B6F7C; --t3:#B0B4C1;
+  --bdr:rgba(0,0,0,.08); --bdrc:rgba(0,0,0,.16);
+  --acc:#1D6EF5; --acc2:#1558CC;
+  --acclo:rgba(29,110,245,.08); --accmd:rgba(29,110,245,.22);
+  --amb:#F59E0B;
+  --ff:'Outfit',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;width:100%}
+body{
+  background:var(--bg);color:var(--t0);
+  font-family:var(--ff);font-size:15px;
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bdr);
+  height:54px;display:flex;align-items:center;
+  padding:0 20px;gap:12px;
+}
+.tb-logo{
+  display:flex;align-items:center;gap:9px;
+  text-decoration:none;flex:1;
+}
+.tb-q{
+  width:32px;height:32px;border-radius:9px;
+  background:var(--acc);
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:900;color:#fff;flex-shrink:0;
+}
+.tb-name{font-size:15px;font-weight:800;color:var(--t0);letter-spacing:-.01em}
+.tb-back{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:8px;
+  border:1px solid var(--bdr);background:var(--bg3);
+  color:var(--t1);font-size:.76rem;font-weight:600;
+  text-decoration:none;font-family:var(--ff);
+  transition:border-color .14s,color .14s,background .14s;
+}
+.tb-back:hover{border-color:var(--accmd);color:var(--acc);background:var(--acclo)}
+.page-wrap{max-width:680px;margin:0 auto;padding:48px 24px 80px}
+.doc-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--acc);background:var(--acclo);
+  border:1px solid var(--accmd);
+  padding:4px 10px;border-radius:6px;margin-bottom:18px;
+}
+h1{
+  font-size:clamp(1.7rem,4vw,2.4rem);
+  font-weight:800;color:var(--t0);
+  letter-spacing:-.03em;line-height:1.15;margin-bottom:6px;
+}
+.doc-meta{font-size:.8rem;color:var(--t2);font-family:var(--mono);margin-bottom:36px}
+.intro-box{
+  background:var(--bg1);border:1px solid var(--bdr);
+  border-left:3px solid var(--acc);
+  border-radius:0 10px 10px 0;
+  padding:14px 18px;font-size:.9rem;color:var(--t1);
+  margin-bottom:36px;line-height:1.6;
+}
+.divider{border:none;border-top:1px solid var(--bdr);margin:32px 0}
+h2{
+  font-size:1.05rem;font-weight:700;color:var(--t0);
+  letter-spacing:-.01em;margin:36px 0 10px;
+  display:flex;align-items:baseline;gap:8px;
+}
+.num{
+  font-family:var(--mono);font-size:.7rem;color:var(--acc);
+  letter-spacing:.04em;background:var(--acclo);
+  padding:2px 7px;border-radius:4px;flex-shrink:0;
+}
+p{font-size:.9rem;color:var(--t1);margin-bottom:10px;line-height:1.7}
+ul{margin:6px 0 12px 0;padding-left:18px}
+li{font-size:.9rem;color:var(--t1);margin-bottom:5px;line-height:1.6}
+li::marker{color:var(--acc)}
+a{color:var(--acc);text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+strong{color:var(--t0);font-weight:600}
+.tp-card{background:var(--bg1);border:1px solid var(--bdr);border-radius:10px;overflow:hidden;margin:12px 0}
+.tp-row{display:flex;align-items:flex-start;gap:14px;padding:13px 16px;border-bottom:1px solid var(--bdr)}
+.tp-row:last-child{border-bottom:none}
+.tp-name{font-weight:700;font-size:.84rem;color:var(--t0);min-width:130px;flex-shrink:0}
+.tp-desc{font-size:.82rem;color:var(--t1);line-height:1.5;flex:1}
+footer{
+  border-top:1px solid var(--bdr);background:var(--bg1);
+  padding:20px 24px;text-align:center;
+  font-size:.78rem;color:var(--t2);font-family:var(--mono);
+}
+footer a{color:var(--acc);text-decoration:none}
+footer a:hover{text-decoration:underline}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
+.footer-logo .fq{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--acc);display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:900;color:#fff;
+}
+.footer-logo span{font-size:.82rem;font-weight:700;color:var(--t1);font-family:var(--ff)}
+@media(max-width:520px){
+  .page-wrap{padding:32px 16px 60px}
+  .tp-row{flex-direction:column;gap:4px}.tp-name{min-width:unset}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="tb-logo">
+    <div class="tb-q">Q</div>
+    <span class="tb-name">Queva</span>
+  </a>
+  <a href="index.html" class="tb-back">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    &nbsp;Back to app
+  </a>
+</div>
+
+<div class="page-wrap">
+
+  <div class="doc-label">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Privacy Policy
+  </div>
+  <h1>How we handle your data</h1>
+  <p class="doc-meta">Effective: April 22, 2025 &nbsp;&bull;&nbsp; Last updated: April 22, 2025</p>
+
+  <div class="intro-box">
+    Queva is a free AI study companion built for Nigerian university students. This policy explains exactly what data we collect, how it is used, and what rights you have over it. Plain language only.
+  </div>
+
+  <hr class="divider"/>
+
+  <h2><span class="num">01</span> Who We Are</h2>
+  <p>Queva is a personal project developed and maintained by Obinna Egenti. The app is live at <a href="https://obinna18.github.io/QUEVA" target="_blank">obinna18.github.io/QUEVA</a>. For privacy-related questions, contact <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a>.</p>
+
+  <h2><span class="num">02</span> What We Collect</h2>
+  <p>We only collect what is necessary to make Queva work.</p>
+  <p><strong>When you sign in with Google:</strong></p>
+  <ul>
+    <li>Your name and email address</li>
+    <li>Your Google profile photo</li>
+    <li>A unique user ID from Firebase Authentication</li>
+  </ul>
+  <p><strong>When you use the app:</strong></p>
+  <ul>
+    <li>Your study questions and conversation history — stored in Firestore so Queva remembers your context across sessions</li>
+    <li>Notes, flashcards, quiz results, or any content you create inside the app</li>
+    <li>Study alarm settings (topic and time)</li>
+  </ul>
+  <p><strong>Automatically collected:</strong></p>
+  <ul>
+    <li>Basic browser and device info collected by Firebase — used only for app stability, not for profiling</li>
+  </ul>
+
+  <h2><span class="num">03</span> How We Use Your Data</h2>
+  <ul>
+    <li>To authenticate you and keep your account secure</li>
+    <li>To give Queva memory so it can recall your study context across sessions</li>
+    <li>To generate AI responses — your queries are sent to Groq's servers to produce answers via LLaMA 3.3-70B</li>
+    <li>To improve app performance and fix bugs</li>
+  </ul>
+  <p>We do not use your data for advertising. We do not sell your data to any third party.</p>
+
+  <h2><span class="num">04</span> Third-Party Services</h2>
+  <p>Queva relies on these services to function, each with its own privacy policy:</p>
+  <div class="tp-card">
+    <div class="tp-row">
+      <div class="tp-name">Google Firebase</div>
+      <div class="tp-desc">Handles authentication and Firestore data storage. <a href="https://firebase.google.com/support/privacy" target="_blank">Firebase Privacy Policy →</a></div>
+    </div>
+    <div class="tp-row">
+      <div class="tp-name">Groq API</div>
+      <div class="tp-desc">Processes your study queries using LLaMA 3.3-70B. Your messages are sent to Groq's servers to generate responses. <a href="https://groq.com/privacy-policy/" target="_blank">Groq Privacy Policy →</a></div>
+    </div>
+  </div>
+
+  <h2><span class="num">05</span> Data Retention</h2>
+  <p>Your conversation history and profile data remain in Firebase Firestore for as long as your account is active. If you request deletion, your data will be removed within 30 days.</p>
+
+  <h2><span class="num">06</span> Your Rights</h2>
+  <p>You have the right to:</p>
+  <ul>
+    <li>Access the personal data we hold about you</li>
+    <li>Request correction of inaccurate data</li>
+    <li>Request deletion of your data</li>
+    <li>Withdraw consent at any time by contacting us or deleting your account</li>
+  </ul>
+  <p>To exercise any of these rights, email <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a>.</p>
+
+  <h2><span class="num">07</span> Data Security</h2>
+  <p>We use Firebase Firestore security rules to ensure only you can read or write your own data. API keys are not exposed in client-side code. All data is transmitted over HTTPS.</p>
+
+  <h2><span class="num">08</span> Children's Privacy</h2>
+  <p>Queva is designed for university students aged 18 and older. We do not knowingly collect personal data from anyone under 18. If you believe a minor has used the app, email <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a> and we will delete their data promptly.</p>
+
+  <h2><span class="num">09</span> Changes to This Policy</h2>
+  <p>We may update this policy as Queva evolves. If changes are significant, we will notify users within the app. The date at the top of this page always reflects the most current version.</p>
+
+  <h2><span class="num">10</span> Contact</h2>
+  <p>Questions? Email <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a></p>
+
+</div>
+
+<footer>
+  <div class="footer-logo">
+    <div class="fq">Q</div>
+    <span>Queva &mdash; Question anything, learn everything</span>
+  </div>
+  &copy; 2025 Queva &nbsp;&bull;&nbsp;
+  <a href="queva-terms.html">Terms of Use</a> &nbsp;&bull;&nbsp;
+  <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a>
+</footer>
+
+</body>
+</html>

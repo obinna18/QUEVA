@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Terms of Use — Queva</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:#F0F2F5; --bg1:#FFFFFF; --bg2:#F7F8FA; --bg3:#ECEEF2;
+  --t0:#0D0F14; --t1:#3A3D47; --t2:#6B6F7C; --t3:#B0B4C1;
+  --bdr:rgba(0,0,0,.08); --bdrc:rgba(0,0,0,.16);
+  --acc:#1D6EF5; --acc2:#1558CC;
+  --acclo:rgba(29,110,245,.08); --accmd:rgba(29,110,245,.22);
+  --red:#DC2626; --amb:#F59E0B;
+  --ff:'Outfit',system-ui,sans-serif;
+  --mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;width:100%}
+body{
+  background:var(--bg);color:var(--t0);
+  font-family:var(--ff);font-size:15px;
+  line-height:1.7;-webkit-font-smoothing:antialiased;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,255,255,.9);backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--bdr);
+  height:54px;display:flex;align-items:center;
+  padding:0 20px;gap:12px;
+}
+.tb-logo{display:flex;align-items:center;gap:9px;text-decoration:none;flex:1}
+.tb-q{
+  width:32px;height:32px;border-radius:9px;
+  background:var(--acc);display:flex;align-items:center;justify-content:center;
+  font-size:15px;font-weight:900;color:#fff;flex-shrink:0;
+}
+.tb-name{font-size:15px;font-weight:800;color:var(--t0);letter-spacing:-.01em}
+.tb-back{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 12px;border-radius:8px;
+  border:1px solid var(--bdr);background:var(--bg3);
+  color:var(--t1);font-size:.76rem;font-weight:600;
+  text-decoration:none;font-family:var(--ff);
+  transition:border-color .14s,color .14s,background .14s;
+}
+.tb-back:hover{border-color:var(--accmd);color:var(--acc);background:var(--acclo)}
+.page-wrap{max-width:680px;margin:0 auto;padding:48px 24px 80px}
+.doc-label{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--mono);font-size:.68rem;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--acc);background:var(--acclo);
+  border:1px solid var(--accmd);
+  padding:4px 10px;border-radius:6px;margin-bottom:18px;
+}
+h1{
+  font-size:clamp(1.7rem,4vw,2.4rem);
+  font-weight:800;color:var(--t0);
+  letter-spacing:-.03em;line-height:1.15;margin-bottom:6px;
+}
+.doc-meta{font-size:.8rem;color:var(--t2);font-family:var(--mono);margin-bottom:36px}
+.intro-box{
+  background:var(--bg1);border:1px solid var(--bdr);
+  border-left:3px solid var(--acc);
+  border-radius:0 10px 10px 0;
+  padding:14px 18px;font-size:.9rem;color:var(--t1);
+  margin-bottom:36px;line-height:1.6;
+}
+.warn-box{
+  background:rgba(245,158,11,.05);
+  border:1px solid rgba(245,158,11,.25);
+  border-left:3px solid var(--amb);
+  border-radius:0 10px 10px 0;
+  padding:13px 16px;font-size:.88rem;color:var(--t1);
+  margin:14px 0;line-height:1.6;
+}
+.divider{border:none;border-top:1px solid var(--bdr);margin:32px 0}
+h2{
+  font-size:1.05rem;font-weight:700;color:var(--t0);
+  letter-spacing:-.01em;margin:36px 0 10px;
+  display:flex;align-items:baseline;gap:8px;
+}
+.num{
+  font-family:var(--mono);font-size:.7rem;color:var(--acc);
+  letter-spacing:.04em;background:var(--acclo);
+  padding:2px 7px;border-radius:4px;flex-shrink:0;
+}
+p{font-size:.9rem;color:var(--t1);margin-bottom:10px;line-height:1.7}
+ul{margin:6px 0 12px 0;padding-left:18px}
+li{font-size:.9rem;color:var(--t1);margin-bottom:5px;line-height:1.6}
+li::marker{color:var(--acc)}
+a{color:var(--acc);text-decoration:none;font-weight:500}
+a:hover{text-decoration:underline}
+strong{color:var(--t0);font-weight:600}
+footer{
+  border-top:1px solid var(--bdr);background:var(--bg1);
+  padding:20px 24px;text-align:center;
+  font-size:.78rem;color:var(--t2);font-family:var(--mono);
+}
+footer a{color:var(--acc);text-decoration:none}
+footer a:hover{text-decoration:underline}
+.footer-logo{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:10px}
+.footer-logo .fq{
+  width:22px;height:22px;border-radius:6px;
+  background:var(--acc);display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:900;color:#fff;
+}
+.footer-logo span{font-size:.82rem;font-weight:700;color:var(--t1);font-family:var(--ff)}
+@media(max-width:520px){.page-wrap{padding:32px 16px 60px}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a href="index.html" class="tb-logo">
+    <div class="tb-q">Q</div>
+    <span class="tb-name">Queva</span>
+  </a>
+  <a href="index.html" class="tb-back">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+    &nbsp;Back to app
+  </a>
+</div>
+
+<div class="page-wrap">
+
+  <div class="doc-label">
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 8h10M7 12h10M7 16h6"/></svg>
+    Terms of Use
+  </div>
+  <h1>Rules for using Queva</h1>
+  <p class="doc-meta">Effective: April 22, 2025 &nbsp;&bull;&nbsp; Last updated: April 22, 2025</p>
+
+  <div class="intro-box">
+    By using Queva you agree to these terms. They are written plainly on purpose. Read them before you proceed.
+  </div>
+
+  <hr class="divider"/>
+
+  <h2><span class="num">01</span> What Queva Is</h2>
+  <p>Queva is a free AI-powered study companion for Nigerian university students. It uses large language models to help with studying, note summarization, question answering, and exam preparation. Queva is a personal project maintained by Obinna Egenti and is not affiliated with any university or academic institution.</p>
+
+  <h2><span class="num">02</span> Acceptance of Terms</h2>
+  <p>By accessing or using Queva at <a href="https://obinna18.github.io/QUEVA" target="_blank">obinna18.github.io/QUEVA</a>, you confirm that you have read, understood, and agree to be bound by these terms. If you do not agree, do not use the app.</p>
+
+  <h2><span class="num">03</span> Eligibility</h2>
+  <p>Queva is intended for users who are 18 years of age or older, or university students with parental or guardian consent. By using Queva, you confirm that you meet this requirement.</p>
+
+  <h2><span class="num">04</span> AI Disclaimer</h2>
+  <div class="warn-box">
+    <strong>Queva is powered by AI. AI can be wrong.</strong> Do not use Queva responses as your sole source of information for exams, academic submissions, medical advice, legal decisions, or any high-stakes situation. Always verify with your textbooks, lecturers, or credible sources.
+  </div>
+  <p>AI-generated responses on Queva are provided for study assistance only. Obinna Egenti makes no guarantees about the accuracy, completeness, or reliability of any AI-generated content.</p>
+
+  <h2><span class="num">05</span> Acceptable Use</h2>
+  <p>You agree to use Queva only for lawful, educational purposes. You must not:</p>
+  <ul>
+    <li>Use Queva to generate content that is harmful, abusive, discriminatory, or illegal</li>
+    <li>Attempt to reverse-engineer, hack, or exploit the app or its underlying systems</li>
+    <li>Use automated bots or scripts to make excessive requests to the app</li>
+    <li>Impersonate another person or misrepresent your affiliation with any institution</li>
+    <li>Use Queva in ways that violate your institution's academic integrity policies</li>
+  </ul>
+
+  <h2><span class="num">06</span> Intellectual Property</h2>
+  <p>The Queva app, its design, source code, and branding are the intellectual property of Obinna Egenti. You may not copy, reproduce, or distribute any part of Queva without explicit written permission.</p>
+  <p>Content you create within Queva — notes, study records, flashcards — remains yours. You grant Queva a limited license to store and process that content solely to provide the service to you.</p>
+
+  <h2><span class="num">07</span> Third-Party Services</h2>
+  <p>Queva uses Google Firebase and the Groq API to function. Your use of Queva means your data is also subject to their terms and privacy policies. Queva is not responsible for the actions, policies, or outages of these third-party providers.</p>
+
+  <h2><span class="num">08</span> Availability</h2>
+  <p>Queva is provided free of charge, as-is. We do not guarantee uninterrupted access. The app may be modified, suspended, or discontinued at any time without notice. We are not liable for any loss arising from such interruptions.</p>
+
+  <h2><span class="num">09</span> Limitation of Liability</h2>
+  <p>To the fullest extent permitted by law, Obinna Egenti shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of Queva — including academic consequences, data loss, or reliance on AI-generated content.</p>
+
+  <h2><span class="num">10</span> Governing Law</h2>
+  <p>These terms are governed by the laws of the Federal Republic of Nigeria. Any disputes shall be subject to the jurisdiction of Nigerian courts.</p>
+
+  <h2><span class="num">11</span> Changes to Terms</h2>
+  <p>We may update these terms as Queva evolves. Continued use of the app after changes are posted constitutes acceptance. The date at the top of this page will always reflect the current version.</p>
+
+  <h2><span class="num">12</span> Contact</h2>
+  <p>Questions about these terms? Email <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a></p>
+
+</div>
+
+<footer>
+  <div class="footer-logo">
+    <div class="fq">Q</div>
+    <span>Queva &mdash; Question anything, learn everything</span>
+  </div>
+  &copy; 2025 Queva &nbsp;&bull;&nbsp;
+  <a href="queva-privacy-policy.html">Privacy Policy</a> &nbsp;&bull;&nbsp;
+  <a href="mailto:queva.app@gmail.com">queva.app@gmail.com</a>
+</footer>
+
+</body>
+</html>
